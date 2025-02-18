@@ -7,19 +7,19 @@ export function TopCourses() {
     {
       title: "React Masterclass",
       students: 1234,
-      revenue: "$18,420",
+      revenue: "₹18,420",
       growth: "+12%"
     },
     {
       title: "Vue.js Fundamentals",
       students: 890,
-      revenue: "$13,350",
+      revenue: "₹13,350",
       growth: "+8%"
     },
     {
       title: "Node.js Backend",
       students: 756,
-      revenue: "$11,340",
+      revenue: "₹11,340",
       growth: "+15%"
     }
   ];

@@ -1,10 +1,9 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { BadgePlus, BookOpen, DollarSign, Users } from "lucide-react";
+import { BadgePlus, BookOpen, IndianRupee, Users } from "lucide-react";
 import { DashboardMetric } from "@/components/DashboardMetric";
 import { RecentSales } from "@/components/RecentSales";
 import { TopCourses } from "@/components/TopCourses";
@@ -12,11 +11,11 @@ import { TopTeachers } from "@/components/TopTeachers";
 import { TeacherList } from "@/components/TeacherList";
 
 const mockChartData = [
-  { name: 'Jan', value: 400 },
-  { name: 'Feb', value: 300 },
-  { name: 'Mar', value: 600 },
-  { name: 'Apr', value: 800 },
-  { name: 'May', value: 700 },
+  { name: 'Jan', value: 400000 },
+  { name: 'Feb', value: 300000 },
+  { name: 'Mar', value: 600000 },
+  { name: 'Apr', value: 800000 },
+  { name: 'May', value: 700000 },
 ];
 
 const Index = () => {
@@ -32,9 +31,9 @@ const Index = () => {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <DashboardMetric
           title="Total Revenue"
-          value="$15,231.89"
+          value="₹15,23,189"
           description="+20.1% from last month"
-          icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
+          icon={<IndianRupee className="h-4 w-4 text-muted-foreground" />}
         />
         <DashboardMetric
           title="Active Users"
@@ -66,8 +65,13 @@ const Index = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={mockChartData}>
                   <XAxis dataKey="name" stroke="#888888" />
-                  <YAxis stroke="#888888" />
-                  <Tooltip />
+                  <YAxis 
+                    stroke="#888888"
+                    tickFormatter={(value) => `₹${(value/1000).toFixed(0)}k`}
+                  />
+                  <Tooltip 
+                    formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Revenue']}
+                  />
                   <Line
                     type="monotone"
                     dataKey="value"
@@ -82,10 +86,10 @@ const Index = () => {
         </Card>
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Recent Sales</CardTitle>
+            <CardTitle>Top Selling Courses</CardTitle>
           </CardHeader>
           <CardContent>
-            <RecentSales />
+            <TopCourses />
           </CardContent>
         </Card>
       </div>
