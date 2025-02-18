@@ -35,7 +35,8 @@ export function Sidebar() {
               <Icon className="h-5 w-5" />
               <span>{item.label}</span>
             </Link>
-          ))}
+          );
+        })}
       </nav>
     </div>
   );
