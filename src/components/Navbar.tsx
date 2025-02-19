@@ -60,16 +60,16 @@ export function Navbar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
               <Avatar className="h-9 w-9">
-                <AvatarFallback>RS</AvatarFallback>
+                <AvatarFallback>GK</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Rahul Sharma</p>
+                <p className="text-sm font-medium leading-none">Garv Kamra</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  rahul.sharma@neevcode.com
+                  garvkamra@neevcode.com
                 </p>
               </div>
             </DropdownMenuLabel>
