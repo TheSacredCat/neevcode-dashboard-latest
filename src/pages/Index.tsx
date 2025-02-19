@@ -53,14 +53,14 @@ const Index = () => {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
                 <Users className="h-5 w-5" />
-                <span className="text-sm font-medium">Total Views</span>
+                <span className="text-sm font-medium">Total Users</span>
               </div>
-              <span className="text-xs bg-white/20 px-2 py-1 rounded">+2400 People</span>
+              <span className="text-xs bg-white/20 px-2 py-1 rounded">+140 People</span>
             </div>
             <div className="space-y-1">
-              <h2 className="text-2xl font-bold">2,400</h2>
+              <h2 className="text-2xl font-bold">240</h2>
               <div className="flex items-center text-xs">
-                <span className="text-emerald-400">+4.5%</span>
+                <span className="text-emerald-400">+150%</span>
                 <span className="ml-2">than last month</span>
               </div>
             </div>
