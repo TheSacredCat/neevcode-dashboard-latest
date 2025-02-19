@@ -6,7 +6,7 @@ Got it! Here’s the refined version, making it clear and professional for other
 
 ## Project Information  
 
-**URL**: [Project Link](https://67b596e96a31a61b3e8e11fb--neevcode-admin.netlify.app/)  
+**URL**: [Project Link](https://preview--neevcode-dashboard-latest.lovable.app/)  
 
 ## How to Edit This Code  
 
