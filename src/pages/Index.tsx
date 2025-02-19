@@ -20,7 +20,7 @@ const mockChartData = [
 
 const Index = () => {
   return (
-    <div className="p-8 animate-in">
+    <div className="p-4 md:p-8 space-y-8 animate-in">
       <header className="mb-8">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Welcome to NeevCode Dashboard</h1>
@@ -28,7 +28,7 @@ const Index = () => {
         </div>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <Card className="bg-[#0D5F6C] text-white">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
@@ -87,13 +87,13 @@ const Index = () => {
         </Card>
       </div>
 
-      <div className="grid gap-6 grid-cols-7 mt-6">
-        <Card className="col-span-5">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-7">
+        <Card className="lg:col-span-4">
           <CardHeader>
             <CardTitle>Statistics</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[400px]">
+            <div className="h-[300px] md:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={mockChartData}>
                   <XAxis dataKey="name" stroke="#888888" />
@@ -117,11 +117,31 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        <Card className="col-span-2">
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Latest Transactions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RecentSales />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-7">
+        <Card className="lg:col-span-4">
+          <CardHeader>
+            <CardTitle>Top Selling Courses</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TopCourses />
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-3">
           <CardHeader>
             <CardTitle>Our Teachers</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Meet our teachers and see their expertise
+              Meet our expert instructors
             </p>
           </CardHeader>
           <CardContent>
