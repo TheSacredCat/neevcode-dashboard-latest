@@ -23,10 +23,10 @@ Ensure you have **Node.js & npm** installed. You can install them using [nvm](ht
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone [https://github.com/TheSacredCat/neevcode-dashboard-latest.git]
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd neevcode-dashboard-latest
 
 # Step 3: Install the required dependencies.
 npm install
