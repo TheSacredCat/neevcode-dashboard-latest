@@ -28,40 +28,72 @@ const Index = () => {
         </div>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <DashboardMetric
-          title="Total Revenue"
-          value="₹15,23,189"
-          description="+20.1% from last month"
-          icon={<IndianRupee className="h-4 w-4 text-muted-foreground" />}
-        />
-        <DashboardMetric
-          title="Active Users"
-          value="2,350"
-          description="+180 new users"
-          icon={<Users className="h-4 w-4 text-muted-foreground" />}
-        />
-        <DashboardMetric
-          title="Total Courses"
-          value="12"
-          description="2 courses added this month"
-          icon={<BookOpen className="h-4 w-4 text-muted-foreground" />}
-        />
-        <DashboardMetric
-          title="Active Teachers"
-          value="15"
-          description="3 teachers joined this month"
-          icon={<Users className="h-4 w-4 text-muted-foreground" />}
-        />
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="bg-[#0D5F6C] text-white">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-2">
+                <IndianRupee className="h-5 w-5" />
+                <span className="text-sm font-medium">Total Sales</span>
+              </div>
+              <span className="text-xs bg-white/20 px-2 py-1 rounded">100 Students</span>
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-2xl font-bold">₹4,59,100</h2>
+              <div className="flex items-center text-xs">
+                <span className="text-emerald-400">+4.5%</span>
+                <span className="ml-2">than last month</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-[#8B5CF6] text-white">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-2">
+                <Users className="h-5 w-5" />
+                <span className="text-sm font-medium">Total Views</span>
+              </div>
+              <span className="text-xs bg-white/20 px-2 py-1 rounded">+2400 People</span>
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-2xl font-bold">2,400</h2>
+              <div className="flex items-center text-xs">
+                <span className="text-emerald-400">+4.5%</span>
+                <span className="ml-2">than last month</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-[#0D5F6C] text-white">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-2">
+                <Users className="h-5 w-5" />
+                <span className="text-sm font-medium">Avg. Client Rating</span>
+              </div>
+              <span className="text-xs bg-white/20 px-2 py-1 rounded">1500 Reviews</span>
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-2xl font-bold">8.8/10</h2>
+              <div className="flex items-center text-xs">
+                <span className="text-emerald-400">+2.5%</span>
+                <span className="ml-2">than last week</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7 mt-6">
-        <Card className="col-span-4">
+      <div className="grid gap-6 grid-cols-7 mt-6">
+        <Card className="col-span-5">
           <CardHeader>
-            <CardTitle>Revenue Overview</CardTitle>
+            <CardTitle>Statistics</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
+            <div className="h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={mockChartData}>
                   <XAxis dataKey="name" stroke="#888888" />
@@ -75,37 +107,22 @@ const Index = () => {
                   <Line
                     type="monotone"
                     dataKey="value"
-                    stroke="hsl(var(--primary))"
+                    stroke="#8B5CF6"
                     strokeWidth={2}
-                    dot={false}
+                    fill="#8B5CF6"
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Top Selling Courses</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TopCourses />
-          </CardContent>
-        </Card>
-      </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7 mt-6">
-        <Card className="col-span-4">
+        <Card className="col-span-2">
           <CardHeader>
-            <CardTitle>Top Performing Teachers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TopTeachers />
-          </CardContent>
-        </Card>
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Teacher Management</CardTitle>
+            <CardTitle>Our Teachers</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Meet our teachers and see their expertise
+            </p>
           </CardHeader>
           <CardContent>
             <TeacherList />
