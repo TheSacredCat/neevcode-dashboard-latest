@@ -6,22 +6,22 @@ import { Badge } from "@/components/ui/badge";
 export function TopTeachers() {
   const teachers = [
     {
-      name: "Dr. Sarah Wilson",
-      subject: "React & React Native",
-      rating: 4.9,
-      students: 450,
+      name: "Dr. Pallavi Kamra",
+      Rols: " Director of Teacher Training & Student Counseling",
+      rating: 5.0,
+      students: 45,
     },
     {
-      name: "Prof. Michael Chen",
-      subject: "Advanced JavaScript",
+      name: "Mr. Savyasaachi V.",
+      subject: "Advanced Python",
       rating: 4.8,
-      students: 380,
+      students: 7,
     },
     {
-      name: "Dr. Emily Brooks",
-      subject: "Web Architecture",
+      name: "Ms. Shine RIjie",
+      subject: "Designing",
       rating: 4.7,
-      students: 320,
+      students: 10,
     },
   ];
 
