@@ -7,7 +7,7 @@ export function TopTeachers() {
   const teachers = [
     {
       name: "Dr. Pallavi Kamra",
-      Rols: " Director of Teacher Training & Student Counseling",
+      Role: " Director of Teacher Training & Student Counseling",
       rating: 5.0,
       students: 45,
     },
