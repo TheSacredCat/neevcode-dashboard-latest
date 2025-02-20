@@ -98,11 +98,11 @@ const Index = () => {
                   <XAxis dataKey="name" stroke="#888888" />
                   <YAxis 
                     stroke="#888888"
-                    tickFormatter={(value) => `${(value/1000).toFixed(0)}k`}
+                    tickFormatter={(value) => `₹${(value/1000).toFixed(0)}k`}
                     domain={[0, 100000]}
                   />
                   <Tooltip 
-                    formatter={(value: number) => [`��${value.toLocaleString()}`, 'Revenue']}
+                    formatter={(value: number) => [`₹${value.toLocaleString('en-IN')}`, 'Revenue']}
                   />
                   <Line
                     type="monotone"

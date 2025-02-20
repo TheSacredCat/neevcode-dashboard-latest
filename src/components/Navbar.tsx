@@ -1,4 +1,3 @@
-
 import { Bell, Search, User, LogOut, Settings, Sun, Moon } from "lucide-react";
 import {
   DropdownMenu,
@@ -12,14 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState } from "react";
+import { useTheme } from "@/components/theme-provider";
 
 export function Navbar() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-    // You can implement the actual theme switching logic here
-  };
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="h-16 border-b bg-card px-6 flex items-center justify-between">
@@ -82,7 +77,7 @@ export function Navbar() {
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={toggleTheme}>
+            <DropdownMenuItem onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
               {theme === 'light' ? (
                 <Moon className="mr-2 h-4 w-4" />
               ) : (
