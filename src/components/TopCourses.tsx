@@ -40,7 +40,7 @@ export function TopCourses() {
             </div>
             <div className="text-right">
               <p className="text-sm font-medium">{course.revenue}</p>
-             <p className="text-sm text-[#947dc2]">{course.growth}</p>
+              <p className="text-sm text-emerald-500">{course.growth}</p>
             </div>
           </div>
         ))}
