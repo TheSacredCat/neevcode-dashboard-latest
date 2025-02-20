@@ -13,9 +13,9 @@ interface Teacher {
 }
 
 const teachers: Teacher[] = [
-  { id: 1, name: "Dr. Sarah Wilson", subject: "React", avatar: "SW" },
-  { id: 2, name: "Prof. John Smith", subject: "JavaScript", avatar: "JS" },
-  { id: 3, name: "Mrs. Emily Brown", subject: "Python", avatar: "EB" },
+  { id: 1, name: "Dr. Pallavi Kamra", subject: "Counsellor", avatar: "PK" },
+  { id: 2, name: "Shine Rijie", subject: "UI/UX", avatar: "SR" },
+  { id: 3, name: "Savyasaachi Vanga", subject: "Python", avatar: "SV" },
 ];
 
 export function ChatWidget() {
