@@ -37,7 +37,6 @@ const teachers = [
       email: "ashish.j@neevcode.com",
     },
   ];
-  ];
 
   return (
     <ScrollArea className="h-[300px]">
