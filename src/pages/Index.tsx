@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,11 +10,11 @@ import { TopTeachers } from "@/components/TopTeachers";
 import { TeacherList } from "@/components/TeacherList";
 
 const mockChartData = [
-  { name: 'Jan', value: 400000 },
-  { name: 'Feb', value: 300000 },
-  { name: 'Mar', value: 600000 },
-  { name: 'Apr', value: 800000 },
-  { name: 'May', value: 700000 },
+  { name: 'Jan', value: 20000 },
+  { name: 'Feb', value: 35000 },
+  { name: 'Mar', value: 45000 },
+  { name: 'Apr', value: 80000 },
+  { name: 'May', value: 65000 },
 ];
 
 const Index = () => {
@@ -99,17 +98,18 @@ const Index = () => {
                   <XAxis dataKey="name" stroke="#888888" />
                   <YAxis 
                     stroke="#888888"
-                    tickFormatter={(value) => `₹${(value/1000).toFixed(0)}k`}
+                    tickFormatter={(value) => `${(value/1000).toFixed(0)}k`}
+                    domain={[0, 100000]}
                   />
                   <Tooltip 
-                    formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Revenue']}
+                    formatter={(value: number) => [`��${value.toLocaleString()}`, 'Revenue']}
                   />
                   <Line
                     type="monotone"
                     dataKey="value"
-                    stroke="#8B5CF6"
+                    stroke="#947dc2"
                     strokeWidth={2}
-                    fill="#8B5CF6"
+                    fill="#947dc2"
                   />
                 </LineChart>
               </ResponsiveContainer>

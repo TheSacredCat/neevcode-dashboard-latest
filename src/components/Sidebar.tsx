@@ -18,12 +18,12 @@ export function Sidebar() {
   return (
     <div 
       className={cn(
-        "min-h-screen bg-card border-r flex flex-col transition-all duration-300",
+        "min-h-screen bg-[#d0c3f1] border-r flex flex-col transition-all duration-300",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
       <div className="p-4 flex items-center justify-between border-b">
-        {!isCollapsed && <h2 className="text-xl font-bold text-primary">NeevCode</h2>}
+        {!isCollapsed && <h2 className="text-xl font-bold text-[#0b6380]">NeevCode</h2>}
         <Button
           variant="ghost"
           size="icon"
