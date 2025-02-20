@@ -15,13 +15,16 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Hardcoded credentials for demonstration
     if (username === "admin" && password === "neevcode123") {
       toast({
-        title: "Login successful",
-        description: "Welcome back!",
+        title: "Welcome back!",
+        description: "Login successful",
+        className: "bg-[#947dc2] text-white border-none",
+        duration: 3000,
       });
+      localStorage.setItem("isAuthenticated", "true");
       navigate("/");
+      window.location.reload();
     } else {
       toast({
         title: "Login failed",
@@ -32,11 +35,15 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#d0c3f1]/10">
-      <Card className="w-[350px]">
-        <CardHeader>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#d0c3f1]/10">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-[#947dc2]">NeevCode</h1>
+        <p className="text-center mt-2 text-muted-foreground">Learning Management System</p>
+      </div>
+      <Card className="w-[350px] shadow-lg">
+        <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center text-[#0b6380]">
-            NeevCode Login
+            Sign in to your account
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -49,6 +56,7 @@ export default function Login() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter your username"
+                className="border-[#d0c3f1]/50 focus:border-[#947dc2]"
                 required
               />
             </div>
@@ -60,6 +68,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
+                className="border-[#d0c3f1]/50 focus:border-[#947dc2]"
                 required
               />
             </div>
@@ -67,11 +76,14 @@ export default function Login() {
               type="submit" 
               className="w-full bg-[#947dc2] hover:bg-[#947dc2]/90"
             >
-              Login
+              Sign in
             </Button>
           </form>
         </CardContent>
       </Card>
+      <p className="mt-4 text-sm text-muted-foreground">
+        Demo credentials: admin / neevcode123
+      </p>
     </div>
   );
 }
