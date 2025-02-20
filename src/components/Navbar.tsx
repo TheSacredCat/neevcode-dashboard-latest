@@ -12,24 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState } from "react";
 import { useTheme } from "@/components/theme-provider";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/toast";
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    toast({
-      title: "Logged out successfully",
-      description: "See you soon!",
-      className: "bg-[#947dc2] text-white border-none",
-    });
-    navigate("/login");
-    window.location.reload();
-  };
 
   return (
     <div className="h-16 border-b bg-card px-6 flex items-center justify-between">
@@ -107,7 +92,7 @@ export function Navbar() {
               <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
+            <DropdownMenuItem className="text-red-600">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
