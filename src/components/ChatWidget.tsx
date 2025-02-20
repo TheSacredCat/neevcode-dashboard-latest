@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -69,7 +68,7 @@ export function ChatWidget() {
               <div className="p-4 border-t">
                 <div className="flex gap-2">
                   <Input placeholder="Type your message..." />
-                  <Button size="icon">
+                  <Button size="icon" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
@@ -80,7 +79,7 @@ export function ChatWidget() {
       ) : (
         <Button 
           size="icon" 
-          className="h-12 w-12 rounded-full shadow-lg"
+          className="h-12 w-12 rounded-full shadow-lg bg-[#947dc2] hover:bg-[#947dc2]/90"
           onClick={() => setIsOpen(true)}
         >
           <MessageCircle className="h-6 w-6" />

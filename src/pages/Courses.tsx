@@ -118,7 +118,7 @@ export default function Courses() {
         <h1 className="text-3xl font-bold tracking-tight">Courses</h1>
         <Dialog open={isAddingCourse} onOpenChange={setIsAddingCourse}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
               <Plus className="mr-2 h-4 w-4" /> Add New Course
             </Button>
           </DialogTrigger>
@@ -189,7 +189,10 @@ export default function Courses() {
               <Button variant="outline" onClick={() => setIsAddingCourse(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleAddCourse}>
+              <Button 
+                onClick={handleAddCourse}
+                className="bg-[#947dc2] hover:bg-[#947dc2]/90"
+              >
                 Add Course
               </Button>
             </div>
@@ -285,7 +288,10 @@ export default function Courses() {
               <Button variant="outline" onClick={() => setIsEditingCourse(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleEditCourse}>
+              <Button 
+                onClick={handleEditCourse}
+                className="bg-[#947dc2] hover:bg-[#947dc2]/90"
+              >
                 Save Changes
               </Button>
             </div>

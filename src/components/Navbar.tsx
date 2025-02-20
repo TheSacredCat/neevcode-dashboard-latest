@@ -77,7 +77,13 @@ export function Navbar() {
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+            <DropdownMenuItem 
+              onClick={(e) => {
+                e.preventDefault();
+                setTheme(theme === 'light' ? 'dark' : 'light');
+              }}
+              onSelect={(e) => e.preventDefault()}
+            >
               {theme === 'light' ? (
                 <Moon className="mr-2 h-4 w-4" />
               ) : (
