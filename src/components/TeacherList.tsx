@@ -11,31 +11,32 @@ import {
 import { MoreVertical } from "lucide-react";
 
 export function TeacherList() {
-  const teachers = [
+const teachers = [
     {
-      name: "Dr. Sarah Wilson",
-      subject: "React & React Native",
+      name: "Dr. Pallavi Kamra",
+      subject: "Teacher Training & Student Counseling",
       status: "Active",
-      email: "sarah.wilson@neevcode.com",
+      email: "dr.pallavi.k@neevcode.com",
     },
     {
-      name: "Prof. Michael Chen",
-      subject: "Advanced JavaScript",
+      name: "Savyasaachi V.",
+      subject: "Advanced Python",
       status: "Active",
-      email: "michael.chen@neevcode.com",
+      email: "savyasaachi.v@neevcode.com",
     },
     {
-      name: "Dr. Emily Brooks",
-      subject: "Web Architecture",
-      status: "Active",
-      email: "emily.brooks@neevcode.com",
-    },
-    {
-      name: "John Smith",
+      name: "Shine RIjie",
       subject: "UI/UX Design",
       status: "Active",
-      email: "john.smith@neevcode.com",
+      email: "shine.r@neevcode.com",
     },
+    {
+      name: "Ashish Jaisawl",
+      subject: "Networking",
+      status: "Active",
+      email: "ashish.j@neevcode.com",
+    },
+  ];
   ];
 
   return (
