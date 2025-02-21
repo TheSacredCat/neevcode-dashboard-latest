@@ -5,9 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
-export default function Login() {
+interface LoginProps {
+  setIsAuthenticated: (value: boolean) => void;
+}
+
+export default function Login({ setIsAuthenticated }: LoginProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -23,8 +27,8 @@ export default function Login() {
         duration: 3000,
       });
       localStorage.setItem("isAuthenticated", "true");
+      setIsAuthenticated(true);
       navigate("/");
-      window.location.reload();
     } else {
       toast({
         title: "Login failed",

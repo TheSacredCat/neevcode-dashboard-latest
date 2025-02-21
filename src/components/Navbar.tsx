@@ -15,13 +15,18 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
 import { useToast } from "@/hooks/use-toast";
 
-export function Navbar() {
+interface NavbarProps {
+  setIsAuthenticated: (value: boolean) => void;
+}
+
+export function Navbar({ setIsAuthenticated }: NavbarProps) {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
+    setIsAuthenticated(false);
     toast({
       title: "Goodbye!",
       description: "You've been successfully logged out",

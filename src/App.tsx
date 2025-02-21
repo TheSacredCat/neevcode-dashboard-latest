@@ -11,6 +11,8 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Courses from "./pages/Courses";
 import NotFound from "./pages/NotFound";
+import Teachers from "./pages/Teachers";
+import Expenses from "./pages/Expenses";
 import { ChatWidget } from "./components/ChatWidget";
 import { useState } from "react";
 
@@ -30,18 +32,20 @@ const App = () => {
           <BrowserRouter>
             {!isAuthenticated ? (
               <Routes>
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             ) : (
               <div className="flex min-h-screen">
                 <Sidebar />
                 <div className="flex-1">
-                  <Navbar />
-                  <main>
+                  <Navbar setIsAuthenticated={setIsAuthenticated} />
+                  <main className="p-6">
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/courses" element={<Courses />} />
+                      <Route path="/teachers" element={<Teachers />} />
+                      <Route path="/expenses" element={<Expenses />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
