@@ -18,8 +18,9 @@ export function Sidebar() {
   return (
     <div 
       className={cn(
-        "min-h-screen bg-white border-r flex flex-col transition-all duration-300",
-        isCollapsed ? "w-16" : "w-64"
+        "fixed left-0 top-0 z-20 min-h-screen bg-background border-r flex flex-col transition-all duration-300",
+        isCollapsed ? "w-16" : "w-64",
+        "md:relative"
       )}
     >
       <div className="p-4 flex items-center justify-between border-b">
@@ -44,8 +45,8 @@ export function Sidebar() {
               className={cn(
                 "flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors my-1",
                 isActive
-                  ? "bg-[#d0c3f1] text-[#0b6380]"
-                  : "hover:bg-[#d0c3f1]/10 text-muted-foreground hover:text-foreground"
+                  ? "bg-[#d0c3f1] text-[#0b6380] dark:bg-[#947dc2]/20 dark:text-[#947dc2]"
+                  : "hover:bg-[#d0c3f1]/10 text-muted-foreground hover:text-foreground dark:hover:bg-[#947dc2]/10"
               )}
             >
               <Icon className="h-5 w-5 shrink-0" />

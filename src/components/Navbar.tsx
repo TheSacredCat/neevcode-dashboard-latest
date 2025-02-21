@@ -1,3 +1,4 @@
+
 import { Bell, Search, User, LogOut, Settings, Sun, Moon } from "lucide-react";
 import {
   DropdownMenu,
@@ -10,11 +11,24 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
+import { useToast } from "@/hooks/use-toast";
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    toast({
+      title: "Goodbye!",
+      description: "You've been successfully logged out",
+      className: "bg-[#947dc2] text-white",
+    });
+    navigate("/login");
+  };
 
   return (
     <div className="h-16 border-b bg-card px-6 flex items-center justify-between">
@@ -92,7 +106,10 @@ export function Navbar() {
               <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
+            <DropdownMenuItem 
+              className="text-red-600"
+              onClick={handleLogout}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
