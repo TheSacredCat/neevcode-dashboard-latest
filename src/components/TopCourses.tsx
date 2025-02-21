@@ -33,7 +33,7 @@ export function TopCourses() {
               <BookOpen className="h-6 w-6 text-[#947dc2]" />
             </div>
             <div className="flex-1 space-y-1">
-              <p className="text-sm font-medium">{course.title}</p>
+              <p className="text-sm font-medium leading-none">{course.title}</p>
               <p className="text-sm text-muted-foreground">
                 {course.students} students
               </p>
