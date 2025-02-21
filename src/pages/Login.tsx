@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface LoginProps {
   setIsAuthenticated: (value: boolean) => void;
@@ -15,25 +15,21 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (username === "admin" && password === "neevcode123") {
-      toast({
-        title: "Welcome back!",
-        description: "Login successful",
-        className: "bg-[#947dc2] text-white border-none",
-        duration: 3000,
+      toast.success("Login successful", {
+        description: "Welcome back!",
+        duration: 2000,
       });
       localStorage.setItem("isAuthenticated", "true");
       setIsAuthenticated(true);
       navigate("/");
     } else {
-      toast({
-        title: "Login failed",
+      toast.error("Login failed", {
         description: "Invalid credentials",
-        variant: "destructive",
+        duration: 2000,
       });
     }
   };

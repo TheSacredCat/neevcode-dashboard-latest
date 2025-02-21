@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface NavbarProps {
   setIsAuthenticated: (value: boolean) => void;
@@ -22,22 +22,19 @@ interface NavbarProps {
 export function Navbar({ setIsAuthenticated }: NavbarProps) {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
-    toast({
-      title: "Goodbye!",
-      description: "You've been successfully logged out",
-      className: "bg-[#947dc2] text-white",
+    toast.success("Logged out successfully", {
+      description: "See you again soon!",
+      duration: 2000,
     });
     navigate("/login");
   };
 
   return (
     <div className="h-16 border-b bg-card px-6 flex items-center justify-between">
-      {/* Search Section */}
       <div className="flex-1 max-w-xl">
         <div className="relative">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -48,9 +45,7 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
         </div>
       </div>
 
-      {/* Right Section */}
       <div className="flex items-center space-x-4">
-        {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
@@ -69,7 +64,6 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* User Profile */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
