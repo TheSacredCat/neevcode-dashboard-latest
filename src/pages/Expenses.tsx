@@ -4,15 +4,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon, Plus } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function Expenses() {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const { toast } = useToast();
+  const [date, setDate] = useState<Date>();
+
+  const categories = [
+    "Supplies",
+    "Equipment",
+    "Software",
+    "Maintenance",
+    "Training",
+    "Other"
+  ];
 
   const [expenses] = useState([
     { id: 1, date: "2024-02-21", amount: "₹5,000", category: "Supplies", description: "Teaching materials" },
@@ -22,15 +37,14 @@ export default function Expenses() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically save to a database
-    toast({
-      title: "Success!",
-      description: "Expense added successfully",
-      className: "bg-[#947dc2] text-white",
+    toast.success("Expense added successfully", {
+      description: `Added expense of ₹${amount}`,
+      duration: 2000,
     });
     setAmount("");
     setDescription("");
     setCategory("");
+    setDate(undefined);
   };
 
   return (
@@ -47,6 +61,31 @@ export default function Expenses() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
+                <Label htmlFor="date">Date</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "PPP") : "Pick a date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="amount">Amount (₹)</Label>
                 <Input
                   id="amount"
@@ -59,13 +98,18 @@ export default function Expenses() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Input
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  placeholder="Enter category"
-                  required
-                />
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
@@ -78,6 +122,7 @@ export default function Expenses() {
                 />
               </div>
               <Button type="submit" className="w-full bg-[#947dc2] hover:bg-[#947dc2]/90">
+                <Plus className="mr-2 h-4 w-4" />
                 Add Expense
               </Button>
             </form>
@@ -102,9 +147,15 @@ export default function Expenses() {
                 {expenses.map((expense) => (
                   <TableRow key={expense.id}>
                     <TableCell>{expense.date}</TableCell>
-                    <TableCell>{expense.amount}</TableCell>
-                    <TableCell>{expense.category}</TableCell>
-                    <TableCell>{expense.description}</TableCell>
+                    <TableCell className="font-medium">{expense.amount}</TableCell>
+                    <TableCell>
+                      <span className="px-2 py-1 bg-[#947dc2]/10 text-[#947dc2] rounded-full text-xs">
+                        {expense.category}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {expense.description}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
