@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,8 +27,8 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light" storageKey="ui-theme">
         <TooltipProvider>
-          <Toaster position="top-right" />
-          <Sonner position="top-right" className="!top-4 !right-4" />
+          <Toaster />
+          <Sonner className="toaster group" />
           <BrowserRouter>
             {!isAuthenticated ? (
               <Routes>
