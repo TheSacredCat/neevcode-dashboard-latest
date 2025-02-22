@@ -42,16 +42,18 @@ export default function Teachers() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
+  const [customRole, setCustomRole] = useState("");
   const [subject, setSubject] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [employmentType, setEmploymentType] = useState("");
 
   const teachers = [
     {
       name: "Dr. Pallavi Kamra",
       role: "Director",
       subject: "Teacher Training & Student Counseling",
-      status: "Active",
+      status: "Permanent",
       email: "dr.pallavi.k@neevcode.com",
       phone: "+91 98765 43210"
     },
@@ -59,7 +61,7 @@ export default function Teachers() {
       name: "Savyasaachi V.",
       role: "Lead Instructor",
       subject: "Advanced Python",
-      status: "Active",
+      status: "Permanent",
       email: "savyasaachi.v@neevcode.com",
       phone: "+91 98765 43211"
     },
@@ -67,7 +69,7 @@ export default function Teachers() {
       name: "Shine Rijie",
       role: "Design Lead",
       subject: "UI/UX Design",
-      status: "Active",
+      status: "Permanent",
       email: "shine.r@neevcode.com",
       phone: "+91 98765 43212"
     },
@@ -75,7 +77,7 @@ export default function Teachers() {
       name: "Ashish Jaisawl",
       role: "Technical Instructor",
       subject: "Networking",
-      status: "Active",
+      status: "Intern",
       email: "ashish.j@neevcode.com",
       phone: "+91 98765 43213"
     },
@@ -83,6 +85,7 @@ export default function Teachers() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const finalRole = role === "other" ? customRole : role;
     toast.success("Teacher added successfully", {
       description: `${name} has been added to the system`,
       duration: 2000,
@@ -94,9 +97,11 @@ export default function Teachers() {
   const resetForm = () => {
     setName("");
     setRole("");
+    setCustomRole("");
     setSubject("");
     setEmail("");
     setPhone("");
+    setEmploymentType("");
   };
 
   const handleEdit = (teacher: typeof teachers[0]) => {
@@ -111,6 +116,10 @@ export default function Teachers() {
       description: `Deleting ${teacher.name}`,
       duration: 2000,
     });
+  };
+
+  const getStatusColor = (status: string) => {
+    return status === "Permanent" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800";
   };
 
   return (
@@ -158,8 +167,18 @@ export default function Teachers() {
                     <SelectItem value="lead_instructor">Lead Instructor</SelectItem>
                     <SelectItem value="instructor">Instructor</SelectItem>
                     <SelectItem value="assistant">Teaching Assistant</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
+                {role === "other" && (
+                  <Input
+                    className="mt-2"
+                    placeholder="Enter custom role"
+                    value={customRole}
+                    onChange={(e) => setCustomRole(e.target.value)}
+                    required
+                  />
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="subject">Subject</Label>
@@ -187,11 +206,29 @@ export default function Teachers() {
                 <Input
                   id="phone"
                   type="tel"
+                  pattern="[0-9+ -]+"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '' || /^[0-9+ -]+$/.test(value)) {
+                      setPhone(value);
+                    }
+                  }}
                   placeholder="Enter phone number"
                   required
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="employmentType">Employment Type</Label>
+                <Select value={employmentType} onValueChange={setEmploymentType} required>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select employment type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="permanent">Permanent</SelectItem>
+                    <SelectItem value="intern">Intern</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex justify-end gap-3 mt-6">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
@@ -249,7 +286,7 @@ export default function Teachers() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(teacher.status)}`}>
                     {teacher.status}
                   </span>
                 </TableCell>
