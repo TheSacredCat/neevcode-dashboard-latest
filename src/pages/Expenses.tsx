@@ -230,159 +230,121 @@ export default function Expenses() {
           </Dialog>
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-  <DialogTrigger asChild>
-    <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
-      <Plus className="mr-2 h-4 w-4" />
-      Add Transaction
-    </Button>
-  </DialogTrigger>
-  <DialogContent className="sm:max-w-[425px]">
-    <DialogHeader>
-      <DialogTitle>Add New Transaction</DialogTitle>
-      <DialogDescription>
-        Add a new transaction to track your company's income or expenses.
-      </DialogDescription>
-    </DialogHeader>
-    <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-      {/* Transaction Type */}
-      <div className="space-y-2">
-        <Label htmlFor="type">Transaction Type</Label>
-        <Select value={type} onValueChange={setType} required>
-          <SelectTrigger>
-            <SelectValue placeholder="Select type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="income">Income</SelectItem>
-            <SelectItem value="expense">Expense</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Amount */}
-      <div className="space-y-2">
-        <Label htmlFor="amount">Amount</Label>
-        <div className="relative">
-          <IndianRupee className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-          <Input
-            id="amount"
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-            className="pl-10"
-            required
-          />
-        </div>
-      </div>
-
-      {/* Date */}
-      <div className="space-y-2">
-        <Label htmlFor="date">Date</Label>
-        <Input
-          id="date"
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-      </div>
-
-      {/* Category Selection */}
-      <div className="space-y-2">
-        <Label htmlFor="category">Category</Label>
-        <Select
-          value={category}
-          onValueChange={(value) => {
-            setCategory(value);
-            if (value !== "other") {
-              setCustomCategory("");
-            }
-          }}
-          required
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="salary">Salary & Payroll</SelectItem>
-            <SelectItem value="utilities">Utilities</SelectItem>
-            <SelectItem value="software">Software & Tools</SelectItem>
-            <SelectItem value="marketing">Marketing</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Custom Category Input (only appears if "Other" is selected) */}
-      {category === "other" && (
-        <div className="space-y-2">
-          <Label htmlFor="custom-category">Custom Category</Label>
-          <Input
-            id="custom-category"
-            value={customCategory}
-            onChange={(e) => setCustomCategory(e.target.value)}
-            placeholder="Enter custom category"
-            required
-          />
-        </div>
-      )}
-
-      {/* Description */}
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Input
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Enter description"
-          required
-        />
-      </div>
-
-      {/* Recurring Transaction */}
-      <div className="space-y-2">
-        <Label htmlFor="recurring">Recurring Transaction?</Label>
-        <Select value={isRecurring} onValueChange={setIsRecurring}>
-          <SelectTrigger>
-            <SelectValue placeholder="Is this recurring?" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="yes">Yes</SelectItem>
-            <SelectItem value="no">No</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Frequency (only visible if recurring) */}
-      {isRecurring === "yes" && (
-        <div className="space-y-2">
-          <Label htmlFor="frequency">Frequency</Label>
-          <Select value={frequency} onValueChange={setFrequency} required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select frequency" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="yearly">Yearly</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      <div className="flex justify-end gap-3 mt-6">
-        <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-          Cancel
-        </Button>
-        <Button type="submit" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
-          Add Transaction
-        </Button>
-      </div>
-    </form>
-  </DialogContent>
-</Dialog>
-
+            <DialogTrigger asChild>
+              <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Transaction
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add New Transaction</DialogTitle>
+                <DialogDescription>
+                  Add a new transaction to track your company's income or expenses.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type">Transaction Type</Label>
+                  <Select value={type} onValueChange={setType} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="income">Income</SelectItem>
+                      <SelectItem value="expense">Expense</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="amount">Amount</Label>
+                  <div className="relative">
+                    <IndianRupee className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="amount"
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="Enter amount"
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date</Label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select value={category} onValueChange={setCategory} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="salary">Salary & Payroll</SelectItem>
+                      <SelectItem value="utilities">Utilities</SelectItem>
+                      <SelectItem value="software">Software & Tools</SelectItem>
+                      <SelectItem value="marketing">Marketing</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Input
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter description"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="recurring">Recurring Transaction?</Label>
+                  <Select value={isRecurring} onValueChange={setIsRecurring}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Is this recurring?" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="yes">Yes</SelectItem>
+                      <SelectItem value="no">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                {isRecurring === "yes" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="frequency">Frequency</Label>
+                    <Select value={frequency} onValueChange={setFrequency} required>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="weekly">Weekly</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                        <SelectItem value="yearly">Yearly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div className="flex justify-end gap-3 mt-6">
+                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
+                    Add Transaction
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
