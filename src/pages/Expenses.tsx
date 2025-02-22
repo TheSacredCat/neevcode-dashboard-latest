@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -43,19 +42,16 @@ import { toast } from "sonner";
 
 export default function Expenses() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false);
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [isRecurring, setIsRecurring] = useState("");
   const [frequency, setFrequency] = useState("");
-  
-  const balance = 85000;
-  const totalIncome = 150000;
-  const totalExpenses = 65000;
-  const savings = 45000;
-
-  const transactions = [
+  const [date, setDate] = useState("");
+  const [currentBalance, setCurrentBalance] = useState(85000);
+  const [transactions, setTransactions] = useState([
     {
       id: 1,
       description: "Salary Deposit",
@@ -68,7 +64,7 @@ export default function Expenses() {
     },
     {
       id: 2,
-      description: "House Rent",
+      description: "Office Rent",
       amount: 25000,
       type: "expense",
       category: "Housing",
@@ -78,16 +74,16 @@ export default function Expenses() {
     },
     {
       id: 3,
-      description: "Groceries",
+      description: "Office Supplies",
       amount: 8000,
       type: "expense",
-      category: "Food",
+      category: "Office",
       date: "2024-03-10",
       isRecurring: false
     },
     {
       id: 4,
-      description: "Internet Bill",
+      description: "Internet & Utilities",
       amount: 1200,
       type: "expense",
       category: "Utilities",
@@ -95,16 +91,73 @@ export default function Expenses() {
       isRecurring: true,
       frequency: "Monthly"
     }
-  ];
+  ]);
+
+  const totalIncome = transactions
+    .filter(t => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const totalExpenses = transactions
+    .filter(t => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const savings = currentBalance - totalExpenses;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newTransaction = {
+      id: transactions.length + 1,
+      description,
+      amount: Number(amount),
+      type,
+      category,
+      date: date || new Date().toISOString().split('T')[0],
+      isRecurring: isRecurring === "yes",
+      frequency: isRecurring === "yes" ? frequency : undefined
+    };
+
+    setTransactions([...transactions, newTransaction]);
+    
+    if (type === "expense") {
+      setCurrentBalance(prev => prev - Number(amount));
+    } else {
+      setCurrentBalance(prev => prev + Number(amount));
+    }
+
     toast.success("Transaction added successfully", {
       description: `Added ${type === "expense" ? "expense" : "income"} of ₹${amount}`,
       duration: 2000,
     });
     setIsDialogOpen(false);
     resetForm();
+  };
+
+  const handleUpdateBalance = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newBalance = Number(amount);
+    setCurrentBalance(newBalance);
+    setIsBalanceDialogOpen(false);
+    setAmount("");
+    toast.success("Balance updated successfully", {
+      description: `Current balance set to ₹${newBalance.toLocaleString('en-IN')}`,
+      duration: 2000,
+    });
+  };
+
+  const handleDeleteTransaction = (id: number) => {
+    const transaction = transactions.find(t => t.id === id);
+    if (transaction) {
+      if (transaction.type === "expense") {
+        setCurrentBalance(prev => prev + transaction.amount);
+      } else {
+        setCurrentBalance(prev => prev - transaction.amount);
+      }
+      setTransactions(transactions.filter(t => t.id !== id));
+      toast.success("Transaction deleted", {
+        description: `${transaction.description} has been removed`,
+        duration: 2000,
+      });
+    }
   };
 
   const resetForm = () => {
@@ -114,6 +167,7 @@ export default function Expenses() {
     setType("");
     setIsRecurring("");
     setFrequency("");
+    setDate("");
   };
 
   const formatAmount = (amount: number) => {
@@ -128,121 +182,175 @@ export default function Expenses() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Expense Tracker</h1>
+          <h1 className="text-3xl font-bold">Company Expense Tracker</h1>
           <p className="text-muted-foreground mt-2">
-            Keep track of your income, expenses, and savings
+            Manage and track your company's finances
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Transaction
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add New Transaction</DialogTitle>
-              <DialogDescription>
-                Add a new transaction to track your income or expenses.
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <div className="space-y-2">
-                <Label htmlFor="type">Transaction Type</Label>
-                <Select value={type} onValueChange={setType} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="income">Income</SelectItem>
-                    <SelectItem value="expense">Expense</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="amount">Amount</Label>
-                <div className="relative">
-                  <IndianRupee className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                  <Input
-                    id="amount"
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Enter amount"
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select value={category} onValueChange={setCategory} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="salary">Salary</SelectItem>
-                    <SelectItem value="housing">Housing</SelectItem>
-                    <SelectItem value="transportation">Transportation</SelectItem>
-                    <SelectItem value="food">Food & Dining</SelectItem>
-                    <SelectItem value="utilities">Utilities</SelectItem>
-                    <SelectItem value="insurance">Insurance</SelectItem>
-                    <SelectItem value="healthcare">Healthcare</SelectItem>
-                    <SelectItem value="entertainment">Entertainment</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Enter description"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="recurring">Recurring Transaction?</Label>
-                <Select value={isRecurring} onValueChange={setIsRecurring}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Is this recurring?" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">Yes</SelectItem>
-                    <SelectItem value="no">No</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {isRecurring === "yes" && (
+        <div className="space-x-4">
+          <Dialog open={isBalanceDialogOpen} onOpenChange={setIsBalanceDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                Update Balance
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Update Current Balance</DialogTitle>
+                <DialogDescription>
+                  Enter the new balance amount.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleUpdateBalance} className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="frequency">Frequency</Label>
-                  <Select value={frequency} onValueChange={setFrequency} required>
+                  <Label htmlFor="balance">New Balance</Label>
+                  <div className="relative">
+                    <IndianRupee className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="balance"
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="Enter new balance"
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3">
+                  <Button type="button" variant="outline" onClick={() => setIsBalanceDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
+                    Update Balance
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+          
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Transaction
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add New Transaction</DialogTitle>
+                <DialogDescription>
+                  Add a new transaction to track your company's income or expenses.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type">Transaction Type</Label>
+                  <Select value={type} onValueChange={setType} required>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select frequency" />
+                      <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="yearly">Yearly</SelectItem>
+                      <SelectItem value="income">Income</SelectItem>
+                      <SelectItem value="expense">Expense</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-              )}
-              <div className="flex justify-end gap-3 mt-6">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
-                  Add Transaction
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+                <div className="space-y-2">
+                  <Label htmlFor="amount">Amount</Label>
+                  <div className="relative">
+                    <IndianRupee className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="amount"
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="Enter amount"
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date</Label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select value={category} onValueChange={setCategory} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="salary">Salary & Payroll</SelectItem>
+                      <SelectItem value="office">Office Supplies</SelectItem>
+                      <SelectItem value="housing">Rent & Facilities</SelectItem>
+                      <SelectItem value="utilities">Utilities</SelectItem>
+                      <SelectItem value="software">Software & Tools</SelectItem>
+                      <SelectItem value="marketing">Marketing</SelectItem>
+                      <SelectItem value="travel">Travel & Entertainment</SelectItem>
+                      <SelectItem value="insurance">Insurance</SelectItem>
+                      <SelectItem value="taxes">Taxes</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Input
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter description"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="recurring">Recurring Transaction?</Label>
+                  <Select value={isRecurring} onValueChange={setIsRecurring}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Is this recurring?" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="yes">Yes</SelectItem>
+                      <SelectItem value="no">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                {isRecurring === "yes" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="frequency">Frequency</Label>
+                    <Select value={frequency} onValueChange={setFrequency} required>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="weekly">Weekly</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                        <SelectItem value="yearly">Yearly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div className="flex justify-end gap-3 mt-6">
+                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
+                    Add Transaction
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -252,7 +360,7 @@ export default function Expenses() {
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatAmount(balance)}</div>
+            <div className="text-2xl font-bold">{formatAmount(currentBalance)}</div>
             <p className="text-xs text-muted-foreground">
               Available balance in your account
             </p>
@@ -303,7 +411,7 @@ export default function Expenses() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {transactions.slice(0, 5).map((transaction) => (
+              {transactions.slice(-5).reverse().map((transaction) => (
                 <div
                   key={transaction.id}
                   className="flex items-center justify-between p-4 border rounded-lg"
@@ -425,11 +533,7 @@ export default function Expenses() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem className="text-red-600" onClick={() => handleDeleteTransaction(transaction.id)}>
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </DropdownMenuItem>
