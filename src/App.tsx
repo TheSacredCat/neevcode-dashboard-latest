@@ -40,7 +40,7 @@ const App = () => {
                 <Sidebar />
                 <div className="flex-1">
                   <Navbar setIsAuthenticated={setIsAuthenticated} />
-                  <main className="p-6">
+                  <main className="p-6 mt-16">
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/courses" element={<Courses />} />
