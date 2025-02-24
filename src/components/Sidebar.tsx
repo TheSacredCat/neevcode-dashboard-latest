@@ -83,7 +83,7 @@ export function Sidebar() {
       <div className="hidden md:block">
         <div 
           className={cn(
-            "h-screen sticky top-0 flex",
+            "h-screen fixed top-0 left-0",
             "bg-background dark:bg-card border-r border-border",
             isCollapsed ? "w-16" : "w-64",
             "transition-all duration-300"
