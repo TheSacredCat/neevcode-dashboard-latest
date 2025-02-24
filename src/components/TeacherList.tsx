@@ -40,14 +40,6 @@ type Teacher = {
   email: string;
 };
 
-type EditFormData = {
-  name: string;
-  subject: string;
-  role: string;
-  status: "Permanent" | "Intern";
-  email: string;
-};
-
 export function TeacherList() {
   const [teachers, setTeachers] = useState<Teacher[]>([
     {
@@ -86,11 +78,11 @@ export function TeacherList() {
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
-  const [editForm, setEditForm] = useState<EditFormData>({
+  const [editForm, setEditForm] = useState({
     name: "",
     subject: "",
     role: "",
-    status: "Permanent",
+    status: "",
     email: "",
   });
 

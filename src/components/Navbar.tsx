@@ -34,7 +34,7 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
   };
 
   return (
-    <div className="h-16 border-b bg-card px-6 flex items-center justify-between fixed top-0 right-0 left-0 z-40 md:left-[16rem]">
+    <div className="h-16 border-b bg-card px-6 flex items-center justify-between">
       <div className="flex-1 max-w-xl">
         <div className="relative">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />

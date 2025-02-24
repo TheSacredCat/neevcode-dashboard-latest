@@ -2,10 +2,8 @@
 import { cn } from "@/lib/utils";
 import { BookOpen, Home, Users, Menu, DollarSign } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useMediaQuery } from "@/hooks/use-mobile";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", path: "/" },
@@ -14,14 +12,29 @@ const menuItems = [
   { icon: DollarSign, label: "Expenses", path: "/expenses" },
 ];
 
-const SidebarContent = ({ isCollapsed }: { isCollapsed: boolean }) => {
+export function Sidebar() {
   const location = useLocation();
-  
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
   return (
-    <div className="flex flex-col h-full">
+    <div 
+      className={cn(
+        "fixed left-0 top-0 z-20 min-h-screen flex flex-col transition-all duration-300",
+        "bg-background dark:bg-card border-r border-border",
+        isCollapsed ? "w-16" : "w-64",
+        "md:relative"
+      )}
+    >
       <div className="p-4 flex items-center justify-between border-b border-border">
         {!isCollapsed && <h2 className="text-xl font-bold text-[#947dc2]">NeevCode</h2>}
-        {isCollapsed && <span className="w-6" />}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
       </div>
       <nav className="flex-1 p-2">
         {menuItems.map((item) => {
@@ -45,72 +58,5 @@ const SidebarContent = ({ isCollapsed }: { isCollapsed: boolean }) => {
         })}
       </nav>
     </div>
-  );
-};
-
-export function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Reset mobile sidebar state when switching between mobile and desktop
-  useEffect(() => {
-    setIsOpen(false);
-  }, [isMobile]);
-
-  if (isMobile) {
-    return (
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-10 w-10 fixed top-3 left-3 z-50 md:hidden"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-64">
-          <SidebarContent isCollapsed={false} />
-        </SheetContent>
-      </Sheet>
-    );
-  }
-
-  return (
-    <>
-      {/* Desktop Sidebar */}
-      <div className="hidden md:block">
-        <div 
-          className={cn(
-            "h-screen fixed top-0 left-0",
-            "bg-background dark:bg-card border-r border-border",
-            isCollapsed ? "w-16" : "w-64",
-            "transition-all duration-300"
-          )}
-        >
-          <div className="flex flex-col flex-1">
-            <SidebarContent isCollapsed={isCollapsed} />
-            <div className="p-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 mx-auto"
-                onClick={() => setIsCollapsed(!isCollapsed)}
-              >
-                <Menu className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Spacer div */}
-      <div className={cn(
-        "hidden md:block",
-        isCollapsed ? "w-16" : "w-64",
-        "shrink-0 transition-all duration-300"
-      )} />
-    </>
   );
 }
