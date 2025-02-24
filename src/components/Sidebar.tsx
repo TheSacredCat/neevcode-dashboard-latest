@@ -22,15 +22,17 @@ export function Sidebar() {
   const sidebarContent = (
     <>
       <div className="p-4 flex items-center justify-between border-b border-border">
-        {!isCollapsed && <h2 className="text-xl font-bold text-[#947dc2]">NeevCode</h2>}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          <Menu className="h-4 w-4" />
-        </Button>
+        <h2 className="text-xl font-bold text-[#947dc2]">NeevCode</h2>
+        {!isMobile && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <nav className="flex-1 p-2">
         {menuItems.map((item) => {
@@ -48,7 +50,7 @@ export function Sidebar() {
               )}
             >
               <Icon className="h-5 w-5 shrink-0" />
-              {!isCollapsed && <span>{item.label}</span>}
+              <span>{isMobile || !isCollapsed ? item.label : ""}</span>
             </Link>
           );
         })}
@@ -63,12 +65,12 @@ export function Sidebar() {
           <Button
             variant="ghost"
             size="icon"
-            className="fixed top-3 left-3 z-50 md:hidden"
+            className="fixed top-3 left-4 z-50 md:hidden"
           >
             <Menu className="h-4 w-4" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-64">
+        <SheetContent side="left" className="p-0 w-72">
           {sidebarContent}
         </SheetContent>
       </Sheet>
