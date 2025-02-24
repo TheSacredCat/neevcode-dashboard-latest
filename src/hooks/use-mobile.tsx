@@ -16,3 +16,8 @@ export function useMediaQuery(query: string) {
 
   return matches
 }
+
+// Export the useIsMobile hook for backward compatibility
+export function useIsMobile() {
+  return useMediaQuery("(max-width: 768px)")
+}
