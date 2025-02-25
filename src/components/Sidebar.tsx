@@ -6,6 +6,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", path: "/" },
@@ -18,6 +23,40 @@ export function Sidebar() {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const isMobile = useIsMobile();
+
+  const MenuItem = ({ item, isCollapsed }: { item: typeof menuItems[0], isCollapsed: boolean }) => {
+    const Icon = item.icon;
+    const isActive = location.pathname === item.path;
+    const content = (
+      <Link
+        to={item.path}
+        className={cn(
+          "flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors my-1",
+          isActive
+            ? "bg-[#947dc2]/20 text-[#947dc2]"
+            : "text-muted-foreground hover:text-foreground hover:bg-[#947dc2]/10"
+        )}
+      >
+        <Icon className="h-5 w-5 shrink-0" />
+        <span>{isMobile || !isCollapsed ? item.label : ""}</span>
+      </Link>
+    );
+
+    if (isCollapsed && !isMobile) {
+      return (
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            {content}
+          </TooltipTrigger>
+          <TooltipContent side="right" className="ml-1">
+            {item.label}
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return content;
+  };
 
   const sidebarContent = (
     <>
@@ -35,25 +74,9 @@ export function Sidebar() {
         )}
       </div>
       <nav className="flex-1 p-2">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.path;
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={cn(
-                "flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors my-1",
-                isActive
-                  ? "bg-[#947dc2]/20 text-[#947dc2]"
-                  : "text-muted-foreground hover:text-foreground hover:bg-[#947dc2]/10"
-              )}
-            >
-              <Icon className="h-5 w-5 shrink-0" />
-              <span>{isMobile || !isCollapsed ? item.label : ""}</span>
-            </Link>
-          );
-        })}
+        {menuItems.map((item) => (
+          <MenuItem key={item.path} item={item} isCollapsed={isCollapsed} />
+        ))}
       </nav>
     </>
   );
