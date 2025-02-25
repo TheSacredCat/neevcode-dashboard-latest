@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { BookOpen, Home, Users, Menu, DollarSign } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -23,6 +23,14 @@ export function Sidebar() {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close sidebar when route changes
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [location.pathname, isMobile]);
 
   const MenuItem = ({ item, isCollapsed }: { item: typeof menuItems[0], isCollapsed: boolean }) => {
     const Icon = item.icon;
@@ -83,7 +91,7 @@ export function Sidebar() {
 
   if (isMobile) {
     return (
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button
             variant="ghost"
