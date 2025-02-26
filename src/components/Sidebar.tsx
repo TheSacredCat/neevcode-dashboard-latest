@@ -1,6 +1,6 @@
 
 import { cn } from "@/lib/utils";
-import { BookOpen, Home, Users, Menu, DollarSign } from "lucide-react";
+import { BookOpen, Home, Users, Menu, DollarSign, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ const menuItems = [
   { icon: BookOpen, label: "Courses", path: "/courses" },
   { icon: Users, label: "Teachers", path: "/teachers" },
   { icon: DollarSign, label: "Expenses", path: "/expenses" },
+  { icon: Settings, label: "Content Management", path: "/content" },
 ];
 
 export function Sidebar() {

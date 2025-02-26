@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -31,14 +30,14 @@ const getInitials = (name: string) => {
     .toUpperCase();
 };
 
-type Teacher = {
+interface Teacher {
   id: number;
   name: string;
   subject: string;
   role: string;
   status: "Permanent" | "Intern";
   email: string;
-};
+}
 
 export function TeacherList() {
   const [teachers, setTeachers] = useState<Teacher[]>([

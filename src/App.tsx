@@ -13,6 +13,7 @@ import Courses from "./pages/Courses";
 import NotFound from "./pages/NotFound";
 import Teachers from "./pages/Teachers";
 import Expenses from "./pages/Expenses";
+import ContentManagement from "./pages/ContentManagement";
 import { ChatWidget } from "./components/ChatWidget";
 import { useState } from "react";
 
@@ -46,6 +47,7 @@ const App = () => {
                       <Route path="/courses" element={<Courses />} />
                       <Route path="/teachers" element={<Teachers />} />
                       <Route path="/expenses" element={<Expenses />} />
+                      <Route path="/content" element={<ContentManagement />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
