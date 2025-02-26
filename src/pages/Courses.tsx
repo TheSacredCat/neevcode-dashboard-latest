@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Edit, Plus, Trash2, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Course {
   id: number;
@@ -31,26 +31,24 @@ interface Course {
 }
 
 export default function Courses() {
-  const [courses, setCourses] = useState<Course[]>([
-    {
-      id: 1,
-      name: "React Masterclass",
-      category: "Web dev",
-      description: "Complete React course from basics to advanced",
-      price: 14999,
-      imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee",
-      curriculum: ["React Basics", "Hooks", "State Management", "Advanced Patterns"]
-    },
-    {
-      id: 2,
-      name: "Advanced JavaScript",
-      category: "Programming",
-      description: "Deep dive into JavaScript concepts",
-      price: 12499,
-      imageUrl: "https://images.unsplash.com/photo-1627398242454-45a1465c2479",
-      curriculum: ["ES6+", "Promises", "Async/Await", "Design Patterns"]
-    }
-  ]);
+  const [courses, setCourses] = useState([])
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://192.168.0.100:5000/api/course');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+        const data = await response.json();
+        setCourses(data);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [newCourse, setNewCourse] = useState<Partial<Course>>({
