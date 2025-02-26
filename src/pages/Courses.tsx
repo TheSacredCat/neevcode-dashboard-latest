@@ -69,6 +69,8 @@ export default function Courses() {
   const [curriculumTitle, setCurriculumTitle] = useState("");
   const [curriculumItem, setCurriculumItem] = useState("");
   const [currentTopicIndex, setCurrentTopicIndex] = useState<number | null>(null);
+  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const generateUniqueId = () => {
     const existingIds = courses.map(course => course.id);
@@ -80,8 +82,8 @@ export default function Courses() {
   };
 
   const handleAddCourse = () => {
-    if (!newCourse.name || !newCourse.description || newCourse.price === null || !newCourse.imageUrl || !newCourse.category) {
-      toast.error("Please fill all required fields.");
+    if (!newCourse.name || !newCourse.description || newCourse.price === null || !newCourse.imageUrl || !newCourse.category || newCourse.curriculum.length === 0) {
+      toast.error("Please fill all required fields, including at least one topic.");
       return;
     }
 
@@ -121,7 +123,8 @@ export default function Courses() {
     }
   };
 
-  const handleAddCurriculumItem = (topicIndex: number) => {
+  const handleAddCurriculumItem = (topicIndex: number, e?: React.KeyboardEvent) => {
+    if (e && e.key !== "Enter") return; // Only trigger on Enter key
     if (curriculumItem.trim() && newCourse.curriculum) {
       const updatedCurriculum = [...newCourse.curriculum];
       updatedCurriculum[topicIndex].items.push(curriculumItem.trim());
@@ -152,6 +155,25 @@ export default function Courses() {
         curriculum: updatedCurriculum
       });
     }
+  };
+
+  const handleEditCourse = () => {
+    if (!editingCourse || !editingCourse.name || !editingCourse.description || editingCourse.price === null || !editingCourse.imageUrl || !editingCourse.category || editingCourse.curriculum.length === 0) {
+      toast.error("Please fill all required fields, including at least one topic.");
+      return;
+    }
+
+    setCourses(courses.map(course => 
+      course.id === editingCourse.id ? editingCourse : course
+    ));
+    setEditingCourse(null);
+    setIsEditDialogOpen(false);
+    toast.success("Course updated successfully!");
+  };
+
+  const startEditing = (course: Course) => {
+    setEditingCourse(course);
+    setIsEditDialogOpen(true);
   };
 
   return (
@@ -262,6 +284,7 @@ export default function Courses() {
                               <Input
                                 value={curriculumItem}
                                 onChange={(e) => setCurriculumItem(e.target.value)}
+                                onKeyDown={(e) => handleAddCurriculumItem(topicIndex, e)}
                                 placeholder="Add a subtopic"
                               />
                               <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
@@ -291,7 +314,134 @@ export default function Courses() {
         </Dialog>
       </div>
 
-      {/* Courses Table */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[625px] max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle>Edit Course</DialogTitle>
+          </DialogHeader>
+          {editingCourse && (
+            <ScrollArea className="h-full max-h-[calc(90vh-8rem)]">
+              <div className="grid gap-4 py-4 pr-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-name">Course Name</Label>
+                  <Input
+                    id="edit-name"
+                    value={editingCourse.name}
+                    onChange={(e) => setEditingCourse({ ...editingCourse, name: e.target.value })}
+                    placeholder="Enter course name"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-category">Category</Label>
+                  <Input
+                    id="edit-category"
+                    value={editingCourse.category}
+                    onChange={(e) => setEditingCourse({ ...editingCourse, category: e.target.value })}
+                    placeholder="Enter course category"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-description">Description</Label>
+                  <Textarea
+                    id="edit-description"
+                    value={editingCourse.description}
+                    onChange={(e) => setEditingCourse({ ...editingCourse, description: e.target.value })}
+                    placeholder="Enter course description"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-price">Price (₹)</Label>
+                  <Input
+                    id="edit-price"
+                    type="number"
+                    value={editingCourse.price === null ? "" : editingCourse.price}
+                    onChange={(e) => setEditingCourse({ ...editingCourse, price: e.target.value === "" ? null : Number(e.target.value) })}
+                    placeholder="Enter course price"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-image">Image URL</Label>
+                  <Input
+                    id="edit-image"
+                    value={editingCourse.imageUrl}
+                    onChange={(e) => setEditingCourse({ ...editingCourse, imageUrl: e.target.value })}
+                    placeholder="Enter image URL"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Curriculum Topics</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={curriculumTitle}
+                      onChange={(e) => setCurriculumTitle(e.target.value)}
+                      onKeyDown={(e) => handleAddCurriculumTopic(e)}
+                      placeholder="Add a topic title"
+                    />
+                    <Button type="button" onClick={() => handleAddCurriculumTopic()}>
+                      Add Topic
+                    </Button>
+                  </div>
+                  <div className="space-y-4 mt-4">
+                    {editingCourse.curriculum.map((topic, topicIndex) => (
+                      <div key={topicIndex} className="border p-4 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium mb-2">{topic.title}</h4>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-4 w-4"
+                            onClick={() => handleDeleteCurriculumTopic(topicIndex)}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <div className="space-y-2">
+                          {topic.items.map((item, itemIndex) => (
+                            <div key={itemIndex} className="flex items-center gap-2">
+                              <span className="text-sm">{item}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-4 w-4"
+                                onClick={() => handleDeleteCurriculumItem(topicIndex, itemIndex)}
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ))}
+                          <div className="flex gap-2 mt-2">
+                            <Input
+                              value={curriculumItem}
+                              onChange={(e) => setCurriculumItem(e.target.value)}
+                              onKeyDown={(e) => handleAddCurriculumItem(topicIndex, e)}
+                              placeholder="Add a subtopic"
+                            />
+                            <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
+                              Add
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </ScrollArea>
+          )}
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleEditCourse}
+              className="bg-[#947dc2] hover:bg-[#947dc2]/90"
+            >
+              Save Changes
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
