@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -72,6 +71,10 @@ export default function Courses() {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isEditingCourse, setIsEditingCourse] = useState(false);
   const [currentTopicIndex, setCurrentTopicIndex] = useState<number | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingCurriculumTitle, setEditingCurriculumTitle] = useState("");
+  const [editingCurriculumItem, setEditingCurriculumItem] = useState("");
+  const [editingTopicIndex, setEditingTopicIndex] = useState<number | null>(null);
 
   const generateUniqueId = () => {
     const existingIds = courses.map(course => course.id);
@@ -146,6 +149,39 @@ export default function Courses() {
     setIsEditingCourse(true);
     setCurriculumTitle("");
     setCurriculumItem("");
+  };
+
+  const handleEditCurriculumTopic = () => {
+    if (editingCurriculumTitle.trim() && editingCourse) {
+      setEditingCourse({
+        ...editingCourse,
+        curriculum: [...editingCourse.curriculum, { title: editingCurriculumTitle, items: [] }]
+      });
+      setEditingCurriculumTitle("");
+    }
+  };
+
+  const handleEditCurriculumItem = (topicIndex: number) => {
+    if (editingCurriculumItem.trim() && editingCourse) {
+      const updatedCurriculum = [...editingCourse.curriculum];
+      updatedCurriculum[topicIndex].items.push(editingCurriculumItem.trim());
+      setEditingCourse({
+        ...editingCourse,
+        curriculum: updatedCurriculum
+      });
+      setEditingCurriculumItem("");
+      setEditingTopicIndex(null);
+    }
+  };
+
+  const handleUpdateCourse = () => {
+    if (editingCourse && editingCourse.name && editingCourse.description && editingCourse.price && editingCourse.imageUrl) {
+      setCourses(courses.map(course => 
+        course.id === editingCourse.id ? editingCourse : course
+      ));
+      setEditingCourse(null);
+      setIsEditDialogOpen(false);
+    }
   };
 
   return (
@@ -278,6 +314,127 @@ export default function Courses() {
           </DialogContent>
         </Dialog>
       </div>
+
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[625px]">
+          <DialogHeader>
+            <DialogTitle>Edit Course</DialogTitle>
+          </DialogHeader>
+          {editingCourse && (
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-name">Course Name</Label>
+                <Input
+                  id="edit-name"
+                  value={editingCourse.name}
+                  onChange={(e) => setEditingCourse({ ...editingCourse, name: e.target.value })}
+                  placeholder="Enter course name"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-category">Category</Label>
+                <Input
+                  id="edit-category"
+                  value={editingCourse.category}
+                  onChange={(e) => setEditingCourse({ ...editingCourse, category: e.target.value })}
+                  placeholder="Enter course category"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-description">Description</Label>
+                <Textarea
+                  id="edit-description"
+                  value={editingCourse.description}
+                  onChange={(e) => setEditingCourse({ ...editingCourse, description: e.target.value })}
+                  placeholder="Enter course description"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-price">Price (₹)</Label>
+                <Input
+                  id="edit-price"
+                  type="number"
+                  value={editingCourse.price}
+                  onChange={(e) => setEditingCourse({ ...editingCourse, price: Number(e.target.value) })}
+                  placeholder="Enter course price"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-image">Image URL</Label>
+                <Input
+                  id="edit-image"
+                  value={editingCourse.imageUrl}
+                  onChange={(e) => setEditingCourse({ ...editingCourse, imageUrl: e.target.value })}
+                  placeholder="Enter image URL"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>Curriculum Topics</Label>
+                <div className="flex gap-2">
+                  <Input
+                    value={editingCurriculumTitle}
+                    onChange={(e) => setEditingCurriculumTitle(e.target.value)}
+                    placeholder="Add a topic title"
+                  />
+                  <Button type="button" onClick={handleEditCurriculumTopic}>
+                    Add Topic
+                  </Button>
+                </div>
+                <div className="space-y-4 mt-4">
+                  {editingCourse.curriculum.map((topic, topicIndex) => (
+                    <div key={topicIndex} className="border p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">{topic.title}</h4>
+                      <div className="space-y-2">
+                        {topic.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="flex items-center gap-2">
+                            <span className="text-sm">{item}</span>
+                          </div>
+                        ))}
+                        {editingTopicIndex === topicIndex ? (
+                          <div className="flex gap-2 mt-2">
+                            <Input
+                              value={editingCurriculumItem}
+                              onChange={(e) => setEditingCurriculumItem(e.target.value)}
+                              placeholder="Add a subtopic"
+                            />
+                            <Button type="button" onClick={() => handleEditCurriculumItem(topicIndex)}>
+                              Add
+                            </Button>
+                            <Button type="button" variant="outline" onClick={() => setEditingTopicIndex(null)}>
+                              Cancel
+                            </Button>
+                          </div>
+                        ) : (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="mt-2"
+                            onClick={() => setEditingTopicIndex(topicIndex)}
+                          >
+                            Add Subtopic
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleUpdateCourse}
+              className="bg-[#947dc2] hover:bg-[#947dc2]/90"
+            >
+              Update Course
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="rounded-md border">
         <Table>
