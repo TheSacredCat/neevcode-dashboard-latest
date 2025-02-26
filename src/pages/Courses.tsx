@@ -154,6 +154,34 @@ export default function Courses() {
   };
 
   const handleDeleteCourse = (id: number) => {
+    const deleteCourseAPI = async () => {
+      try {
+        const response = await fetch('http://192.168.0.100:5000/api/addEditCourse', {
+          
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify( {
+            id: id,
+          } )
+        });
+        if (!response.ok) {
+          toast.error("Could not delete course in backend", {
+            position: "top-right",
+            style: { background: "red", color: "white" },
+          });
+          throw new Error('Failed to delete courses to backend');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Could not delete course in backend", {
+          position: "top-right",
+          style: { background: "red", color: "white" },
+        });
+      }
+    };
+    deleteCourseAPI();    
     setCourses(courses.filter(course => course.id !== id));
     toast.success("Course deleted successfully!", {
       position: "top-right",
