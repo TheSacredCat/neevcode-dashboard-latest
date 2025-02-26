@@ -38,26 +38,24 @@ interface Course {
 }
 
 export default function Courses() {
-  const [courses, setCourses] = useState<Course[]>([
-    {
-      id: 1,
-      name: "React Masterclass",
-      description: "Complete React course from basics to advanced",
-      price: 14999,
-      imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee",
-      category: "Development",
-      curriculum: [
-        {
-          title: "Introduction to React",
-          items: ["React Basics", "Components", "Props and State"]
-        },
-        {
-          title: "Advanced Concepts",
-          items: ["Hooks", "Context API", "Performance Optimization"]
+  const [courses, setCourses] = useState([])
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://192.168.0.100:5000/api/course');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
         }
-      ]
-    }
-  ]);
+        const data = await response.json();
+        setCourses(data);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [newCourse, setNewCourse] = useState<Partial<Course>>({
@@ -84,7 +82,7 @@ export default function Courses() {
     }
     return newId;
   };
-
+  
   const handleAddCourse = () => {
     if (!newCourse.name || !newCourse.description || newCourse.price === null || !newCourse.imageUrl || !newCourse.category || newCourse.curriculum.length === 0) {
       toast.error("Please fill all required fields, including at least one topic.", {
