@@ -17,14 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Edit, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Edit, Plus, Trash2, X } from "lucide-react";
+import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface CourseContent {
-  title: string;
-  items: string[];
-}
 
 interface Course {
   id: number;
@@ -33,30 +28,28 @@ interface Course {
   price: number;
   imageUrl: string;
   category: string;
-  curriculum: CourseContent[];
+  curriculum: string[]; // Changed to flat array of strings
 }
 
 export default function Courses() {
-  const [courses, setCourses] = useState<Course[]>([
-    {
-      id: 1,
-      name: "React Masterclass",
-      description: "Complete React course from basics to advanced",
-      price: 14999,
-      imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee",
-      category: "Development",
-      curriculum: [
-        {
-          title: "Introduction to React",
-          items: ["React Basics", "Components", "Props and State"]
-        },
-        {
-          title: "Advanced Concepts",
-          items: ["Hooks", "Context API", "Performance Optimization"]
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  // Fetch courses from the API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://192.168.0.100:5000/api/course');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
         }
-      ]
-    }
-  ]);
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [newCourse, setNewCourse] = useState<Partial<Course>>({
@@ -67,13 +60,9 @@ export default function Courses() {
     category: "",
     curriculum: []
   });
-  const [curriculumTitle, setCurriculumTitle] = useState("");
-  const [curriculumItem, setCurriculumItem] = useState("");
+  const [curriculumInput, setCurriculumInput] = useState("");
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editingCurriculumTitle, setEditingCurriculumTitle] = useState("");
-  const [editingCurriculumItem, setEditingCurriculumItem] = useState("");
-  const [editingTopicIndex, setEditingTopicIndex] = useState<number | null>(null);
 
   const generateUniqueId = () => {
     const existingIds = courses.map(course => course.id);
@@ -110,51 +99,17 @@ export default function Courses() {
     setCourses(courses.filter(course => course.id !== id));
   };
 
-  const handleAddCurriculumTopic = () => {
-    if (curriculumTitle.trim()) {
+  const handleAddCurriculumItem = () => {
+    if (curriculumInput.trim()) {
       setNewCourse({
         ...newCourse,
-        curriculum: [...(newCourse.curriculum || []), { title: curriculumTitle, items: [] }]
+        curriculum: [...(newCourse.curriculum || []), curriculumInput.trim()]
       });
-      setCurriculumTitle("");
+      setCurriculumInput("");
     }
   };
 
-  const handleAddCurriculumItem = (topicIndex: number) => {
-    if (curriculumItem.trim() && newCourse.curriculum) {
-      const updatedCurriculum = [...newCourse.curriculum];
-      updatedCurriculum[topicIndex].items.push(curriculumItem.trim());
-      setNewCourse({
-        ...newCourse,
-        curriculum: updatedCurriculum
-      });
-      setCurriculumItem("");
-    }
-  };
-
-  const handleEditCurriculumTopic = () => {
-    if (editingCurriculumTitle.trim() && editingCourse) {
-      setEditingCourse({
-        ...editingCourse,
-        curriculum: [...editingCourse.curriculum, { title: editingCurriculumTitle, items: [] }]
-      });
-      setEditingCurriculumTitle("");
-    }
-  };
-
-  const handleEditCurriculumItem = (topicIndex: number) => {
-    if (editingCurriculumItem.trim() && editingCourse) {
-      const updatedCurriculum = [...editingCourse.curriculum];
-      updatedCurriculum[topicIndex].items.push(editingCurriculumItem.trim());
-      setEditingCourse({
-        ...editingCourse,
-        curriculum: updatedCurriculum
-      });
-      setEditingCurriculumItem("");
-    }
-  };
-
-  const handleUpdateCourse = () => {
+  const handleEditCourse = () => {
     if (editingCourse && editingCourse.name && editingCourse.description && editingCourse.price && editingCourse.imageUrl) {
       setCourses(courses.map(course => 
         course.id === editingCourse.id ? editingCourse : course
@@ -235,39 +190,20 @@ export default function Courses() {
                   <Label>Curriculum Topics</Label>
                   <div className="flex gap-2">
                     <Input
-                      value={curriculumTitle}
-                      onChange={(e) => setCurriculumTitle(e.target.value)}
-                      placeholder="Add a topic title"
+                      value={curriculumInput}
+                      onChange={(e) => setCurriculumInput(e.target.value)}
+                      placeholder="Add a topic"
                     />
-                    <Button type="button" onClick={handleAddCurriculumTopic}>
+                    <Button type="button" onClick={handleAddCurriculumItem}>
                       Add Topic
                     </Button>
                   </div>
                   {newCourse.curriculum && newCourse.curriculum.length > 0 && (
-                    <div className="space-y-4 mt-4">
-                      {newCourse.curriculum.map((topic, topicIndex) => (
-                        <div key={topicIndex} className="border p-4 rounded-lg">
-                          <h4 className="font-medium mb-2">{topic.title}</h4>
-                          <div className="space-y-2">
-                            {topic.items.map((item, itemIndex) => (
-                              <div key={itemIndex} className="flex items-center gap-2">
-                                <span className="text-sm">{item}</span>
-                              </div>
-                            ))}
-                            <div className="flex gap-2 mt-2">
-                              <Input
-                                value={curriculumItem}
-                                onChange={(e) => setCurriculumItem(e.target.value)}
-                                placeholder="Add a subtopic"
-                              />
-                              <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
-                                Add
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
+                    <ul className="list-disc list-inside space-y-1">
+                      {newCourse.curriculum.map((topic, index) => (
+                        <li key={index} className="text-sm">{topic}</li>
                       ))}
-                    </div>
+                    </ul>
                   )}
                 </div>
               </div>
@@ -345,38 +281,45 @@ export default function Courses() {
                   <Label>Curriculum Topics</Label>
                   <div className="flex gap-2">
                     <Input
-                      value={editingCurriculumTitle}
-                      onChange={(e) => setEditingCurriculumTitle(e.target.value)}
-                      placeholder="Add a topic title"
+                      value={curriculumInput}
+                      onChange={(e) => setCurriculumInput(e.target.value)}
+                      placeholder="Add a topic"
                     />
-                    <Button type="button" onClick={handleEditCurriculumTopic}>
+                    <Button 
+                      type="button" 
+                      onClick={() => {
+                        if (curriculumInput.trim()) {
+                          setEditingCourse({
+                            ...editingCourse,
+                            curriculum: [...editingCourse.curriculum, curriculumInput.trim()]
+                          });
+                          setCurriculumInput("");
+                        }
+                      }}
+                    >
                       Add Topic
                     </Button>
                   </div>
-                  <div className="space-y-4 mt-4">
-                    {editingCourse.curriculum.map((topic, topicIndex) => (
-                      <div key={topicIndex} className="border p-4 rounded-lg">
-                        <h4 className="font-medium mb-2">{topic.title}</h4>
-                        <div className="space-y-2">
-                          {topic.items.map((item, itemIndex) => (
-                            <div key={itemIndex} className="flex items-center gap-2">
-                              <span className="text-sm">{item}</span>
-                            </div>
-                          ))}
-                          <div className="flex gap-2 mt-2">
-                            <Input
-                              value={editingCurriculumItem}
-                              onChange={(e) => setEditingCurriculumItem(e.target.value)}
-                              placeholder="Add a subtopic"
-                            />
-                            <Button type="button" onClick={() => handleEditCurriculumItem(topicIndex)}>
-                              Add
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  {editingCourse.curriculum.length > 0 && (
+                    <ul className="list-disc list-inside space-y-1">
+                      {editingCourse.curriculum.map((topic, index) => (
+                        <li key={index} className="text-sm">
+                          {topic}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-4 w-4 ml-2"
+                            onClick={() => setEditingCourse({
+                              ...editingCourse,
+                              curriculum: editingCourse.curriculum.filter((_, i) => i !== index)
+                            })}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             </ScrollArea>
@@ -386,10 +329,10 @@ export default function Courses() {
               Cancel
             </Button>
             <Button 
-              onClick={handleUpdateCourse}
+              onClick={handleEditCourse}
               className="bg-[#947dc2] hover:bg-[#947dc2]/90"
             >
-              Update Course
+              Save Changes
             </Button>
           </div>
         </DialogContent>
@@ -416,9 +359,7 @@ export default function Courses() {
                 <TableCell>{course.category}</TableCell>
                 <TableCell>{course.description}</TableCell>
                 <TableCell>₹{course.price.toLocaleString()}</TableCell>
-                <TableCell>
-                  {course.curriculum.map(topic => topic.title).join(", ")}
-                </TableCell>
+                <TableCell>{course.curriculum.join(", ")}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button 
