@@ -73,6 +73,41 @@ export default function Courses() {
           curriculum: newCourse.curriculum || []
         }
       ]);
+      
+      const largestID = courses.reduce((max, item) => (item.id > max.id ? item : max), courses[0]);
+
+      // useEffect(() => {
+        const addCourseAPI = async () => {
+          try {
+            const response = await fetch('http://192.168.0.100:5000/api/addEditCourse', {
+              
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify( {
+                id: largestID.id,
+                name: newCourse.name,
+                category: newCourse.category,
+                description: newCourse.description,
+                price: newCourse.price,
+                imageUrl: newCourse.imageUrl,
+                curriculum: newCourse.curriculum,
+              } )
+            });
+            if (!response.ok) {
+              throw new Error('Failed to update courses to backend');
+            }
+            // const data = await response.json();
+            // setCourses(data);
+            console.log(newCourse.name);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        addCourseAPI();
+      // }, []);
+      
       setNewCourse({
         name: "",
         category: "",
