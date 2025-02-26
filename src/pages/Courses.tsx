@@ -21,6 +21,11 @@ import { Edit, Plus, Trash2, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+interface CourseContent {
+  title: string;
+  items: string[];
+}
+
 interface Course {
   id: number;
   name: string;
@@ -28,7 +33,7 @@ interface Course {
   price: number;
   imageUrl: string;
   category: string;
-  curriculum: string[]; // Changed to flat array of strings
+  curriculum: CourseContent[];
 }
 
 export default function Courses() {
@@ -60,9 +65,14 @@ export default function Courses() {
     category: "",
     curriculum: []
   });
-  const [curriculumInput, setCurriculumInput] = useState("");
+  const [curriculumTitle, setCurriculumTitle] = useState("");
+  const [curriculumItem, setCurriculumItem] = useState("");
+  const [currentTopicIndex, setCurrentTopicIndex] = useState<number | null>(null);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingCurriculumTitle, setEditingCurriculumTitle] = useState("");
+  const [editingCurriculumItem, setEditingCurriculumItem] = useState("");
+  const [editingTopicIndex, setEditingTopicIndex] = useState<number | null>(null);
 
   const generateUniqueId = () => {
     const existingIds = courses.map(course => course.id);
@@ -99,13 +109,46 @@ export default function Courses() {
     setCourses(courses.filter(course => course.id !== id));
   };
 
-  const handleAddCurriculumItem = () => {
-    if (curriculumInput.trim()) {
+  const handleAddCurriculumTopic = () => {
+    if (curriculumTitle.trim()) {
       setNewCourse({
         ...newCourse,
-        curriculum: [...(newCourse.curriculum || []), curriculumInput.trim()]
+        curriculum: [...(newCourse.curriculum || []), { title: curriculumTitle, items: [] }]
       });
-      setCurriculumInput("");
+      setCurriculumTitle("");
+    }
+  };
+
+  const handleAddCurriculumItem = (topicIndex: number) => {
+    if (curriculumItem.trim() && newCourse.curriculum) {
+      const updatedCurriculum = [...newCourse.curriculum];
+      updatedCurriculum[topicIndex].items.push(curriculumItem.trim());
+      setNewCourse({
+        ...newCourse,
+        curriculum: updatedCurriculum
+      });
+      setCurriculumItem("");
+    }
+  };
+
+  const handleDeleteCurriculumTopic = (topicIndex: number) => {
+    if (newCourse.curriculum) {
+      const updatedCurriculum = newCourse.curriculum.filter((_, index) => index !== topicIndex);
+      setNewCourse({
+        ...newCourse,
+        curriculum: updatedCurriculum
+      });
+    }
+  };
+
+  const handleDeleteCurriculumItem = (topicIndex: number, itemIndex: number) => {
+    if (newCourse.curriculum) {
+      const updatedCurriculum = [...newCourse.curriculum];
+      updatedCurriculum[topicIndex].items = updatedCurriculum[topicIndex].items.filter((_, index) => index !== itemIndex);
+      setNewCourse({
+        ...newCourse,
+        curriculum: updatedCurriculum
+      });
     }
   };
 
@@ -190,20 +233,57 @@ export default function Courses() {
                   <Label>Curriculum Topics</Label>
                   <div className="flex gap-2">
                     <Input
-                      value={curriculumInput}
-                      onChange={(e) => setCurriculumInput(e.target.value)}
-                      placeholder="Add a topic"
+                      value={curriculumTitle}
+                      onChange={(e) => setCurriculumTitle(e.target.value)}
+                      placeholder="Add a topic title"
                     />
-                    <Button type="button" onClick={handleAddCurriculumItem}>
+                    <Button type="button" onClick={handleAddCurriculumTopic}>
                       Add Topic
                     </Button>
                   </div>
                   {newCourse.curriculum && newCourse.curriculum.length > 0 && (
-                    <ul className="list-disc list-inside space-y-1">
-                      {newCourse.curriculum.map((topic, index) => (
-                        <li key={index} className="text-sm">{topic}</li>
+                    <div className="space-y-4 mt-4">
+                      {newCourse.curriculum.map((topic, topicIndex) => (
+                        <div key={topicIndex} className="border p-4 rounded-lg">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-medium mb-2">{topic.title}</h4>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-4 w-4"
+                              onClick={() => handleDeleteCurriculumTopic(topicIndex)}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <div className="space-y-2">
+                            {topic.items.map((item, itemIndex) => (
+                              <div key={itemIndex} className="flex items-center gap-2">
+                                <span className="text-sm">{item}</span>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-4 w-4"
+                                  onClick={() => handleDeleteCurriculumItem(topicIndex, itemIndex)}
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            ))}
+                            <div className="flex gap-2 mt-2">
+                              <Input
+                                value={curriculumItem}
+                                onChange={(e) => setCurriculumItem(e.target.value)}
+                                placeholder="Add a subtopic"
+                              />
+                              <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
+                                Add
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   )}
                 </div>
               </div>
@@ -281,45 +361,56 @@ export default function Courses() {
                   <Label>Curriculum Topics</Label>
                   <div className="flex gap-2">
                     <Input
-                      value={curriculumInput}
-                      onChange={(e) => setCurriculumInput(e.target.value)}
-                      placeholder="Add a topic"
+                      value={editingCurriculumTitle}
+                      onChange={(e) => setEditingCurriculumTitle(e.target.value)}
+                      placeholder="Add a topic title"
                     />
-                    <Button 
-                      type="button" 
-                      onClick={() => {
-                        if (curriculumInput.trim()) {
-                          setEditingCourse({
-                            ...editingCourse,
-                            curriculum: [...editingCourse.curriculum, curriculumInput.trim()]
-                          });
-                          setCurriculumInput("");
-                        }
-                      }}
-                    >
+                    <Button type="button" onClick={handleAddCurriculumTopic}>
                       Add Topic
                     </Button>
                   </div>
-                  {editingCourse.curriculum.length > 0 && (
-                    <ul className="list-disc list-inside space-y-1">
-                      {editingCourse.curriculum.map((topic, index) => (
-                        <li key={index} className="text-sm">
-                          {topic}
+                  <div className="space-y-4 mt-4">
+                    {editingCourse.curriculum.map((topic, topicIndex) => (
+                      <div key={topicIndex} className="border p-4 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium mb-2">{topic.title}</h4>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-4 w-4 ml-2"
-                            onClick={() => setEditingCourse({
-                              ...editingCourse,
-                              curriculum: editingCourse.curriculum.filter((_, i) => i !== index)
-                            })}
+                            className="h-4 w-4"
+                            onClick={() => handleDeleteCurriculumTopic(topicIndex)}
                           >
                             <X className="h-3 w-3" />
                           </Button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                        </div>
+                        <div className="space-y-2">
+                          {topic.items.map((item, itemIndex) => (
+                            <div key={itemIndex} className="flex items-center gap-2">
+                              <span className="text-sm">{item}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-4 w-4"
+                                onClick={() => handleDeleteCurriculumItem(topicIndex, itemIndex)}
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ))}
+                          <div className="flex gap-2 mt-2">
+                            <Input
+                              value={editingCurriculumItem}
+                              onChange={(e) => setEditingCurriculumItem(e.target.value)}
+                              placeholder="Add a subtopic"
+                            />
+                            <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
+                              Add
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </ScrollArea>
@@ -359,7 +450,9 @@ export default function Courses() {
                 <TableCell>{course.category}</TableCell>
                 <TableCell>{course.description}</TableCell>
                 <TableCell>₹{course.price.toLocaleString()}</TableCell>
-                <TableCell>{course.curriculum.join(", ")}</TableCell>
+                <TableCell>
+                  {course.curriculum.map(topic => topic.title).join(", ")}
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button 
