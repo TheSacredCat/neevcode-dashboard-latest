@@ -43,36 +43,28 @@ export function TeacherList() {
   const [teachers, setTeachers] = useState<Teacher[]>([
     {
       id: 1,
-      name: "Dr. Pallavi Kamra",
-      subject: "Teacher Training & Student Counseling",
-      role: "Director",
+      name: "John Doe",
+      subject: "Mathematics",
+      role: "Senior Teacher",
       status: "Permanent",
-      email: "dr.pallavi.k@neevcode.com",
+      email: "john@example.com"
     },
     {
       id: 2,
-      name: "Savyasaachi V.",
-      subject: "Advanced Python",
-      role: "Lead Instructor",
+      name: "Jane Smith",
+      subject: "Physics",
+      role: "Teacher",
       status: "Permanent",
-      email: "savyasaachi.v@neevcode.com",
+      email: "jane@example.com"
     },
     {
       id: 3,
-      name: "Shine Rijie",
-      subject: "UI/UX Design",
-      role: "Design Lead",
-      status: "Permanent",
-      email: "shine.r@neevcode.com",
-    },
-    {
-      id: 4,
-      name: "Ashish Jaisawl",
-      subject: "Networking",
-      role: "Technical Instructor",
+      name: "Mike Johnson",
+      subject: "Chemistry",
+      role: "Assistant Teacher",
       status: "Intern",
-      email: "ashish.j@neevcode.com",
-    },
+      email: "mike@example.com"
+    }
   ]);
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
