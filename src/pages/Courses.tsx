@@ -146,10 +146,8 @@ export default function Courses() {
   };
 
   const startEditing = (course: Course) => {
-    setEditingCourse(course);
-    setIsEditingCourse(true);
-    setCurriculumTitle("");
-    setCurriculumItem("");
+    setEditingCourse({ ...course });
+    setIsEditDialogOpen(true);
   };
 
   const handleEditCurriculumTopic = () => {
@@ -327,6 +325,14 @@ export default function Courses() {
             <ScrollArea className="h-full max-h-[calc(90vh-8rem)]">
               <div className="grid gap-4 py-4 pr-4">
                 <div className="grid gap-2">
+                  <Label>Course ID</Label>
+                  <Input
+                    value={editingCourse.id}
+                    disabled
+                    className="bg-muted"
+                  />
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="edit-name">Course Name</Label>
                   <Input
                     id="edit-name"
@@ -445,6 +451,7 @@ export default function Courses() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID</TableHead>
               <TableHead>Course Name</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Description</TableHead>
@@ -456,6 +463,7 @@ export default function Courses() {
           <TableBody>
             {courses.map((course) => (
               <TableRow key={course.id}>
+                <TableCell>{course.id}</TableCell>
                 <TableCell className="font-medium">{course.name}</TableCell>
                 <TableCell>{course.category}</TableCell>
                 <TableCell>{course.description}</TableCell>
