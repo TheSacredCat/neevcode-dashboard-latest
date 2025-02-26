@@ -101,6 +101,43 @@ export default function Courses() {
         curriculum: newCourse.curriculum || []
       }
     ]);
+    const addCourseAPI = async () => {
+      try {
+        const response = await fetch('http://192.168.0.100:5000/api/addEditCourse', {
+          
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify( {
+            id: uid,
+            name: newCourse.name,
+            category: newCourse.category,
+            description: newCourse.description,
+            price: newCourse.price,
+            imageUrl: newCourse.imageUrl,
+            curriculum: newCourse.curriculum,
+          } )
+        });
+        if (!response.ok) {
+          toast.error("Could not update course in backend", {
+            position: "top-right",
+            style: { background: "red", color: "white" },
+          });
+          throw new Error('Failed to update courses to backend');
+        }
+        // const data = await response.json();
+        // setCourses(data);
+        // console.log(newCourse.name);
+      } catch (error) {
+        console.error(error);
+        toast.error("Could not update course in backend", {
+          position: "top-right",
+          style: { background: "red", color: "white" },
+        });
+      }
+    };
+    addCourseAPI();
     setNewCourse({
       name: "",
       description: "",
