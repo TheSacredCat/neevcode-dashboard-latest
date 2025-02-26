@@ -35,21 +35,6 @@ npm install
 npm run dev
 ```
 
-### 2. Edit Directly on GitHub  
-
-- Navigate to the desired file in the repository.  
-- Click the **Edit** button (pencil icon) at the top right.  
-- Make your changes and commit them.  
-
-### 3. Use GitHub Codespaces  
-
-For an instant cloud-based development environment:  
-
-- Go to the main page of the repository.  
-- Click on the **Code** button (green button) in the top right.  
-- Select the **Codespaces** tab.  
-- Click **New Codespace** to launch a development environment.  
-- Edit files directly, then commit and push changes.  
 
 ## Technologies Used  
 
@@ -61,6 +46,3 @@ This project is built with:
 - **shadcn-ui** – Component library  
 - **Tailwind CSS** – Utility-first CSS framework  
 
-## Deployment  
-
-You can deploy this project using services like **Netlify** or **Vercel**.  
