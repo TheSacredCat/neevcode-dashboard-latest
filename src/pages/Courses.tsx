@@ -83,6 +83,7 @@ export default function Courses() {
     return newId;
   };
   
+  const uid=generateUniqueId();
   const handleAddCourse = () => {
     if (!newCourse.name || !newCourse.description || newCourse.price === null || !newCourse.imageUrl || !newCourse.category || newCourse.curriculum.length === 0) {
       toast.error("Please fill all required fields, including at least one topic.", {
@@ -96,7 +97,7 @@ export default function Courses() {
       ...courses,
       {
         ...newCourse as Course,
-        id: generateUniqueId(),
+        id: uid,
         curriculum: newCourse.curriculum || []
       }
     ]);
