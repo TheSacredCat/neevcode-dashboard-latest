@@ -36,6 +36,7 @@ interface Course {
   category: string;
   curriculum: CourseContent[];
 }
+const apiDomain='http://192.168.0.100:5000';
 
 export default function Courses() {
   const [courses, setCourses] = useState([])
@@ -43,7 +44,7 @@ export default function Courses() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://192.168.0.100:5000/api/course');
+        const response = await fetch(apiDomain+'/api/course');
         if (!response.ok) {
           throw new Error('Failed to fetch courses');
         }
@@ -103,8 +104,8 @@ export default function Courses() {
     ]);
     const addCourseAPI = async () => {
       try {
-        const response = await fetch('http://192.168.0.100:5000/api/addEditCourse', {
-          
+        const response = await fetch(apiDomain+'/api/addEditCourse', {
+
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +157,7 @@ export default function Courses() {
   const handleDeleteCourse = (id: number) => {
     const deleteCourseAPI = async () => {
       try {
-        const response = await fetch('http://192.168.0.100:5000/api/addEditCourse', {
+        const response = await fetch(apiDomain+'/api/addEditCourse', {
           
           method: 'DELETE',
           headers: {
@@ -250,7 +251,7 @@ export default function Courses() {
     setIsEditDialogOpen(false);
     const editCourseAPI = async () => {
       try {
-        const response = await fetch('http://192.168.0.100:5000/api/addEditCourse', {
+        const response = await fetch(apiDomain+'/api/addEditCourse', {
           
           method: 'POST',
           headers: {
