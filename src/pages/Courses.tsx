@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Edit, Plus, Trash2, X } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -70,8 +70,6 @@ export default function Courses() {
   const [curriculumTitle, setCurriculumTitle] = useState("");
   const [curriculumItem, setCurriculumItem] = useState("");
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
-  const [isEditingCourse, setIsEditingCourse] = useState(false);
-  const [currentTopicIndex, setCurrentTopicIndex] = useState<number | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingCurriculumTitle, setEditingCurriculumTitle] = useState("");
   const [editingCurriculumItem, setEditingCurriculumItem] = useState("");
@@ -131,25 +129,7 @@ export default function Courses() {
         curriculum: updatedCurriculum
       });
       setCurriculumItem("");
-      setCurrentTopicIndex(null);
     }
-  };
-
-  const handleEditCourse = () => {
-    if (editingCourse && editingCourse.name && editingCourse.description && editingCourse.price && editingCourse.imageUrl) {
-      setCourses(courses.map(course => 
-        course.id === editingCourse.id ? editingCourse : course
-      ));
-      setEditingCourse(null);
-      setIsEditingCourse(false);
-    }
-  };
-
-  const startEditing = (course: Course) => {
-    setEditingCourse(course);
-    setIsEditingCourse(true);
-    setCurriculumTitle("");
-    setCurriculumItem("");
   };
 
   const handleEditCurriculumTopic = () => {
@@ -171,7 +151,6 @@ export default function Courses() {
         curriculum: updatedCurriculum
       });
       setEditingCurriculumItem("");
-      setEditingTopicIndex(null);
     }
   };
 
@@ -183,6 +162,11 @@ export default function Courses() {
       setEditingCourse(null);
       setIsEditDialogOpen(false);
     }
+  };
+
+  const startEditing = (course: Course) => {
+    setEditingCourse(course);
+    setIsEditDialogOpen(true);
   };
 
   return (
@@ -270,31 +254,16 @@ export default function Courses() {
                                 <span className="text-sm">{item}</span>
                               </div>
                             ))}
-                            {currentTopicIndex === topicIndex ? (
-                              <div className="flex gap-2 mt-2">
-                                <Input
-                                  value={curriculumItem}
-                                  onChange={(e) => setCurriculumItem(e.target.value)}
-                                  placeholder="Add a subtopic"
-                                />
-                                <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
-                                  Add
-                                </Button>
-                                <Button type="button" variant="outline" onClick={() => setCurrentTopicIndex(null)}>
-                                  Cancel
-                                </Button>
-                              </div>
-                            ) : (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                className="mt-2"
-                                onClick={() => setCurrentTopicIndex(topicIndex)}
-                              >
-                                Add Subtopic
+                            <div className="flex gap-2 mt-2">
+                              <Input
+                                value={curriculumItem}
+                                onChange={(e) => setCurriculumItem(e.target.value)}
+                                placeholder="Add a subtopic"
+                              />
+                              <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
+                                Add
                               </Button>
-                            )}
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -394,31 +363,16 @@ export default function Courses() {
                               <span className="text-sm">{item}</span>
                             </div>
                           ))}
-                          {editingTopicIndex === topicIndex ? (
-                            <div className="flex gap-2 mt-2">
-                              <Input
-                                value={editingCurriculumItem}
-                                onChange={(e) => setEditingCurriculumItem(e.target.value)}
-                                placeholder="Add a subtopic"
-                              />
-                              <Button type="button" onClick={() => handleEditCurriculumItem(topicIndex)}>
-                                Add
-                              </Button>
-                              <Button type="button" variant="outline" onClick={() => setEditingTopicIndex(null)}>
-                                Cancel
-                              </Button>
-                            </div>
-                          ) : (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="mt-2"
-                              onClick={() => setEditingTopicIndex(topicIndex)}
-                            >
-                              Add Subtopic
+                          <div className="flex gap-2 mt-2">
+                            <Input
+                              value={editingCurriculumItem}
+                              onChange={(e) => setEditingCurriculumItem(e.target.value)}
+                              placeholder="Add a subtopic"
+                            />
+                            <Button type="button" onClick={() => handleEditCurriculumItem(topicIndex)}>
+                              Add
                             </Button>
-                          )}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -445,6 +399,7 @@ export default function Courses() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID</TableHead>
               <TableHead>Course Name</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Description</TableHead>
@@ -456,6 +411,7 @@ export default function Courses() {
           <TableBody>
             {courses.map((course) => (
               <TableRow key={course.id}>
+                <TableCell>{course.id}</TableCell>
                 <TableCell className="font-medium">{course.name}</TableCell>
                 <TableCell>{course.category}</TableCell>
                 <TableCell>{course.description}</TableCell>
