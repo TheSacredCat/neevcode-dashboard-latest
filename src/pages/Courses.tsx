@@ -83,7 +83,10 @@ export default function Courses() {
 
   const handleAddCourse = () => {
     if (!newCourse.name || !newCourse.description || newCourse.price === null || !newCourse.imageUrl || !newCourse.category || newCourse.curriculum.length === 0) {
-      toast.error("Please fill all required fields, including at least one topic.");
+      toast.error("Please fill all required fields, including at least one topic.", {
+        position: "top-right",
+        style: { background: "#ef4444", color: "white" },
+      });
       return;
     }
 
@@ -104,12 +107,18 @@ export default function Courses() {
       curriculum: []
     });
     setIsAddingCourse(false);
-    toast.success("Course added successfully!");
+    toast.success("Course added successfully!", {
+      position: "top-right",
+      style: { background: "#10b981", color: "white" },
+    });
   };
 
   const handleDeleteCourse = (id: number) => {
     setCourses(courses.filter(course => course.id !== id));
-    toast.success("Course deleted successfully!");
+    toast.success("Course deleted successfully!", {
+      position: "top-right",
+      style: { background: "#10b981", color: "white" },
+    });
   };
 
   const handleAddCurriculumTopic = (e?: React.KeyboardEvent) => {
@@ -159,7 +168,10 @@ export default function Courses() {
 
   const handleEditCourse = () => {
     if (!editingCourse || !editingCourse.name || !editingCourse.description || editingCourse.price === null || !editingCourse.imageUrl || !editingCourse.category || editingCourse.curriculum.length === 0) {
-      toast.error("Please fill all required fields, including at least one topic.");
+      toast.error("Please fill all required fields, including at least one topic.", {
+        position: "top-right",
+        style: { background: "#ef4444", color: "white" },
+      });
       return;
     }
 
@@ -168,12 +180,39 @@ export default function Courses() {
     ));
     setEditingCourse(null);
     setIsEditDialogOpen(false);
-    toast.success("Course updated successfully!");
+    toast.success("Course updated successfully!", {
+      position: "top-right",
+      style: { background: "#10b981", color: "white" },
+    });
   };
 
   const startEditing = (course: Course) => {
-    setEditingCourse(course);
+    setEditingCourse({ ...course });
     setIsEditDialogOpen(true);
+  };
+
+  const handleEditCurriculumTopic = (e?: React.KeyboardEvent) => {
+    if (e && e.key !== "Enter") return; // Only trigger on Enter key
+    if (editingCurriculumTitle.trim() && editingCourse) {
+      setEditingCourse({
+        ...editingCourse,
+        curriculum: [...editingCourse.curriculum, { title: editingCurriculumTitle, items: [] }]
+      });
+      setEditingCurriculumTitle("");
+    }
+  };
+
+  const handleEditCurriculumItem = (topicIndex: number, e?: React.KeyboardEvent) => {
+    if (e && e.key !== "Enter") return; // Only trigger on Enter key
+    if (editingCurriculumItem.trim() && editingCourse) {
+      const updatedCurriculum = [...editingCourse.curriculum];
+      updatedCurriculum[topicIndex].items.push(editingCurriculumItem.trim());
+      setEditingCourse({
+        ...editingCourse,
+        curriculum: updatedCurriculum
+      });
+      setEditingCurriculumItem("");
+    }
   };
 
   return (
@@ -372,12 +411,12 @@ export default function Courses() {
                   <Label>Curriculum Topics</Label>
                   <div className="flex gap-2">
                     <Input
-                      value={curriculumTitle}
-                      onChange={(e) => setCurriculumTitle(e.target.value)}
-                      onKeyDown={(e) => handleAddCurriculumTopic(e)}
+                      value={editingCurriculumTitle}
+                      onChange={(e) => setEditingCurriculumTitle(e.target.value)}
+                      onKeyDown={(e) => handleEditCurriculumTopic(e)}
                       placeholder="Add a topic title"
                     />
-                    <Button type="button" onClick={() => handleAddCurriculumTopic()}>
+                    <Button type="button" onClick={() => handleEditCurriculumTopic()}>
                       Add Topic
                     </Button>
                   </div>
@@ -390,7 +429,10 @@ export default function Courses() {
                             variant="ghost"
                             size="icon"
                             className="h-4 w-4"
-                            onClick={() => handleDeleteCurriculumTopic(topicIndex)}
+                            onClick={() => {
+                              const updatedCurriculum = editingCourse.curriculum.filter((_, index) => index !== topicIndex);
+                              setEditingCourse({ ...editingCourse, curriculum: updatedCurriculum });
+                            }}
                           >
                             <X className="h-3 w-3" />
                           </Button>
@@ -403,7 +445,11 @@ export default function Courses() {
                                 variant="ghost"
                                 size="icon"
                                 className="h-4 w-4"
-                                onClick={() => handleDeleteCurriculumItem(topicIndex, itemIndex)}
+                                onClick={() => {
+                                  const updatedCurriculum = [...editingCourse.curriculum];
+                                  updatedCurriculum[topicIndex].items = updatedCurriculum[topicIndex].items.filter((_, index) => index !== itemIndex);
+                                  setEditingCourse({ ...editingCourse, curriculum: updatedCurriculum });
+                                }}
                               >
                                 <X className="h-3 w-3" />
                               </Button>
@@ -411,12 +457,12 @@ export default function Courses() {
                           ))}
                           <div className="flex gap-2 mt-2">
                             <Input
-                              value={curriculumItem}
-                              onChange={(e) => setCurriculumItem(e.target.value)}
-                              onKeyDown={(e) => handleAddCurriculumItem(topicIndex, e)}
+                              value={editingCurriculumItem}
+                              onChange={(e) => setEditingCurriculumItem(e.target.value)}
+                              onKeyDown={(e) => handleEditCurriculumItem(topicIndex, e)}
                               placeholder="Add a subtopic"
                             />
-                            <Button type="button" onClick={() => handleAddCurriculumItem(topicIndex)}>
+                            <Button type="button" onClick={() => handleEditCurriculumItem(topicIndex)}>
                               Add
                             </Button>
                           </div>
