@@ -23,6 +23,7 @@ import { useState } from "react";
 interface Course {
   id: number;
   name: string;
+  category: string;
   description: string;
   price: number;
   imageUrl: string;
@@ -34,6 +35,7 @@ export default function Courses() {
     {
       id: 1,
       name: "React Masterclass",
+      category: "Web dev",
       description: "Complete React course from basics to advanced",
       price: 14999,
       imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee",
@@ -42,6 +44,7 @@ export default function Courses() {
     {
       id: 2,
       name: "Advanced JavaScript",
+      category: "Programming",
       description: "Deep dive into JavaScript concepts",
       price: 12499,
       imageUrl: "https://images.unsplash.com/photo-1627398242454-45a1465c2479",
@@ -52,6 +55,7 @@ export default function Courses() {
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [newCourse, setNewCourse] = useState<Partial<Course>>({
     name: "",
+    category: "",
     description: "",
     price: 0,
     imageUrl: "",
@@ -62,7 +66,7 @@ export default function Courses() {
   const [isEditingCourse, setIsEditingCourse] = useState(false);
 
   const handleAddCourse = () => {
-    if (newCourse.name && newCourse.description && newCourse.price && newCourse.imageUrl) {
+    if (newCourse.name && newCourse.category && newCourse.description && newCourse.price && newCourse.imageUrl) {
       setCourses([
         ...courses,
         {
@@ -73,6 +77,7 @@ export default function Courses() {
       ]);
       setNewCourse({
         name: "",
+        category: "",
         description: "",
         price: 0,
         imageUrl: "",
@@ -97,7 +102,7 @@ export default function Courses() {
   };
 
   const handleEditCourse = () => {
-    if (editingCourse && editingCourse.name && editingCourse.description && editingCourse.price && editingCourse.imageUrl) {
+    if (editingCourse && editingCourse.name && editingCourse.category && editingCourse.description && editingCourse.price && editingCourse.imageUrl) {
       setCourses(courses.map(course => 
         course.id === editingCourse.id ? editingCourse : course
       ));
@@ -134,6 +139,15 @@ export default function Courses() {
                   value={newCourse.name}
                   onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })}
                   placeholder="Enter course name"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="name">Category</Label>
+                <Input
+                  id="category"
+                  value={newCourse.category}
+                  onChange={(e) => setNewCourse({ ...newCourse, category: e.target.value })}
+                  placeholder="Enter course category"
                 />
               </div>
               <div className="grid gap-2">
@@ -211,6 +225,14 @@ export default function Courses() {
                     id="edit-name"
                     value={editingCourse.name}
                     onChange={(e) => setEditingCourse({ ...editingCourse, name: e.target.value })}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-name">Course category</Label>
+                  <Input
+                    id="edit-category"
+                    value={editingCourse.category}
+                    onChange={(e) => setEditingCourse({ ...editingCourse, category: e.target.value })}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -304,6 +326,7 @@ export default function Courses() {
           <TableHeader>
             <TableRow>
               <TableHead>Course Name</TableHead>
+              <TableHead>Category</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Topics</TableHead>
@@ -314,6 +337,7 @@ export default function Courses() {
             {courses.map((course) => (
               <TableRow key={course.id}>
                 <TableCell className="font-medium">{course.name}</TableCell>
+                <TableCell>{course.category}</TableCell>
                 <TableCell>{course.description}</TableCell>
                 <TableCell>₹{course.price.toLocaleString()}</TableCell>
                 <TableCell>{course.curriculum.join(", ")}</TableCell>
