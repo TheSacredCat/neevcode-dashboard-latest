@@ -248,6 +248,40 @@ export default function Courses() {
     ));
     setEditingCourse(null);
     setIsEditDialogOpen(false);
+    const editCourseAPI = async () => {
+      try {
+        const response = await fetch('http://192.168.0.100:5000/api/addEditCourse', {
+          
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify( {
+            id: editingCourse.id,
+            name: editingCourse.name,
+            category: editingCourse.category,
+            description: editingCourse.description,
+            price: editingCourse.price,
+            imageUrl: editingCourse.imageUrl,
+            curriculum: editingCourse.curriculum,
+          } )
+        });
+        if (!response.ok) {
+          toast.error("Could not update course in backend", {
+            position: "top-right",
+            style: { background: "red", color: "white" },
+          });
+          throw new Error('Failed to update courses to backend');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Could not update course in backend", {
+          position: "top-right",
+          style: { background: "red", color: "white" },
+        });
+      }
+    };
+    editCourseAPI();
     toast.success("Course updated successfully!", {
       position: "top-right",
       style: { background: "#10b981", color: "white" },
