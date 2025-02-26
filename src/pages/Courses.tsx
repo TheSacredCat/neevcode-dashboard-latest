@@ -38,24 +38,26 @@ interface Course {
 }
 
 export default function Courses() {
-  const [courses, setCourses] = useState<Course[]>([]);
-
-  // Fetch courses from the API
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch('http://192.168.0.100:5000/api/course');
-        if (!response.ok) {
-          throw new Error('Failed to fetch courses');
+  const [courses, setCourses] = useState<Course[]>([
+    {
+      id: 1,
+      name: "React Masterclass",
+      description: "Complete React course from basics to advanced",
+      price: 14999,
+      imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee",
+      category: "Development",
+      curriculum: [
+        {
+          title: "Introduction to React",
+          items: ["React Basics", "Components", "Props and State"]
+        },
+        {
+          title: "Advanced Concepts",
+          items: ["Hooks", "Context API", "Performance Optimization"]
         }
-        const data = await response.json();
-        setCourses(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchCourses();
-  }, []);
+      ]
+    }
+  ]);
 
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [newCourse, setNewCourse] = useState<Partial<Course>>({
@@ -71,6 +73,8 @@ export default function Courses() {
   const [currentTopicIndex, setCurrentTopicIndex] = useState<number | null>(null);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingCurriculumTitle, setEditingCurriculumTitle] = useState("");
+  const [editingCurriculumItem, setEditingCurriculumItem] = useState("");
 
   const generateUniqueId = () => {
     const existingIds = courses.map(course => course.id);
