@@ -1,4 +1,4 @@
-
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -36,14 +36,13 @@ const revenueData = [
   { name: "Dec", revenue: 52100 },
 ];
 
-function MyButton() {
-  const navigate = useNavigate();
+export default function Index() {
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleClick = () => {
-    navigate('/Teachers');
+    navigate('/Teachers'); // Redirect to /Teachers
   };
-  
-export default function Index() {
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -194,10 +193,10 @@ export default function Index() {
                   Manage your teaching staff and their information.
                 </CardDescription>
               </div>
-            <Button variant="outline" className="gap-1" onClick={handleClick}>
-              View All
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+              <Button variant="outline" className="gap-1" onClick={handleClick}>
+                View All
+                <ArrowRight className="h-4 w-4" />
+              </Button>
             </CardHeader>
             <CardContent>
               <TeacherList />
