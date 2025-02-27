@@ -82,9 +82,9 @@ export default function Index() {
           icon={<GraduationCap className="h-4 w-4 text-[#9b87f5]" />}
         />
         <DashboardMetric
-          title="Avg. Completion Rate"
-          value="78.5%"
-          description="+201 students graduated"
+          title="Avg. Views"
+          value="200"
+          description="+10% then last week"
           trend="down"
           icon={<BarChart3 className="h-4 w-4 text-[#9b87f5]" />}
         />
