@@ -36,7 +36,8 @@ interface Course {
   category: string;
   curriculum: CourseContent[];
 }
-const apiDomain='http://192.168.0.100:5000';
+// const apiDomain='http://192.168.0.100:5000';
+const apiDomain='http://neevcode.com:5000';
 
 export default function Courses() {
   const [courses, setCourses] = useState([])
