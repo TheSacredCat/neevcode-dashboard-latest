@@ -91,7 +91,7 @@ export default function Index() {
           title="Avg. Views"
           value="200"
           description="+10% then last week"
-          trend="down"
+          trend="up"
           icon={<BarChart3 className="h-4 w-4 text-[#9b87f5]" />}
         />
       </div>
