@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,6 +9,32 @@ import { TopTeachers } from "@/components/TopTeachers";
 import { TopCourses } from "@/components/TopCourses";
 import { RecentSales } from "@/components/RecentSales";
 import TeacherList from "@/components/TeacherList";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+
+// Revenue data for the chart
+const revenueData = [
+  { name: "Jan", revenue: 12800 },
+  { name: "Feb", revenue: 18300 },
+  { name: "Mar", revenue: 23400 },
+  { name: "Apr", revenue: 29500 },
+  { name: "May", revenue: 25600 },
+  { name: "Jun", revenue: 32700 },
+  { name: "Jul", revenue: 38100 },
+  { name: "Aug", revenue: 36400 },
+  { name: "Sep", revenue: 42500 },
+  { name: "Oct", revenue: 45200 },
+  { name: "Nov", revenue: 43800 },
+  { name: "Dec", revenue: 52100 },
+];
 
 export default function Index() {
   return (
@@ -78,9 +105,35 @@ export default function Index() {
               </CardHeader>
               <CardContent className="pl-2">
                 <div className="h-[300px]">
-                  <div className="flex items-center justify-center h-full border rounded-lg">
-                    <p className="text-muted-foreground">Revenue chart coming soon</p>
-                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={revenueData}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis 
+                        tickFormatter={(value) => `₹${value / 1000}k`}
+                      />
+                      <Tooltip 
+                        formatter={(value) => [`₹${value}`, 'Revenue']}
+                        labelFormatter={(label) => `Month: ${label}`}
+                      />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="revenue"
+                        stroke="#9b87f5"
+                        strokeWidth={2}
+                        activeDot={{ r: 8 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
