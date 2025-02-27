@@ -36,6 +36,13 @@ const revenueData = [
   { name: "Dec", revenue: 52100 },
 ];
 
+function MyButton() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/Teachers');
+  };
+  
 export default function Index() {
   return (
     <div className="flex flex-col gap-6">
@@ -187,10 +194,10 @@ export default function Index() {
                   Manage your teaching staff and their information.
                 </CardDescription>
               </div>
-              <Button variant="outline" className="gap-1">
-                View All
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+            <Button variant="outline" className="gap-1" onClick={handleClick}>
+              View All
+              <ArrowRight className="h-4 w-4" />
+            </Button>
             </CardHeader>
             <CardContent>
               <TeacherList />
