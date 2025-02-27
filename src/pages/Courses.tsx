@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -21,6 +22,13 @@ import { Edit, Plus, Trash2, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner"; // For toast notifications
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CourseContent {
   title: string;
@@ -35,9 +43,21 @@ interface Course {
   imageUrl: string;
   category: string;
   curriculum: CourseContent[];
+  classes?: number; // Add optional classes field
 }
 // const apiDomain='http://192.168.0.100:5000';
 const apiDomain='http://192.168.29.209:5000';
+
+// Predefined categories
+const CATEGORIES = [
+  "Cybersecurity",
+  "AI/ML",
+  "Designing",
+  "UI/UX",
+  "Web Development",
+  "Data Science",
+  "Other"
+];
 
 export default function Courses() {
   const [courses, setCourses] = useState([])
@@ -66,7 +86,8 @@ export default function Courses() {
     price: null, // Default to null instead of 0
     imageUrl: "",
     category: "",
-    curriculum: []
+    curriculum: [],
+    classes: 1 // Default to 1 class
   });
   const [curriculumTitle, setCurriculumTitle] = useState("");
   const [curriculumItem, setCurriculumItem] = useState("");
@@ -75,6 +96,9 @@ export default function Courses() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingCurriculumTitle, setEditingCurriculumTitle] = useState("");
   const [editingCurriculumItem, setEditingCurriculumItem] = useState("");
+  // For custom category input
+  const [customCategory, setCustomCategory] = useState("");
+  const [isOtherCategory, setIsOtherCategory] = useState(false);
 
   const generateUniqueId = () => {
     const existingIds = courses.map(course => course.id);
@@ -87,7 +111,13 @@ export default function Courses() {
   
   const uid=generateUniqueId();
   const handleAddCourse = () => {
-    if (!newCourse.name || !newCourse.description || newCourse.price === null || !newCourse.imageUrl || !newCourse.category || newCourse.curriculum.length === 0) {
+    // Handle custom category if "Other" is selected
+    let finalCategory = newCourse.category;
+    if (isOtherCategory && customCategory) {
+      finalCategory = customCategory;
+    }
+
+    if (!newCourse.name || !newCourse.description || newCourse.price === null || !newCourse.imageUrl || !finalCategory || newCourse.curriculum.length === 0) {
       toast.error("Please fill all required fields, including at least one topic.", {
         position: "top-right",
         style: { background: "#ef4444", color: "white" },
@@ -95,31 +125,25 @@ export default function Courses() {
       return;
     }
 
+    const courseToAdd = {
+      ...newCourse as Course,
+      id: uid,
+      category: finalCategory,
+      curriculum: newCourse.curriculum || []
+    };
+
     setCourses([
       ...courses,
-      {
-        ...newCourse as Course,
-        id: uid,
-        curriculum: newCourse.curriculum || []
-      }
+      courseToAdd
     ]);
     const addCourseAPI = async () => {
       try {
         const response = await fetch(apiDomain+'/api/addEditCourse', {
-
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify( {
-            id: uid,
-            name: newCourse.name,
-            category: newCourse.category,
-            description: newCourse.description,
-            price: newCourse.price,
-            imageUrl: newCourse.imageUrl,
-            curriculum: newCourse.curriculum,
-          } )
+          body: JSON.stringify(courseToAdd)
         });
         if (!response.ok) {
           toast.error("Could not update course in backend", {
@@ -128,9 +152,6 @@ export default function Courses() {
           });
           throw new Error('Failed to update courses to backend');
         }
-        // const data = await response.json();
-        // setCourses(data);
-        // console.log(newCourse.name);
       } catch (error) {
         console.error(error);
         toast.error("Could not update course in backend", {
@@ -146,9 +167,12 @@ export default function Courses() {
       price: null,
       imageUrl: "",
       category: "",
-      curriculum: []
+      curriculum: [],
+      classes: 1
     });
     setIsAddingCourse(false);
+    setCustomCategory("");
+    setIsOtherCategory(false);
     toast.success("Course added successfully!", {
       position: "top-right",
       style: { background: "#10b981", color: "white" },
@@ -266,6 +290,7 @@ export default function Courses() {
             price: editingCourse.price,
             imageUrl: editingCourse.imageUrl,
             curriculum: editingCourse.curriculum,
+            classes: editingCourse.classes
           } )
         });
         if (!response.ok) {
@@ -319,6 +344,12 @@ export default function Courses() {
     }
   };
 
+  // Handle category selection
+  const handleCategoryChange = (value: string) => {
+    setNewCourse({ ...newCourse, category: value });
+    setIsOtherCategory(value === "Other");
+  };
+
   return (
     <div className="p-8 space-y-8 animate-in">
       <div className="flex items-center justify-between">
@@ -344,15 +375,48 @@ export default function Courses() {
                     placeholder="Enter course name"
                   />
                 </div>
+                
                 <div className="grid gap-2">
                   <Label htmlFor="category">Category</Label>
-                  <Input
-                    id="category"
+                  <Select 
+                    onValueChange={handleCategoryChange}
                     value={newCourse.category}
-                    onChange={(e) => setNewCourse({ ...newCourse, category: e.target.value })}
-                    placeholder="Enter course category"
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CATEGORIES.map(category => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  {isOtherCategory && (
+                    <div className="mt-2">
+                      <Input
+                        value={customCategory}
+                        onChange={(e) => setCustomCategory(e.target.value)}
+                        placeholder="Enter custom category"
+                      />
+                    </div>
+                  )}
+                </div>
+                
+                <div className="grid gap-2">
+                  <Label htmlFor="classes">Number of Classes</Label>
+                  <Input
+                    id="classes"
+                    type="number"
+                    min="1"
+                    value={newCourse.classes}
+                    onChange={(e) => setNewCourse({ ...newCourse, classes: Number(e.target.value) })}
+                    placeholder="Enter number of classes"
                   />
                 </div>
+                
                 <div className="grid gap-2">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
@@ -362,6 +426,7 @@ export default function Courses() {
                     placeholder="Enter course description"
                   />
                 </div>
+                
                 <div className="grid gap-2">
                   <Label htmlFor="price">Price (₹)</Label>
                   <Input
@@ -372,6 +437,7 @@ export default function Courses() {
                     placeholder="Enter course price"
                   />
                 </div>
+                
                 <div className="grid gap-2">
                   <Label htmlFor="image">Image URL</Label>
                   <Input
@@ -381,6 +447,7 @@ export default function Courses() {
                     placeholder="Enter image URL"
                   />
                 </div>
+                
                 <div className="grid gap-2">
                   <Label>Curriculum Topics</Label>
                   <div className="flex gap-2">
@@ -481,6 +548,17 @@ export default function Courses() {
                     value={editingCourse.category}
                     onChange={(e) => setEditingCourse({ ...editingCourse, category: e.target.value })}
                     placeholder="Enter course category"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-classes">Number of Classes</Label>
+                  <Input
+                    id="edit-classes"
+                    type="number"
+                    min="1"
+                    value={editingCourse.classes || 1}
+                    onChange={(e) => setEditingCourse({ ...editingCourse, classes: Number(e.target.value) })}
+                    placeholder="Enter number of classes"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -601,6 +679,7 @@ export default function Courses() {
               <TableHead>Category</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Price</TableHead>
+              <TableHead>Classes</TableHead>
               <TableHead>Topics</TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
@@ -613,6 +692,7 @@ export default function Courses() {
                 <TableCell>{course.category}</TableCell>
                 <TableCell>{course.description}</TableCell>
                 <TableCell>₹{course.price?.toLocaleString()}</TableCell>
+                <TableCell>{course.classes || "-"}</TableCell>
                 <TableCell>
                   {course.curriculum.map(topic => topic.title).join(", ")}
                 </TableCell>
