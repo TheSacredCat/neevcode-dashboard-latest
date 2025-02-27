@@ -1,6 +1,14 @@
 
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+
+const getInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase();
+};
 
 export function RecentSales() {
   const transactions = [
@@ -36,7 +44,11 @@ export function RecentSales() {
         {transactions.map((transaction, i) => (
           <div key={i} className="flex items-center justify-between space-x-4 p-3 hover:bg-muted/50 rounded-lg transition-colors">
             <div className="flex items-center space-x-4">
-              <Avatar className="h-9 w-9" />
+              <Avatar className="h-9 w-9 bg-[#947dc2]">
+                <AvatarFallback className="text-white">
+                  {getInitials(transaction.name)}
+                </AvatarFallback>
+              </Avatar>
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">{transaction.name}</p>
                 <p className="text-sm text-muted-foreground">{transaction.course}</p>

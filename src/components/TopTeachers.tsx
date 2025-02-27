@@ -1,13 +1,21 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+
+const getInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase();
+};
 
 export function TopTeachers() {
   const teachers = [
     {
       name: "Dr. Pallavi Kamra",
-      Subject: "Teacher Training & Student Counseling",
+      subject: "Teacher Training & Student Counseling",
       rating: 5.0,
       students: 450,
     },
@@ -30,7 +38,11 @@ export function TopTeachers() {
       <div className="space-y-6">
         {teachers.map((teacher, i) => (
           <div key={i} className="flex items-center space-x-4">
-            <Avatar className="h-12 w-12" />
+            <Avatar className="h-12 w-12 bg-[#947dc2]">
+              <AvatarFallback className="text-white">
+                {getInitials(teacher.name)}
+              </AvatarFallback>
+            </Avatar>
             <div className="flex-1 space-y-1">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium">{teacher.name}</p>

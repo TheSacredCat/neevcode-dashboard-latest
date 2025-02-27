@@ -109,7 +109,8 @@ export default function Teachers() {
     // Data validation
     if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
       toast.error("Please fill in all required fields", {
-        description: "All fields are required to add a teacher"
+        description: "All fields are required to add a teacher",
+        style: { background: "#ef4444", color: "white" },
       });
       return;
     }
@@ -131,6 +132,7 @@ export default function Teachers() {
     toast.success("Teacher added successfully", {
       description: `${name} has been added to the system`,
       duration: 2000,
+      style: { background: "#10b981", color: "white" },
     });
     
     setIsDialogOpen(false);
@@ -171,7 +173,8 @@ export default function Teachers() {
     // Data validation
     if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
       toast.error("Please fill in all required fields", {
-        description: "All fields are required to update a teacher"
+        description: "All fields are required to update a teacher",
+        style: { background: "#ef4444", color: "white" },
       });
       return;
     }
@@ -194,6 +197,7 @@ export default function Teachers() {
     toast.success("Teacher updated successfully", {
       description: `${name}'s information has been updated`,
       duration: 2000,
+      style: { background: "#10b981", color: "white" },
     });
     
     setIsEditDialogOpen(false);

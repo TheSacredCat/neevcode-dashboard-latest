@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -78,12 +77,10 @@ export default function Index() {
                 <CardTitle>Revenue Overview</CardTitle>
               </CardHeader>
               <CardContent className="pl-2">
-                <div className="h-[300px] bg-gradient-to-r from-[#947dc2]/20 to-[#d6bcfa]/20 rounded-md flex items-center justify-center">
-                  <img
-                    src="/images/dashboard-chart.png"
-                    alt="Revenue chart"
-                    className="w-full"
-                  />
+                <div className="h-[300px]">
+                  <div className="flex items-center justify-center h-full border rounded-lg">
+                    <p className="text-muted-foreground">Revenue chart coming soon</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
