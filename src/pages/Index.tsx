@@ -1,8 +1,9 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, Users, CreditCard, GraduationCap, BarChart3 } from "lucide-react";
 import { DashboardMetric } from "@/components/DashboardMetric";
 import { TopTeachers } from "@/components/TopTeachers";
 import { TopCourses } from "@/components/TopCourses";
@@ -38,24 +39,28 @@ export default function Index() {
           value="₹45,231.89"
           description="+20.1% from last month"
           trend="up"
+          icon={<CreditCard className="h-4 w-4 text-[#9b87f5]" />}
         />
         <DashboardMetric
           title="Enrollments"
           value="2,350"
           description="+180.1% from last month"
           trend="up"
+          icon={<Users className="h-4 w-4 text-[#9b87f5]" />}
         />
         <DashboardMetric
           title="Active Students"
           value="1,763"
           description="+19% from last month"
           trend="up"
+          icon={<GraduationCap className="h-4 w-4 text-[#9b87f5]" />}
         />
         <DashboardMetric
           title="Avg. Completion Rate"
           value="78.5%"
           description="+201 students graduated"
           trend="down"
+          icon={<BarChart3 className="h-4 w-4 text-[#9b87f5]" />}
         />
       </div>
 
@@ -64,7 +69,7 @@ export default function Index() {
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="careers">Career Inquiries</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -73,11 +78,13 @@ export default function Index() {
                 <CardTitle>Revenue Overview</CardTitle>
               </CardHeader>
               <CardContent className="pl-2">
-                <img
-                  src="/images/dashboard-chart.png"
-                  alt="Revenue chart"
-                  className="w-full"
-                />
+                <div className="h-[300px] bg-gradient-to-r from-[#947dc2]/20 to-[#d6bcfa]/20 rounded-md flex items-center justify-center">
+                  <img
+                    src="/images/dashboard-chart.png"
+                    alt="Revenue chart"
+                    className="w-full"
+                  />
+                </div>
               </CardContent>
             </Card>
             <Card className="col-span-3">
@@ -170,17 +177,43 @@ export default function Index() {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="notifications" className="space-y-4">
+        <TabsContent value="careers" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Notifications</CardTitle>
+              <CardTitle>Career Inquiries</CardTitle>
               <CardDescription>
-                Manage your notification preferences.
+                View and manage job applications and inquiries from the careers page.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[450px] flex items-center justify-center border rounded-lg">
-                <p className="text-muted-foreground">Notification settings coming soon</p>
+              <div className="space-y-4">
+                <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20">
+                  <h3 className="font-medium text-[#947dc2]">Rahul Sharma</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Applied for: UI/UX Designer</p>
+                  <p className="text-sm mt-2">I'm a passionate designer with 3 years of experience in creating user interfaces for educational platforms.</p>
+                  <div className="mt-3 flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">June 15, 2023</span>
+                    <Button variant="outline" size="sm">View Details</Button>
+                  </div>
+                </div>
+                <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20">
+                  <h3 className="font-medium text-[#947dc2]">Priya Patel</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Applied for: Python Instructor</p>
+                  <p className="text-sm mt-2">Software engineer with 5+ years of Python experience looking to transition into teaching.</p>
+                  <div className="mt-3 flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">June 12, 2023</span>
+                    <Button variant="outline" size="sm">View Details</Button>
+                  </div>
+                </div>
+                <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20">
+                  <h3 className="font-medium text-[#947dc2]">Amit Kumar</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Applied for: Cybersecurity Expert</p>
+                  <p className="text-sm mt-2">Certified cybersecurity professional with experience in network security and ethical hacking.</p>
+                  <div className="mt-3 flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">June 10, 2023</span>
+                    <Button variant="outline" size="sm">View Details</Button>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

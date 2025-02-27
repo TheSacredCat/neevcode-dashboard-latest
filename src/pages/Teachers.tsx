@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, MoreVertical, Pencil, Trash2, Phone, Mail, Upload } from "lucide-react";
+import { Plus, MoreVertical, Pencil, Trash2, Phone, Mail } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,7 +61,6 @@ export default function Teachers() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [employmentType, setEmploymentType] = useState("");
-  const [logoUrl, setLogoUrl] = useState("");
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
 
   const [teachers, setTeachers] = useState<Teacher[]>([
@@ -124,7 +123,6 @@ export default function Teachers() {
       status: employmentType === "permanent" ? "Permanent" : "Intern",
       email,
       phone,
-      avatar: logoUrl || undefined
     };
     
     // Add to state
@@ -147,7 +145,6 @@ export default function Teachers() {
     setEmail("");
     setPhone("");
     setEmploymentType("");
-    setLogoUrl("");
   };
 
   const handleEdit = (teacher: Teacher) => {
@@ -162,7 +159,6 @@ export default function Teachers() {
     setEmail(teacher.email);
     setPhone(teacher.phone);
     setEmploymentType(teacher.status === "Permanent" ? "permanent" : "intern");
-    setLogoUrl(teacher.avatar || "");
   };
 
   const handleUpdateTeacher = (e: React.FormEvent) => {
@@ -190,7 +186,6 @@ export default function Teachers() {
       status: employmentType === "permanent" ? "Permanent" : "Intern",
       email,
       phone,
-      avatar: logoUrl || undefined
     };
     
     // Update state
@@ -245,32 +240,6 @@ export default function Teachers() {
             </DialogHeader>
             <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
               <form onSubmit={handleSubmit} className="space-y-4 mt-4 pr-4">
-                <div className="space-y-2">
-                  <Label htmlFor="avatar">Profile Picture / Logo</Label>
-                  <div className="flex items-center gap-4">
-                    <Avatar className="h-16 w-16 bg-[#947dc2] cursor-pointer">
-                      {logoUrl ? (
-                        <AvatarImage src={logoUrl} />
-                      ) : (
-                        <AvatarFallback className="text-white text-xl">
-                          {name ? getInitials(name) : <Upload className="h-6 w-6" />}
-                        </AvatarFallback>
-                      )}
-                    </Avatar>
-                    <div className="flex-1">
-                      <Input
-                        id="logoUrl"
-                        value={logoUrl}
-                        onChange={(e) => setLogoUrl(e.target.value)}
-                        placeholder="Enter logo URL"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Paste a URL for your logo or profile picture
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
                   <Input
@@ -380,32 +349,6 @@ export default function Teachers() {
           </DialogHeader>
           <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
             <form onSubmit={handleUpdateTeacher} className="space-y-4 mt-4 pr-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-avatar">Profile Picture / Logo</Label>
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-16 w-16 bg-[#947dc2] cursor-pointer">
-                    {logoUrl ? (
-                      <AvatarImage src={logoUrl} />
-                    ) : (
-                      <AvatarFallback className="text-white text-xl">
-                        {name ? getInitials(name) : <Upload className="h-6 w-6" />}
-                      </AvatarFallback>
-                    )}
-                  </Avatar>
-                  <div className="flex-1">
-                    <Input
-                      id="edit-logoUrl"
-                      value={logoUrl}
-                      onChange={(e) => setLogoUrl(e.target.value)}
-                      placeholder="Enter logo URL"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Paste a URL for your logo or profile picture
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
               <div className="space-y-2">
                 <Label htmlFor="edit-name">Full Name</Label>
                 <Input
