@@ -1,65 +1,52 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Sidebar } from "./components/Sidebar";
-import { Navbar } from "./components/Navbar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import Index from "./pages/Index";
-import Login from "./pages/Login";
 import Courses from "./pages/Courses";
-import NotFound from "./pages/NotFound";
 import Teachers from "./pages/Teachers";
 import Expenses from "./pages/Expenses";
 import ContentManagement from "./pages/ContentManagement";
-import { ChatWidget } from "./components/ChatWidget";
-import { useState } from "react";
+import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import { CustomToastProvider } from "./components/CustomToastProvider";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("isAuthenticated") === "true"
-  );
-
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <TooltipProvider>
-          <Toaster />
-          <Sonner className="toaster group" />
-          <BrowserRouter>
-            {!isAuthenticated ? (
-              <Routes>
-                <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-                <Route path="*" element={<Navigate to="/login" replace />} />
-              </Routes>
-            ) : (
-              <div className="flex min-h-screen">
-                <Sidebar />
-                <div className="flex-1">
-                  <Navbar setIsAuthenticated={setIsAuthenticated} />
-                  <main className="p-6 mt-16">
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/courses" element={<Courses />} />
-                      <Route path="/teachers" element={<Teachers />} />
-                      <Route path="/expenses" element={<Expenses />} />
-                      <Route path="/content" element={<ContentManagement />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </main>
-                </div>
-                <ChatWidget />
+          <Router>
+            <div className="flex h-screen">
+              <Sidebar />
+              <div className="flex flex-col flex-1 overflow-hidden">
+                <Navbar />
+                <main className="flex-1 overflow-y-auto p-6 max-w-7xl mx-auto w-full">
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/courses" element={<Courses />} />
+                    <Route path="/teachers" element={<Teachers />} />
+                    <Route path="/expenses" element={<Expenses />} />
+                    <Route path="/content" element={<ContentManagement />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </main>
               </div>
-            )}
-          </BrowserRouter>
+            </div>
+          </Router>
+          <CustomToastProvider />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
-};
+}
 
 export default App;

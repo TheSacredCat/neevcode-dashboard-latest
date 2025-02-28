@@ -45,7 +45,7 @@ export function RecentSales() {
           <div key={i} className="flex items-center justify-between space-x-4 p-3 hover:bg-muted/50 rounded-lg transition-colors">
             <div className="flex items-center space-x-4">
               <Avatar className="h-9 w-9 bg-[#947dc2]">
-                <AvatarFallback className="text-white">
+                <AvatarFallback className="text-black dark:text-white">
                   {getInitials(transaction.name)}
                 </AvatarFallback>
               </Avatar>

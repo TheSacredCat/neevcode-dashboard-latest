@@ -39,7 +39,7 @@ export function TopTeachers() {
         {teachers.map((teacher, i) => (
           <div key={i} className="flex items-center space-x-4">
             <Avatar className="h-12 w-12 bg-[#947dc2]">
-              <AvatarFallback className="text-white">
+              <AvatarFallback className="text-black dark:text-white">
                 {getInitials(teacher.name)}
               </AvatarFallback>
             </Avatar>

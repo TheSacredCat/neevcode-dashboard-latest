@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -102,7 +102,7 @@ export default function Teachers() {
     },
   ]);
 
-  const resetForm = useCallback(() => {
+  const resetForm = () => {
     setName("");
     setRole("");
     setCustomRole("");
@@ -110,17 +110,16 @@ export default function Teachers() {
     setEmail("");
     setPhone("");
     setEmploymentType("");
-  }, []);
+  };
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const finalRole = role === "other" ? customRole : role;
     
     // Data validation
     if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
       toast.error("Please fill in all required fields", {
-        description: "All fields are required to add a teacher",
-        style: { background: "#ef4444", color: "white" },
+        description: "All fields are required to add a teacher"
       });
       return;
     }
@@ -137,23 +136,18 @@ export default function Teachers() {
     };
     
     // Add to state
-    setTeachers(prevTeachers => [...prevTeachers, newTeacher]);
+    setTeachers([...teachers, newTeacher]);
     
     toast.success("Teacher added successfully", {
-      description: `${name} has been added to the system`,
-      duration: 2000,
-      style: { background: "#10b981", color: "white" },
+      description: `${name} has been added to the system`
     });
     
     setIsDialogOpen(false);
     resetForm();
-  }, [name, role, customRole, subject, email, phone, employmentType, teachers, resetForm]);
+  };
 
-  const handleEdit = useCallback((teacher: Teacher) => {
+  const handleEdit = (teacher: Teacher) => {
     setEditingTeacher(teacher);
-    setIsEditDialogOpen(true);
-    
-    // Populate form with teacher data
     setName(teacher.name);
     setRole(teacher.customRole ? "other" : teacher.role);
     setCustomRole(teacher.customRole || "");
@@ -161,9 +155,10 @@ export default function Teachers() {
     setEmail(teacher.email);
     setPhone(teacher.phone);
     setEmploymentType(teacher.status === "Permanent" ? "permanent" : "intern");
-  }, []);
+    setIsEditDialogOpen(true);
+  };
 
-  const handleUpdateTeacher = useCallback((e: React.FormEvent) => {
+  const handleUpdateTeacher = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!editingTeacher) return;
@@ -173,8 +168,7 @@ export default function Teachers() {
     // Data validation
     if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
       toast.error("Please fill in all required fields", {
-        description: "All fields are required to update a teacher",
-        style: { background: "#ef4444", color: "white" },
+        description: "All fields are required to update a teacher"
       });
       return;
     }
@@ -192,47 +186,29 @@ export default function Teachers() {
     };
     
     // Update state
-    setTeachers(prevTeachers => prevTeachers.map(t => t.id === editingTeacher.id ? updatedTeacher : t));
+    setTeachers(teachers.map(t => t.id === editingTeacher.id ? updatedTeacher : t));
     
     toast.success("Teacher updated successfully", {
-      description: `${name}'s information has been updated`,
-      duration: 2000,
-      style: { background: "#10b981", color: "white" },
+      description: `${name}'s information has been updated`
     });
     
     setIsEditDialogOpen(false);
     setEditingTeacher(null);
     resetForm();
-  }, [name, role, customRole, subject, email, phone, employmentType, editingTeacher, resetForm]);
+  };
 
-  const handleDelete = useCallback((teacher: Teacher) => {
+  const handleDelete = (teacher: Teacher) => {
     // Remove from state
-    setTeachers(prevTeachers => prevTeachers.filter(t => t.id !== teacher.id));
+    setTeachers(teachers.filter(t => t.id !== teacher.id));
     
     toast.success("Teacher removed", {
-      description: `${teacher.name} has been removed from the system`,
-      duration: 2000,
+      description: `${teacher.name} has been removed from the system`
     });
-  }, []);
+  };
 
-  const getStatusColor = useCallback((status: string) => {
+  const getStatusColor = (status: string) => {
     return status === "Permanent" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800";
-  }, []);
-
-  const handleDialogChange = useCallback((open: boolean) => {
-    setIsDialogOpen(open);
-    if (!open) {
-      resetForm();
-    }
-  }, [resetForm]);
-
-  const handleEditDialogChange = useCallback((open: boolean) => {
-    setIsEditDialogOpen(open);
-    if (!open) {
-      setEditingTeacher(null);
-      resetForm();
-    }
-  }, [resetForm]);
+  };
 
   return (
     <div className="space-y-6">
@@ -243,7 +219,7 @@ export default function Teachers() {
             Manage your teaching staff and their information
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
               <Plus className="mr-2 h-4 w-4" />
@@ -357,7 +333,7 @@ export default function Teachers() {
       </div>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={handleEditDialogChange}>
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px] max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Edit Teacher</DialogTitle>
