@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -38,10 +39,10 @@ const revenueData = [
 ];
 
 export default function Index() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/Teachers'); // Redirect to /Teachers
+    navigate('/Teachers');
   };
 
   return (
@@ -51,7 +52,7 @@ export default function Index() {
         <div className="flex items-center gap-2">
           <Select defaultValue="this-month">
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select" />
+              <SelectValue placeholder="This Month" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="today">Today</SelectItem>
