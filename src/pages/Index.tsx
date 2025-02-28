@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -38,20 +38,20 @@ const revenueData = [
 ];
 
 export default function Index() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleClick = () => {
-    navigate('/Teachers');
+    navigate('/Teachers'); // Redirect to /Teachers
   };
 
   return (
-    <div className="flex flex-col gap-6 px-4" style={{ overflowX: 'hidden' }}>
+    <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <div className="flex items-center gap-2">
           <Select defaultValue="this-month">
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="This Month" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="today">Today</SelectItem>
@@ -66,18 +66,18 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4" style={{ maxWidth: '100%' }}>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <DashboardMetric
           title="Total Revenue"
-          value="$45,231.89"
-          description="+203% from last month"
+          value="₹45,231.89"
+          description="+20.1% from last month"
           trend="up"
           icon={<CreditCard className="h-4 w-4 text-[#9b87f5]" />}
         />
         <DashboardMetric
           title="Enrollments"
           value="2,350"
-          description="+180.7% from last month"
+          description="+180.1% from last month"
           trend="up"
           icon={<Users className="h-4 w-4 text-[#9b87f5]" />}
         />
@@ -91,7 +91,7 @@ export default function Index() {
         <DashboardMetric
           title="Avg. Views"
           value="200"
-          description="+10% from last week"
+          description="+10% then last week"
           trend="up"
           icon={<BarChart3 className="h-4 w-4 text-[#9b87f5]" />}
         />
@@ -105,7 +105,7 @@ export default function Index() {
           <TabsTrigger value="careers">Career Inquiries</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7" style={{ maxWidth: '100%' }}>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4">
               <CardHeader>
                 <CardTitle>Revenue Overview</CardTitle>
@@ -125,10 +125,10 @@ export default function Index() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis 
-                        tickFormatter={(value) => `$${value / 1000}k`}
+                        tickFormatter={(value) => `₹${value / 1000}k`}
                       />
                       <Tooltip 
-                        formatter={(value) => [`$${value}`, 'Revenue']}
+                        formatter={(value) => [`₹${value}`, 'Revenue']}
                         labelFormatter={(label) => `Month: ${label}`}
                       />
                       <Legend />
@@ -156,7 +156,7 @@ export default function Index() {
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7" style={{ maxWidth: '100%' }}>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-3">
               <CardHeader>
                 <CardTitle>Top Teachers</CardTitle>
@@ -204,7 +204,87 @@ export default function Index() {
             </CardContent>
           </Card>
         </TabsContent>
-        {/* Other TabsContent sections */}
+        <TabsContent value="analytics" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Analytics</CardTitle>
+              <CardDescription>
+                View detailed analytics about your courses and students.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[450px] flex items-center justify-center border rounded-lg">
+                <p className="text-muted-foreground">Analytics dashboard coming soon</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="reports" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Reports</CardTitle>
+              <CardDescription>
+                View and download reports about your business.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[450px] flex items-center justify-center border rounded-lg">
+                <p className="text-muted-foreground">Reports dashboard coming soon</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="careers" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Career Inquiries</CardTitle>
+              <CardDescription>
+                View and manage job applications and inquiries from the careers page.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[
+                  {
+                    id: 1,
+                    name: "Rahul Sharma",
+                    position: "UI/UX Designer",
+                    description: "I'm a passionate designer with 3 years of experience in creating user interfaces for educational platforms.",
+                    date: "June 15, 2023",
+                    resumeUrl: "/resumes/rahul-sharma-resume.pdf",
+                    education: "Bachelor of Design, NID Ahmedabad",
+                    experience: "3 years at TechDesign Solutions",
+                    skills: "Figma, Adobe XD, User Research, Prototyping"
+                  },
+                  {
+                    id: 2,
+                    name: "Priya Patel",
+                    position: "Python Instructor",
+                    description: "Software engineer with 5+ years of Python experience looking to transition into teaching.",
+                    date: "June 12, 2023",
+                    resumeUrl: "/resumes/priya-patel-resume.pdf",
+                    education: "MS Computer Science, IIT Delhi",
+                    experience: "5 years at Infosys as Python Developer",
+                    skills: "Python, Django, Flask, Data Science, Machine Learning"
+                  },
+                  {
+                    id: 3,
+                    name: "Amit Kumar",
+                    position: "Cybersecurity Expert",
+                    description: "Certified cybersecurity professional with experience in network security and ethical hacking.",
+                    date: "June 10, 2023",
+                    resumeUrl: "/resumes/amit-kumar-resume.pdf",
+                    education: "B.Tech Computer Science, BITS Pilani",
+                    experience: "4 years at SecureNet Solutions",
+                    skills: "Network Security, Penetration Testing, CISSP Certified"
+                  }
+                ].map((applicant) => (
+                  <ApplicantCard key={applicant.id} applicant={applicant} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </div>
   );
