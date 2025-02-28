@@ -31,19 +31,29 @@ import {
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-interface Teacher {
+type Teacher = {
   id: number;
   name: string;
   role: string;
-  customRole?: string;
   subject: string;
   status: "Permanent" | "Intern";
   email: string;
   phone: string;
   avatar?: string;
-}
+};
 
-const getInitials = (name: string) => {
+type FormData = {
+  name: string;
+  role: string;
+  customRole: string;
+  subject: string;
+  email: string;
+  phone: string;
+  employmentType: string;
+};
+
+// Function to get initials from name
+const getInitials = (name: string): string => {
   return name
     .split(' ')
     .map(word => word[0])
@@ -52,17 +62,23 @@ const getInitials = (name: string) => {
 };
 
 export default function Teachers() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // Dialog visibility state
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("");
-  const [customRole, setCustomRole] = useState("");
-  const [subject, setSubject] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [employmentType, setEmploymentType] = useState("");
-  const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
-
+  const [editingId, setEditingId] = useState<number | null>(null);
+  
+  // Form data state
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    role: "",
+    customRole: "",
+    subject: "",
+    email: "",
+    phone: "",
+    employmentType: "",
+  });
+  
+  // Teachers data
   const [teachers, setTeachers] = useState<Teacher[]>([
     {
       id: 1,
@@ -102,29 +118,43 @@ export default function Teachers() {
     },
   ]);
 
-  const resetForm = () => {
-    setName("");
-    setRole("");
-    setCustomRole("");
-    setSubject("");
-    setEmail("");
-    setPhone("");
-    setEmploymentType("");
+  // Form field update handler
+  const handleFormChange = (field: keyof FormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Reset form fields
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      role: "",
+      customRole: "",
+      subject: "",
+      email: "",
+      phone: "",
+      employmentType: "",
+    });
+  };
+
+  // Validation function
+  const validateForm = (): boolean => {
+    const { name, role, customRole, subject, email, phone, employmentType } = formData;
     const finalRole = role === "other" ? customRole : role;
     
-    // Data validation
     if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
-      toast.error("Please fill in all required fields", {
-        description: "All fields are required to add a teacher"
-      });
-      return;
+      toast.error("Please fill in all required fields");
+      return false;
     }
+    return true;
+  };
+
+  // Add new teacher
+  const handleAddTeacher = () => {
+    if (!validateForm()) return;
     
-    // Create new teacher object
+    const { name, role, customRole, subject, email, phone, employmentType } = formData;
+    const finalRole = role === "other" ? customRole : role;
+    
     const newTeacher: Teacher = {
       id: Math.max(0, ...teachers.map(t => t.id)) + 1,
       name,
@@ -135,78 +165,66 @@ export default function Teachers() {
       phone,
     };
     
-    // Add to state
-    setTeachers([...teachers, newTeacher]);
-    
-    toast.success("Teacher added successfully", {
-      description: `${name} has been added to the system`
-    });
-    
-    setIsDialogOpen(false);
+    setTeachers(prev => [...prev, newTeacher]);
+    toast.success("Teacher added successfully");
+    setIsAddDialogOpen(false);
     resetForm();
   };
 
-  const handleEdit = (teacher: Teacher) => {
-    setEditingTeacher(teacher);
-    setName(teacher.name);
-    setRole(teacher.customRole ? "other" : teacher.role);
-    setCustomRole(teacher.customRole || "");
-    setSubject(teacher.subject);
-    setEmail(teacher.email);
-    setPhone(teacher.phone);
-    setEmploymentType(teacher.status === "Permanent" ? "permanent" : "intern");
+  // Start editing a teacher
+  const handleStartEdit = (teacher: Teacher) => {
+    setEditingId(teacher.id);
+    const isCustomRole = !["Director", "Lead Instructor", "Instructor", "Teaching Assistant"].includes(teacher.role);
+    
+    setFormData({
+      name: teacher.name,
+      role: isCustomRole ? "other" : teacher.role,
+      customRole: isCustomRole ? teacher.role : "",
+      subject: teacher.subject,
+      email: teacher.email,
+      phone: teacher.phone,
+      employmentType: teacher.status === "Permanent" ? "permanent" : "intern",
+    });
+    
     setIsEditDialogOpen(true);
   };
 
-  const handleUpdateTeacher = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Update existing teacher
+  const handleUpdateTeacher = () => {
+    if (!validateForm() || editingId === null) return;
     
-    if (!editingTeacher) return;
-    
+    const { name, role, customRole, subject, email, phone, employmentType } = formData;
     const finalRole = role === "other" ? customRole : role;
     
-    // Data validation
-    if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
-      toast.error("Please fill in all required fields", {
-        description: "All fields are required to update a teacher"
-      });
-      return;
-    }
+    setTeachers(prev => prev.map(teacher => {
+      if (teacher.id === editingId) {
+        return {
+          ...teacher,
+          name,
+          role: finalRole,
+          subject,
+          email,
+          phone,
+          status: employmentType === "permanent" ? "Permanent" : "Intern",
+        };
+      }
+      return teacher;
+    }));
     
-    // Update teacher
-    const updatedTeacher: Teacher = {
-      ...editingTeacher,
-      name,
-      role: finalRole,
-      customRole: role === "other" ? customRole : undefined,
-      subject,
-      status: employmentType === "permanent" ? "Permanent" : "Intern",
-      email,
-      phone,
-    };
-    
-    // Update state
-    setTeachers(teachers.map(t => t.id === editingTeacher.id ? updatedTeacher : t));
-    
-    toast.success("Teacher updated successfully", {
-      description: `${name}'s information has been updated`
-    });
-    
+    toast.success("Teacher updated successfully");
     setIsEditDialogOpen(false);
-    setEditingTeacher(null);
+    setEditingId(null);
     resetForm();
   };
 
-  const handleDelete = (teacher: Teacher) => {
-    // Remove from state
-    setTeachers(teachers.filter(t => t.id !== teacher.id));
-    
-    toast.success("Teacher removed", {
-      description: `${teacher.name} has been removed from the system`
-    });
+  // Delete a teacher
+  const handleDeleteTeacher = (id: number) => {
+    setTeachers(prev => prev.filter(teacher => teacher.id !== id));
+    toast.success("Teacher removed successfully");
   };
 
-  const getStatusColor = (status: string) => {
+  // Status color
+  const getStatusColor = (status: string): string => {
     return status === "Permanent" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800";
   };
 
@@ -219,143 +237,36 @@ export default function Teachers() {
             Manage your teaching staff and their information
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
               <Plus className="mr-2 h-4 w-4" />
               Add Teacher
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] max-h-[90vh]">
+          <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Add New Teacher</DialogTitle>
               <DialogDescription>
                 Add a new teacher to the system. Fill in all the required information.
               </DialogDescription>
             </DialogHeader>
-            <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
-              <form className="space-y-4 mt-4 pr-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter teacher's full name"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="role">Role</Label>
-                  <Select value={role} onValueChange={setRole}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Director">Director</SelectItem>
-                      <SelectItem value="Lead Instructor">Lead Instructor</SelectItem>
-                      <SelectItem value="Instructor">Instructor</SelectItem>
-                      <SelectItem value="Teaching Assistant">Teaching Assistant</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {role === "other" && (
-                    <Input
-                      className="mt-2"
-                      placeholder="Enter custom role"
-                      value={customRole}
-                      onChange={(e) => setCustomRole(e.target.value)}
-                    />
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Input
-                    id="subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    placeholder="Enter subject"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter email address"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    pattern="[0-9+ -]+"
-                    value={phone}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === '' || /^[0-9+ -]+$/.test(value)) {
-                        setPhone(value);
-                      }
-                    }}
-                    placeholder="Enter phone number"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="employmentType">Employment Type</Label>
-                  <Select value={employmentType} onValueChange={setEmploymentType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select employment type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="permanent">Permanent</SelectItem>
-                      <SelectItem value="intern">Intern</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </form>
-            </ScrollArea>
-            <div className="flex justify-end gap-3 mt-6">
-              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button type="button" className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleSubmit}>
-                Add Teacher
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] max-h-[90vh]">
-          <DialogHeader>
-            <DialogTitle>Edit Teacher</DialogTitle>
-            <DialogDescription>
-              Update teacher information. Fill in all the required fields.
-            </DialogDescription>
-          </DialogHeader>
-          <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
-            <form className="space-y-4 mt-4 pr-4">
+            <div className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label htmlFor="edit-name">Full Name</Label>
+                <Label htmlFor="name">Full Name</Label>
                 <Input
-                  id="edit-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => handleFormChange("name", e.target.value)}
                   placeholder="Enter teacher's full name"
-                  required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-role">Role</Label>
-                <Select value={role} onValueChange={setRole}>
+                <Label htmlFor="role">Role</Label>
+                <Select 
+                  value={formData.role} 
+                  onValueChange={(value) => handleFormChange("role", value)}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
@@ -367,57 +278,55 @@ export default function Teachers() {
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
-                {role === "other" && (
+                {formData.role === "other" && (
                   <Input
                     className="mt-2"
                     placeholder="Enter custom role"
-                    value={customRole}
-                    onChange={(e) => setCustomRole(e.target.value)}
-                    required
+                    value={formData.customRole}
+                    onChange={(e) => handleFormChange("customRole", e.target.value)}
                   />
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-subject">Subject</Label>
+                <Label htmlFor="subject">Subject</Label>
                 <Input
-                  id="edit-subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
+                  id="subject"
+                  value={formData.subject}
+                  onChange={(e) => handleFormChange("subject", e.target.value)}
                   placeholder="Enter subject"
-                  required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-email">Email</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
-                  id="edit-email"
+                  id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => handleFormChange("email", e.target.value)}
                   placeholder="Enter email address"
-                  required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-phone">Phone Number</Label>
+                <Label htmlFor="phone">Phone Number</Label>
                 <Input
-                  id="edit-phone"
+                  id="phone"
                   type="tel"
-                  pattern="[0-9+ -]+"
-                  value={phone}
+                  value={formData.phone}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value === '' || /^[0-9+ -]+$/.test(value)) {
-                      setPhone(value);
+                      handleFormChange("phone", value);
                     }
                   }}
                   placeholder="Enter phone number"
-                  required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-employmentType">Employment Type</Label>
-                <Select value={employmentType} onValueChange={setEmploymentType}>
+                <Label htmlFor="employmentType">Employment Type</Label>
+                <Select 
+                  value={formData.employmentType} 
+                  onValueChange={(value) => handleFormChange("employmentType", value)}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select employment type" />
                   </SelectTrigger>
@@ -427,13 +336,147 @@ export default function Teachers() {
                   </SelectContent>
                 </Select>
               </div>
-            </form>
-          </ScrollArea>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setIsAddDialogOpen(false);
+                  resetForm();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                className="bg-[#947dc2] hover:bg-[#947dc2]/90" 
+                onClick={handleAddTeacher}
+              >
+                Add Teacher
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {/* Edit Dialog */}
+      <Dialog 
+        open={isEditDialogOpen} 
+        onOpenChange={(open) => {
+          setIsEditDialogOpen(open);
+          if (!open) {
+            setEditingId(null);
+            resetForm();
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit Teacher</DialogTitle>
+            <DialogDescription>
+              Update teacher information. Fill in all the required fields.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Full Name</Label>
+              <Input
+                id="edit-name"
+                value={formData.name}
+                onChange={(e) => handleFormChange("name", e.target.value)}
+                placeholder="Enter teacher's full name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-role">Role</Label>
+              <Select 
+                value={formData.role} 
+                onValueChange={(value) => handleFormChange("role", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Director">Director</SelectItem>
+                  <SelectItem value="Lead Instructor">Lead Instructor</SelectItem>
+                  <SelectItem value="Instructor">Instructor</SelectItem>
+                  <SelectItem value="Teaching Assistant">Teaching Assistant</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              {formData.role === "other" && (
+                <Input
+                  className="mt-2"
+                  placeholder="Enter custom role"
+                  value={formData.customRole}
+                  onChange={(e) => handleFormChange("customRole", e.target.value)}
+                />
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-subject">Subject</Label>
+              <Input
+                id="edit-subject"
+                value={formData.subject}
+                onChange={(e) => handleFormChange("subject", e.target.value)}
+                placeholder="Enter subject"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-email">Email</Label>
+              <Input
+                id="edit-email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleFormChange("email", e.target.value)}
+                placeholder="Enter email address"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-phone">Phone Number</Label>
+              <Input
+                id="edit-phone"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === '' || /^[0-9+ -]+$/.test(value)) {
+                    handleFormChange("phone", value);
+                  }
+                }}
+                placeholder="Enter phone number"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-employmentType">Employment Type</Label>
+              <Select 
+                value={formData.employmentType} 
+                onValueChange={(value) => handleFormChange("employmentType", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select employment type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="permanent">Permanent</SelectItem>
+                  <SelectItem value="intern">Intern</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <div className="flex justify-end gap-3 mt-6">
-            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setIsEditDialogOpen(false);
+                setEditingId(null);
+                resetForm();
+              }}
+            >
               Cancel
             </Button>
-            <Button type="button" className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleUpdateTeacher}>
+            <Button 
+              className="bg-[#947dc2] hover:bg-[#947dc2]/90" 
+              onClick={handleUpdateTeacher}
+            >
               Save Changes
             </Button>
           </div>
@@ -475,7 +518,7 @@ export default function Teachers() {
                 <TableCell>{teacher.role}</TableCell>
                 <TableCell>{teacher.subject}</TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-col space-y-1">
                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
                       <Phone className="h-3 w-3" />
                       <span>{teacher.phone}</span>
@@ -499,13 +542,13 @@ export default function Teachers() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleEdit(teacher)}>
+                      <DropdownMenuItem onClick={() => handleStartEdit(teacher)}>
                         <Pencil className="mr-2 h-4 w-4" />
                         Edit Teacher
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         className="text-red-600"
-                        onClick={() => handleDelete(teacher)}
+                        onClick={() => handleDeleteTeacher(teacher.id)}
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
                         Remove Teacher
