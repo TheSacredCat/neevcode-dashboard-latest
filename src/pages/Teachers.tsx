@@ -112,8 +112,7 @@ export default function Teachers() {
     setEmploymentType("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     const finalRole = role === "other" ? customRole : role;
     
     // Data validation
@@ -158,9 +157,7 @@ export default function Teachers() {
     setIsEditDialogOpen(true);
   };
 
-  const handleUpdateTeacher = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleUpdateTeacher = () => {
     if (!editingTeacher) return;
     
     const finalRole = role === "other" ? customRole : role;
@@ -234,7 +231,7 @@ export default function Teachers() {
               </DialogDescription>
             </DialogHeader>
             <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
-              <form className="space-y-4 mt-4 pr-4">
+              <div className="space-y-4 mt-4 pr-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
                   <Input
@@ -242,7 +239,6 @@ export default function Teachers() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter teacher's full name"
-                    required
                   />
                 </div>
                 <div className="space-y-2">
@@ -275,7 +271,6 @@ export default function Teachers() {
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="Enter subject"
-                    required
                   />
                 </div>
                 <div className="space-y-2">
@@ -286,7 +281,6 @@ export default function Teachers() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter email address"
-                    required
                   />
                 </div>
                 <div className="space-y-2">
@@ -294,7 +288,6 @@ export default function Teachers() {
                   <Input
                     id="phone"
                     type="tel"
-                    pattern="[0-9+ -]+"
                     value={phone}
                     onChange={(e) => {
                       const value = e.target.value;
@@ -303,7 +296,6 @@ export default function Teachers() {
                       }
                     }}
                     placeholder="Enter phone number"
-                    required
                   />
                 </div>
                 <div className="space-y-2">
@@ -318,13 +310,16 @@ export default function Teachers() {
                     </SelectContent>
                   </Select>
                 </div>
-              </form>
+              </div>
             </ScrollArea>
             <div className="flex justify-end gap-3 mt-6">
-              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+              <Button variant="outline" onClick={() => {
+                setIsDialogOpen(false);
+                resetForm();
+              }}>
                 Cancel
               </Button>
-              <Button type="button" className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleSubmit}>
+              <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleSubmit}>
                 Add Teacher
               </Button>
             </div>
@@ -333,7 +328,13 @@ export default function Teachers() {
       </div>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
+        setIsEditDialogOpen(open);
+        if (!open) {
+          setEditingTeacher(null);
+          resetForm();
+        }
+      }}>
         <DialogContent className="sm:max-w-[425px] max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Edit Teacher</DialogTitle>
@@ -342,7 +343,7 @@ export default function Teachers() {
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
-            <form className="space-y-4 mt-4 pr-4">
+            <div className="space-y-4 mt-4 pr-4">
               <div className="space-y-2">
                 <Label htmlFor="edit-name">Full Name</Label>
                 <Input
@@ -350,7 +351,6 @@ export default function Teachers() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter teacher's full name"
-                  required
                 />
               </div>
               <div className="space-y-2">
@@ -373,7 +373,6 @@ export default function Teachers() {
                     placeholder="Enter custom role"
                     value={customRole}
                     onChange={(e) => setCustomRole(e.target.value)}
-                    required
                   />
                 )}
               </div>
@@ -384,7 +383,6 @@ export default function Teachers() {
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   placeholder="Enter subject"
-                  required
                 />
               </div>
               <div className="space-y-2">
@@ -395,7 +393,6 @@ export default function Teachers() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter email address"
-                  required
                 />
               </div>
               <div className="space-y-2">
@@ -403,7 +400,6 @@ export default function Teachers() {
                 <Input
                   id="edit-phone"
                   type="tel"
-                  pattern="[0-9+ -]+"
                   value={phone}
                   onChange={(e) => {
                     const value = e.target.value;
@@ -412,7 +408,6 @@ export default function Teachers() {
                     }
                   }}
                   placeholder="Enter phone number"
-                  required
                 />
               </div>
               <div className="space-y-2">
@@ -427,13 +422,17 @@ export default function Teachers() {
                   </SelectContent>
                 </Select>
               </div>
-            </form>
+            </div>
           </ScrollArea>
           <div className="flex justify-end gap-3 mt-6">
-            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button variant="outline" onClick={() => {
+              setIsEditDialogOpen(false);
+              setEditingTeacher(null);
+              resetForm();
+            }}>
               Cancel
             </Button>
-            <Button type="button" className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleUpdateTeacher}>
+            <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleUpdateTeacher}>
               Save Changes
             </Button>
           </div>
