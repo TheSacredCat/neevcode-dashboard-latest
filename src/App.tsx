@@ -33,7 +33,7 @@ function App() {
               <Sidebar />
               <div className="flex flex-col flex-1 overflow-hidden">
                 <Navbar setIsAuthenticated={setIsAuthenticated} />
-                <main className="flex-1 overflow-y-auto p-6 max-w-7xl mx-auto w-full">
+                <main className="flex-1 overflow-y-auto pt-20 pb-6 px-6 max-w-7xl mx-auto w-full">
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/courses" element={<Courses />} />
