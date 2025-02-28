@@ -263,11 +263,11 @@ export default function Teachers() {
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="director">Director</SelectItem>
-                      <SelectItem value="lead_instructor">Lead Instructor</SelectItem>
-                      <SelectItem value="instructor">Instructor</SelectItem>
-                      <SelectItem value="assistant">Teaching Assistant</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="Director">Director</SelectItem>
+                      <SelectItem value="Lead Instructor">Lead Instructor</SelectItem>
+                      <SelectItem value="Instructor">Instructor</SelectItem>
+                      <SelectItem value="Mentor">Teaching Assistant</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                   {role === "other" && (
