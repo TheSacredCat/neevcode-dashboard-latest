@@ -69,15 +69,15 @@ export default function Index() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4" style={{ maxWidth: '100%' }}>
         <DashboardMetric
           title="Total Revenue"
-          value="₹45,231.89"
-          description="+20.1% from last month"
+          value="$45,231.89"
+          description="+203% from last month"
           trend="up"
           icon={<CreditCard className="h-4 w-4 text-[#9b87f5]" />}
         />
         <DashboardMetric
           title="Enrollments"
           value="2,350"
-          description="+180.1% from last month"
+          description="+180.7% from last month"
           trend="up"
           icon={<Users className="h-4 w-4 text-[#9b87f5]" />}
         />
@@ -91,13 +91,13 @@ export default function Index() {
         <DashboardMetric
           title="Avg. Views"
           value="200"
-          description="+10% then last week"
+          description="+10% from last week"
           trend="up"
           icon={<BarChart3 className="h-4 w-4 text-[#9b87f5]" />}
         />
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4 px-4">
+      <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -125,10 +125,10 @@ export default function Index() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis 
-                        tickFormatter={(value) => `₹${value / 1000}k`}
+                        tickFormatter={(value) => `$${value / 1000}k`}
                       />
                       <Tooltip 
-                        formatter={(value) => [`₹${value}`, 'Revenue']}
+                        formatter={(value) => [`$${value}`, 'Revenue']}
                         labelFormatter={(label) => `Month: ${label}`}
                       />
                       <Legend />
