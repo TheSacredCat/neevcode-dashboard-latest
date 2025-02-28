@@ -126,7 +126,7 @@ export default function Teachers() {
     };
 
     // Add to state
-    setTeachers([...teachers, newTeacher]);
+    setTeachers((prevTeachers) => [...prevTeachers, newTeacher]);
 
     toast.success("Teacher added successfully", {
       description: `${name} has been added to the system`,
@@ -191,7 +191,9 @@ export default function Teachers() {
     };
 
     // Update state
-    setTeachers(teachers.map((t) => (t.id === editingTeacher.id ? updatedTeacher : t)));
+    setTeachers((prevTeachers) =>
+      prevTeachers.map((t) => (t.id === editingTeacher.id ? updatedTeacher : t))
+    );
 
     toast.success("Teacher updated successfully", {
       description: `${name}'s information has been updated`,
@@ -206,7 +208,7 @@ export default function Teachers() {
 
   const handleDelete = (teacher: Teacher) => {
     // Remove from state
-    setTeachers(teachers.filter((t) => t.id !== teacher.id));
+    setTeachers((prevTeachers) => prevTeachers.filter((t) => t.id !== teacher.id));
 
     toast.success("Teacher removed", {
       description: `${teacher.name} has been removed from the system`,
