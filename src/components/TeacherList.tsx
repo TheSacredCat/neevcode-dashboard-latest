@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface Teacher {
   id: number;
@@ -18,6 +19,14 @@ interface Teacher {
   status: "Permanent" | "Intern";
   email: string;
 }
+
+const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+};
 
 export default function TeacherList() {
   const [teachers] = useState<Teacher[]>([
@@ -62,7 +71,16 @@ export default function TeacherList() {
         <TableBody>
           {teachers.map((teacher) => (
             <TableRow key={teacher.id}>
-              <TableCell className="font-medium">{teacher.name}</TableCell>
+              <TableCell className="font-medium">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8 bg-[#947dc2]">
+                    <AvatarFallback className="text-black dark:text-white">
+                      {getInitials(teacher.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span>{teacher.name}</span>
+                </div>
+              </TableCell>
               <TableCell>{teacher.subject}</TableCell>
               <TableCell>{teacher.role}</TableCell>
               <TableCell>

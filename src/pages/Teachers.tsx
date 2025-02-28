@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -44,9 +45,9 @@ interface Teacher {
 
 const getInitials = (name: string) => {
   return name
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
+    .split(' ')
+    .map(word => word[0])
+    .join('')
     .toUpperCase();
 };
 
@@ -70,7 +71,7 @@ export default function Teachers() {
       subject: "Teacher Training & Student Counseling",
       status: "Permanent",
       email: "dr.pallavi.k@neevcode.com",
-      phone: "+91 98765 43210",
+      phone: "+91 98765 43210"
     },
     {
       id: 2,
@@ -79,7 +80,7 @@ export default function Teachers() {
       subject: "Advanced Python",
       status: "Permanent",
       email: "savyasaachi.v@neevcode.com",
-      phone: "+91 98765 43211",
+      phone: "+91 98765 43211"
     },
     {
       id: 3,
@@ -88,7 +89,7 @@ export default function Teachers() {
       subject: "UI/UX Design",
       status: "Permanent",
       email: "shine.r@neevcode.com",
-      phone: "+91 98765 43212",
+      phone: "+91 98765 43212"
     },
     {
       id: 4,
@@ -97,14 +98,24 @@ export default function Teachers() {
       subject: "Networking",
       status: "Intern",
       email: "ashish.j@neevcode.com",
-      phone: "+91 98765 43213",
+      phone: "+91 98765 43213"
     },
   ]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = useCallback(() => {
+    setName("");
+    setRole("");
+    setCustomRole("");
+    setSubject("");
+    setEmail("");
+    setPhone("");
+    setEmploymentType("");
+  }, []);
+
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     const finalRole = role === "other" ? customRole : role;
-
+    
     // Data validation
     if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
       toast.error("Please fill in all required fields", {
@@ -113,10 +124,10 @@ export default function Teachers() {
       });
       return;
     }
-
+    
     // Create new teacher object
     const newTeacher: Teacher = {
-      id: Math.max(0, ...teachers.map((t) => t.id)) + 1,
+      id: Math.max(0, ...teachers.map(t => t.id)) + 1,
       name,
       role: finalRole,
       subject,
@@ -124,34 +135,24 @@ export default function Teachers() {
       email,
       phone,
     };
-
+    
     // Add to state
-    setTeachers((prevTeachers) => [...prevTeachers, newTeacher]);
-
+    setTeachers(prevTeachers => [...prevTeachers, newTeacher]);
+    
     toast.success("Teacher added successfully", {
       description: `${name} has been added to the system`,
       duration: 2000,
       style: { background: "#10b981", color: "white" },
     });
+    
+    setIsDialogOpen(false);
+    resetForm();
+  }, [name, role, customRole, subject, email, phone, employmentType, teachers, resetForm]);
 
-    setIsDialogOpen(false); // Close the dialog
-    resetForm(); // Reset the form
-  };
-
-  const resetForm = () => {
-    setName("");
-    setRole("");
-    setCustomRole("");
-    setSubject("");
-    setEmail("");
-    setPhone("");
-    setEmploymentType("");
-  };
-
-  const handleEdit = (teacher: Teacher) => {
+  const handleEdit = useCallback((teacher: Teacher) => {
     setEditingTeacher(teacher);
     setIsEditDialogOpen(true);
-
+    
     // Populate form with teacher data
     setName(teacher.name);
     setRole(teacher.customRole ? "other" : teacher.role);
@@ -160,15 +161,15 @@ export default function Teachers() {
     setEmail(teacher.email);
     setPhone(teacher.phone);
     setEmploymentType(teacher.status === "Permanent" ? "permanent" : "intern");
-  };
+  }, []);
 
-  const handleUpdateTeacher = (e: React.FormEvent) => {
+  const handleUpdateTeacher = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!editingTeacher) return;
-
+    
     const finalRole = role === "other" ? customRole : role;
-
+    
     // Data validation
     if (!name || !finalRole || !subject || !email || !phone || !employmentType) {
       toast.error("Please fill in all required fields", {
@@ -177,7 +178,7 @@ export default function Teachers() {
       });
       return;
     }
-
+    
     // Update teacher
     const updatedTeacher: Teacher = {
       ...editingTeacher,
@@ -189,36 +190,49 @@ export default function Teachers() {
       email,
       phone,
     };
-
+    
     // Update state
-    setTeachers((prevTeachers) =>
-      prevTeachers.map((t) => (t.id === editingTeacher.id ? updatedTeacher : t))
-    );
-
+    setTeachers(prevTeachers => prevTeachers.map(t => t.id === editingTeacher.id ? updatedTeacher : t));
+    
     toast.success("Teacher updated successfully", {
       description: `${name}'s information has been updated`,
       duration: 2000,
       style: { background: "#10b981", color: "white" },
     });
+    
+    setIsEditDialogOpen(false);
+    setEditingTeacher(null);
+    resetForm();
+  }, [name, role, customRole, subject, email, phone, employmentType, editingTeacher, resetForm]);
 
-    setIsEditDialogOpen(false); // Close the dialog
-    setEditingTeacher(null); // Reset editing teacher
-    resetForm(); // Reset the form
-  };
-
-  const handleDelete = (teacher: Teacher) => {
+  const handleDelete = useCallback((teacher: Teacher) => {
     // Remove from state
-    setTeachers((prevTeachers) => prevTeachers.filter((t) => t.id !== teacher.id));
-
+    setTeachers(prevTeachers => prevTeachers.filter(t => t.id !== teacher.id));
+    
     toast.success("Teacher removed", {
       description: `${teacher.name} has been removed from the system`,
       duration: 2000,
     });
-  };
+  }, []);
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = useCallback((status: string) => {
     return status === "Permanent" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800";
-  };
+  }, []);
+
+  const handleDialogChange = useCallback((open: boolean) => {
+    setIsDialogOpen(open);
+    if (!open) {
+      resetForm();
+    }
+  }, [resetForm]);
+
+  const handleEditDialogChange = useCallback((open: boolean) => {
+    setIsEditDialogOpen(open);
+    if (!open) {
+      setEditingTeacher(null);
+      resetForm();
+    }
+  }, [resetForm]);
 
   return (
     <div className="space-y-6">
@@ -229,10 +243,7 @@ export default function Teachers() {
             Manage your teaching staff and their information
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          if (!open) resetForm(); // Reset form when dialog is closed
-        }}>
+        <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
           <DialogTrigger asChild>
             <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
               <Plus className="mr-2 h-4 w-4" />
@@ -247,7 +258,7 @@ export default function Teachers() {
               </DialogDescription>
             </DialogHeader>
             <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
-              <form onSubmit={handleSubmit} className="space-y-4 mt-4 pr-4">
+              <form className="space-y-4 mt-4 pr-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
                   <Input
@@ -260,7 +271,7 @@ export default function Teachers() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">Role</Label>
-                  <Select value={role} onValueChange={setRole} required>
+                  <Select value={role} onValueChange={setRole}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
@@ -268,8 +279,8 @@ export default function Teachers() {
                       <SelectItem value="Director">Director</SelectItem>
                       <SelectItem value="Lead Instructor">Lead Instructor</SelectItem>
                       <SelectItem value="Instructor">Instructor</SelectItem>
-                      <SelectItem value="Mentor">Teaching Assistant</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="Teaching Assistant">Teaching Assistant</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                   {role === "other" && (
@@ -278,7 +289,6 @@ export default function Teachers() {
                       placeholder="Enter custom role"
                       value={customRole}
                       onChange={(e) => setCustomRole(e.target.value)}
-                      required
                     />
                   )}
                 </div>
@@ -312,7 +322,7 @@ export default function Teachers() {
                     value={phone}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value === "" || /^[0-9+ -]+$/.test(value)) {
+                      if (value === '' || /^[0-9+ -]+$/.test(value)) {
                         setPhone(value);
                       }
                     }}
@@ -322,7 +332,7 @@ export default function Teachers() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="employmentType">Employment Type</Label>
-                  <Select value={employmentType} onValueChange={setEmploymentType} required>
+                  <Select value={employmentType} onValueChange={setEmploymentType}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select employment type" />
                     </SelectTrigger>
@@ -332,28 +342,22 @@ export default function Teachers() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex justify-end gap-3 mt-6">
-                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
-                    Add Teacher
-                  </Button>
-                </div>
               </form>
             </ScrollArea>
+            <div className="flex justify-end gap-3 mt-6">
+              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="button" className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleSubmit}>
+                Add Teacher
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
-        setIsEditDialogOpen(open);
-        if (!open) {
-          setEditingTeacher(null); // Reset editing teacher
-          resetForm(); // Reset form when dialog is closed
-        }
-      }}>
+      <Dialog open={isEditDialogOpen} onOpenChange={handleEditDialogChange}>
         <DialogContent className="sm:max-w-[425px] max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Edit Teacher</DialogTitle>
@@ -362,7 +366,7 @@ export default function Teachers() {
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="h-full max-h-[calc(90vh-10rem)]">
-            <form onSubmit={handleUpdateTeacher} className="space-y-4 mt-4 pr-4">
+            <form className="space-y-4 mt-4 pr-4">
               <div className="space-y-2">
                 <Label htmlFor="edit-name">Full Name</Label>
                 <Input
@@ -375,15 +379,15 @@ export default function Teachers() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="edit-role">Role</Label>
-                <Select value={role} onValueChange={setRole} required>
+                <Select value={role} onValueChange={setRole}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="director">Director</SelectItem>
-                    <SelectItem value="lead_instructor">Lead Instructor</SelectItem>
-                    <SelectItem value="instructor">Instructor</SelectItem>
-                    <SelectItem value="assistant">Teaching Assistant</SelectItem>
+                    <SelectItem value="Director">Director</SelectItem>
+                    <SelectItem value="Lead Instructor">Lead Instructor</SelectItem>
+                    <SelectItem value="Instructor">Instructor</SelectItem>
+                    <SelectItem value="Teaching Assistant">Teaching Assistant</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
@@ -427,7 +431,7 @@ export default function Teachers() {
                   value={phone}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value === "" || /^[0-9+ -]+$/.test(value)) {
+                    if (value === '' || /^[0-9+ -]+$/.test(value)) {
                       setPhone(value);
                     }
                   }}
@@ -437,7 +441,7 @@ export default function Teachers() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="edit-employmentType">Employment Type</Label>
-                <Select value={employmentType} onValueChange={setEmploymentType} required>
+                <Select value={employmentType} onValueChange={setEmploymentType}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select employment type" />
                   </SelectTrigger>
@@ -447,16 +451,16 @@ export default function Teachers() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" className="bg-[#947dc2] hover:bg-[#947dc2]/90">
-                  Save Changes
-                </Button>
-              </div>
             </form>
           </ScrollArea>
+          <div className="flex justify-end gap-3 mt-6">
+            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="button" className="bg-[#947dc2] hover:bg-[#947dc2]/90" onClick={handleUpdateTeacher}>
+              Save Changes
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -481,7 +485,7 @@ export default function Teachers() {
                       {teacher.avatar ? (
                         <AvatarImage src={teacher.avatar} alt={teacher.name} />
                       ) : (
-                        <AvatarFallback className="text-white">
+                        <AvatarFallback className="text-black dark:text-white">
                           {getInitials(teacher.name)}
                         </AvatarFallback>
                       )}
@@ -507,11 +511,7 @@ export default function Teachers() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                      teacher.status
-                    )}`}
-                  >
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(teacher.status)}`}>
                     {teacher.status}
                   </span>
                 </TableCell>
@@ -527,7 +527,7 @@ export default function Teachers() {
                         <Pencil className="mr-2 h-4 w-4" />
                         Edit Teacher
                       </DropdownMenuItem>
-                      <DropdownMenuItem
+                      <DropdownMenuItem 
                         className="text-red-600"
                         onClick={() => handleDelete(teacher)}
                       >

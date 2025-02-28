@@ -9,6 +9,7 @@ import { TopTeachers } from "@/components/TopTeachers";
 import { TopCourses } from "@/components/TopCourses";
 import { RecentSales } from "@/components/RecentSales";
 import TeacherList from "@/components/TeacherList";
+import { ApplicantCard } from "@/components/ApplicantCard";
 import {
   LineChart,
   Line,
@@ -243,33 +244,43 @@ export default function Index() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20">
-                  <h3 className="font-medium text-[#947dc2]">Rahul Sharma</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Applied for: UI/UX Designer</p>
-                  <p className="text-sm mt-2">I'm a passionate designer with 3 years of experience in creating user interfaces for educational platforms.</p>
-                  <div className="mt-3 flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">June 15, 2023</span>
-                    <Button variant="outline" size="sm">View Details</Button>
-                  </div>
-                </div>
-                <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20">
-                  <h3 className="font-medium text-[#947dc2]">Priya Patel</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Applied for: Python Instructor</p>
-                  <p className="text-sm mt-2">Software engineer with 5+ years of Python experience looking to transition into teaching.</p>
-                  <div className="mt-3 flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">June 12, 2023</span>
-                    <Button variant="outline" size="sm">View Details</Button>
-                  </div>
-                </div>
-                <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20">
-                  <h3 className="font-medium text-[#947dc2]">Amit Kumar</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Applied for: Cybersecurity Expert</p>
-                  <p className="text-sm mt-2">Certified cybersecurity professional with experience in network security and ethical hacking.</p>
-                  <div className="mt-3 flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">June 10, 2023</span>
-                    <Button variant="outline" size="sm">View Details</Button>
-                  </div>
-                </div>
+                {[
+                  {
+                    id: 1,
+                    name: "Rahul Sharma",
+                    position: "UI/UX Designer",
+                    description: "I'm a passionate designer with 3 years of experience in creating user interfaces for educational platforms.",
+                    date: "June 15, 2023",
+                    resumeUrl: "/resumes/rahul-sharma-resume.pdf",
+                    education: "Bachelor of Design, NID Ahmedabad",
+                    experience: "3 years at TechDesign Solutions",
+                    skills: "Figma, Adobe XD, User Research, Prototyping"
+                  },
+                  {
+                    id: 2,
+                    name: "Priya Patel",
+                    position: "Python Instructor",
+                    description: "Software engineer with 5+ years of Python experience looking to transition into teaching.",
+                    date: "June 12, 2023",
+                    resumeUrl: "/resumes/priya-patel-resume.pdf",
+                    education: "MS Computer Science, IIT Delhi",
+                    experience: "5 years at Infosys as Python Developer",
+                    skills: "Python, Django, Flask, Data Science, Machine Learning"
+                  },
+                  {
+                    id: 3,
+                    name: "Amit Kumar",
+                    position: "Cybersecurity Expert",
+                    description: "Certified cybersecurity professional with experience in network security and ethical hacking.",
+                    date: "June 10, 2023",
+                    resumeUrl: "/resumes/amit-kumar-resume.pdf",
+                    education: "B.Tech Computer Science, BITS Pilani",
+                    experience: "4 years at SecureNet Solutions",
+                    skills: "Network Security, Penetration Testing, CISSP Certified"
+                  }
+                ].map((applicant) => (
+                  <ApplicantCard key={applicant.id} applicant={applicant} />
+                ))}
               </div>
             </CardContent>
           </Card>
