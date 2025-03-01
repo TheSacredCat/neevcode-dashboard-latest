@@ -1,13 +1,8 @@
-
 #root {
-  width: 100%;
+  max-width: 1280px;
   margin: 0 auto;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+  padding: 2rem;
+  text-align: center;
 }
 
 .logo {
