@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { BookOpen, Home, Users, Menu, DollarSign, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -70,17 +69,10 @@ export function Sidebar() {
   const sidebarContent = (
     <>
       <div className="p-4 flex items-center justify-between border-b border-border">
-        <h2 className="text-xl font-bold text-[#947dc2]">NeevCode</h2>
-        {!isMobile && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
-        )}
+        <div className="flex items-center">
+          <img src="/nc.png" alt="NeevCode Logo" className="h-8" />
+        </div>
+        {/* Hamburger menu is removed for desktop mode */}
       </div>
       <nav className="flex-1 p-2">
         {menuItems.map((item) => (
@@ -92,20 +84,23 @@ export function Sidebar() {
 
   if (isMobile) {
     return (
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="fixed top-3 left-4 z-50 md:hidden"
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-72">
-          {sidebarContent}
-        </SheetContent>
-      </Sheet>
+      <>
+        {/* Hamburger menu for mobile */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed top-3 left-4 z-50 md:hidden"
+          onClick={() => setIsOpen(true)}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+        {/* Mobile sidebar */}
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetContent side="left" className="p-0 w-72">
+            {sidebarContent}
+          </SheetContent>
+        </Sheet>
+      </>
     );
   }
 

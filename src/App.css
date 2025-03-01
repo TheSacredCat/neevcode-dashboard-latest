@@ -1,8 +1,15 @@
+
+
 #root {
-  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 .logo {
@@ -40,3 +47,39 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Fix for dashboard layout */
+.flex-1 {
+  flex: 1 1 0%;
+  width: 100%;
+}
+
+/* Fix for overflow scrollbars */
+.overflow-y-auto {
+  overflow-x: hidden;
+}
+
+/* Ensure content doesn't get cut off in full screen */
+main.flex-1 {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Fix for table containers to prevent overflow */
+.rounded-md.border {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Remove unwanted scrollbars from buttons */
+button {
+  overflow: hidden;
+}
+
+/* Fix for oversized buttons */
+button.gap-1 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
