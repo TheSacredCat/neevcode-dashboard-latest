@@ -72,7 +72,7 @@ export function Sidebar() {
     <>
     <div className="p-4 flex items-center justify-between border-b border-border">
       <Image 
-        src="/path/to/your/logo.png" 
+        src="/nc.png" 
         alt="Logo" 
         width={120} // Adjust width as needed
         height={32} // Adjust height as needed
