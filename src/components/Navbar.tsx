@@ -1,4 +1,3 @@
-
 import { Bell, Search, User, LogOut, Settings, Sun, Moon } from "lucide-react";
 import {
   DropdownMenu,
@@ -50,7 +49,8 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />
-              <span className="absolute top-0 right-0 h-2 w-2 bg-primary rounded-full" />
+              {/* Green dot for notifications */}
+              <span className="absolute top-0 right-0 h-2 w-2 bg-green-500 rounded-full transform translate-x-1/2 -translate-y-1/2" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
