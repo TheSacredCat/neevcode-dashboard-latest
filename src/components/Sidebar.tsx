@@ -69,8 +69,10 @@
 
     const sidebarContent = (
       <>
-  <div className="p-4 flex items-center justify-between border-b border-border">
-          <h2 className="text-xl font-bold text-[#947dc2]">NeevCode</h2>
+        <div className="p-4 flex items-center justify-between border-b border-border">
+          <div className="flex items-center">
+            <img src="/nc.png" alt="NeevCode Logo" className="h-8" />
+          </div>
           {!isMobile && (
             <Button
               variant="ghost"

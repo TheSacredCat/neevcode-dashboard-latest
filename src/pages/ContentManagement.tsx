@@ -141,9 +141,9 @@ export default function ContentManagement() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="space-y-1">
-            <CardTitle>Course Content</CardTitle>
+            <CardTitle>Reviews Management</CardTitle>
             <CardDescription>
-              Manage and organize your course content
+              Manage and organize your course reviews
             </CardDescription>
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

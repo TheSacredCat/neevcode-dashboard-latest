@@ -113,17 +113,17 @@ export default function TeacherList() {
     });
   };
 
-  // Safe dialog close handler
+  // Critical fix: Properly handle dialog closing
   const handleDialogClose = () => {
     setIsEditDialogOpen(false);
     // Use setTimeout to ensure state updates don't conflict
     setTimeout(() => {
       setEditingId(null);
       resetForm();
-    }, 100);
+    }, 150);
   };
 
-  // Start editing a teacher
+  // Start editing a teacher - Fixed order of operations
   const handleStartEdit = (teacher: Teacher) => {
     const isCustomRole = !["Director", "Lead Instructor", "Instructor", "Teaching Assistant"].includes(teacher.role);
     
@@ -139,8 +139,11 @@ export default function TeacherList() {
     
     // Set editing ID
     setEditingId(teacher.id);
+    
     // Open dialog last
-    setIsEditDialogOpen(true);
+    setTimeout(() => {
+      setIsEditDialogOpen(true);
+    }, 10);
   };
 
   // Validation function
@@ -246,7 +249,7 @@ export default function TeacherList() {
         </TableBody>
       </Table>
 
-      {/* Edit Dialog - With improved state management */}
+      {/* Edit Dialog - With critical fixes for responsiveness */}
       <Dialog 
         open={isEditDialogOpen} 
         onOpenChange={(open) => {

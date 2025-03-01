@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,7 +63,7 @@ export default function Index() {
               <SelectItem value="this-year">This Year</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline">Download Report</Button>
+          <Button variant="outline" className="overflow-hidden">Download Report</Button>
         </div>
       </div>
 
@@ -194,7 +195,7 @@ export default function Index() {
                   Manage your teaching staff and their information.
                 </CardDescription>
               </div>
-              <Button variant="outline" className="gap-1" onClick={handleClick}>
+              <Button variant="outline" size="sm" className="gap-1" onClick={handleClick}>
                 View All
                 <ArrowRight className="h-4 w-4" />
               </Button>
