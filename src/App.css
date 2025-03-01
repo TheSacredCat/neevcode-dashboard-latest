@@ -2,12 +2,13 @@
 #root {
   width: 100%;
   margin: 0 auto;
+  max-width: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .logo {
@@ -44,4 +45,14 @@ body {
 
 .read-the-docs {
   color: #888;
+}
+
+/* Fix for dashboard layout */
+.flex-1 {
+  width: 100%;
+}
+
+/* Fix for overflow scrollbars */
+.overflow-y-auto {
+  overflow-x: hidden;
 }

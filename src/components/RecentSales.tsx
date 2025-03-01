@@ -39,7 +39,7 @@ export function RecentSales() {
   ];
 
   return (
-    <ScrollArea className="h-[300px]">
+    <ScrollArea className="h-[300px] w-full">
       <div className="space-y-6">
         {transactions.map((transaction, i) => (
           <div key={i} className="flex items-center justify-between space-x-4">

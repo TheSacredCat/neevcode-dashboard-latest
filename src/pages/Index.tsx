@@ -45,7 +45,7 @@ export default function Index() {
   };
 
   return (
-    <div className="flex flex-col gap-6 px-4" style={{ overflowX: 'hidden' }}>
+    <div className="flex flex-col gap-6 px-4 w-full">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <div className="flex items-center gap-2">
@@ -66,7 +66,7 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4" style={{ maxWidth: '100%' }}>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 w-full">
         <DashboardMetric
           title="Total Revenue"
           value="$45,231.89"
@@ -97,7 +97,7 @@ export default function Index() {
         />
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
+      <Tabs defaultValue="overview" className="space-y-4 w-full">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -105,7 +105,7 @@ export default function Index() {
           <TabsTrigger value="careers">Career Inquiries</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7" style={{ maxWidth: '100%' }}>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 w-full">
             <Card className="col-span-4">
               <CardHeader>
                 <CardTitle>Revenue Overview</CardTitle>
@@ -156,7 +156,7 @@ export default function Index() {
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7" style={{ maxWidth: '100%' }}>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 w-full">
             <Card className="col-span-3">
               <CardHeader>
                 <CardTitle>Top Teachers</CardTitle>
@@ -204,7 +204,6 @@ export default function Index() {
             </CardContent>
           </Card>
         </TabsContent>
-        {/* Other TabsContent sections */}
       </Tabs>
     </div>
   );
