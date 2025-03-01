@@ -113,21 +113,11 @@ export default function TeacherList() {
     });
   };
 
-  // Critical fix: Properly handle dialog closing
-  const handleDialogClose = () => {
-    setIsEditDialogOpen(false);
-    // Use setTimeout to ensure state updates don't conflict
-    setTimeout(() => {
-      setEditingId(null);
-      resetForm();
-    }, 150);
-  };
-
-  // Start editing a teacher - Fixed order of operations
+  // Start editing a teacher
   const handleStartEdit = (teacher: Teacher) => {
+    setEditingId(teacher.id);
     const isCustomRole = !["Director", "Lead Instructor", "Instructor", "Teaching Assistant"].includes(teacher.role);
     
-    // Set form data first before opening dialog
     setFormData({
       name: teacher.name,
       role: isCustomRole ? "other" : teacher.role,
@@ -137,13 +127,7 @@ export default function TeacherList() {
       employmentType: teacher.status === "Permanent" ? "permanent" : "intern",
     });
     
-    // Set editing ID
-    setEditingId(teacher.id);
-    
-    // Open dialog last
-    setTimeout(() => {
-      setIsEditDialogOpen(true);
-    }, 10);
+    setIsEditDialogOpen(true);
   };
 
   // Validation function
@@ -180,7 +164,9 @@ export default function TeacherList() {
     }));
     
     toast.success("Teacher updated successfully");
-    handleDialogClose();
+    setIsEditDialogOpen(false);
+    setEditingId(null);
+    resetForm();
   };
 
   // Delete a teacher
@@ -249,12 +235,14 @@ export default function TeacherList() {
         </TableBody>
       </Table>
 
-      {/* Edit Dialog - With critical fixes for responsiveness */}
+      {/* Edit Dialog - Simplified and improved */}
       <Dialog 
         open={isEditDialogOpen} 
         onOpenChange={(open) => {
+          setIsEditDialogOpen(open);
           if (!open) {
-            handleDialogClose();
+            setEditingId(null);
+            resetForm();
           }
         }}
       >
@@ -281,7 +269,7 @@ export default function TeacherList() {
                 value={formData.role} 
                 onValueChange={(value) => handleFormChange("role", value)}
               >
-                <SelectTrigger id="edit-role">
+                <SelectTrigger>
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -326,7 +314,7 @@ export default function TeacherList() {
                 value={formData.employmentType} 
                 onValueChange={(value) => handleFormChange("employmentType", value)}
               >
-                <SelectTrigger id="edit-employmentType">
+                <SelectTrigger>
                   <SelectValue placeholder="Select employment type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -339,7 +327,11 @@ export default function TeacherList() {
           <DialogFooter className="mt-4">
             <Button 
               variant="outline" 
-              onClick={handleDialogClose}
+              onClick={() => {
+                setIsEditDialogOpen(false);
+                setEditingId(null);
+                resetForm();
+              }}
             >
               Cancel
             </Button>
