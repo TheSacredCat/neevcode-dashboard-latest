@@ -49,23 +49,10 @@ body {
 
 /* Fix for dashboard layout */
 .flex-1 {
-  flex: 1 1 0%;
   width: 100%;
 }
 
 /* Fix for overflow scrollbars */
 .overflow-y-auto {
   overflow-x: hidden;
-}
-
-/* Ensure content doesn't get cut off in full screen */
-main.flex-1 {
-  width: calc(100% - 1rem);
-  max-width: 100%;
-}
-
-/* Fix for table containers to prevent overflow */
-.rounded-md.border {
-  width: 100%;
-  overflow-x: auto;
 }
