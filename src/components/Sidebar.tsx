@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Image from 'next/image';
 import {
   Tooltip,
   TooltipContent,
@@ -69,19 +70,25 @@ export function Sidebar() {
 
   const sidebarContent = (
     <>
-      <div className="p-4 flex items-center justify-between border-b border-border">
-        <h2 className="text-xl font-bold text-[#947dc2]">NeevCode</h2>
-        {!isMobile && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
+    <div className="p-4 flex items-center justify-between border-b border-border">
+      <Image 
+        src="/path/to/your/logo.png" 
+        alt="Logo" 
+        width={120} // Adjust width as needed
+        height={32} // Adjust height as needed
+        className="h-8 w-auto" // Additional styling if needed
+      />
+      {!isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+      )}
+    </div>
       <nav className="flex-1 p-2">
         {menuItems.map((item) => (
           <MenuItem key={item.path} item={item} isCollapsed={isCollapsed} />
