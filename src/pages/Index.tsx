@@ -186,7 +186,7 @@ export default function Index() {
               </CardContent>
             </Card>
           </div>
-          <Card>
+          {/* <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="space-y-1">
                 <CardTitle>Teaching Staff</CardTitle>
@@ -202,7 +202,7 @@ export default function Index() {
             <CardContent>
               <TeacherList />
             </CardContent>
-          </Card>
+          </Card> */}
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">
           <Card>
