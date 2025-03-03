@@ -1,5 +1,6 @@
+
 import { cn } from "@/lib/utils";
-import { BookOpen, Home, Users, Menu, DollarSign, Settings } from "lucide-react";
+import { BookOpen, Home, Users, Menu, DollarSign, Settings, User, Shield, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,12 @@ const menuItems = [
   { icon: Users, label: "Teachers", path: "/teachers" },
   { icon: DollarSign, label: "Expenses", path: "/expenses" },
   { icon: Settings, label: "Content Management", path: "/content" },
+];
+
+const profileMenuItems = [
+  { icon: User, label: "Profile", path: "/profile" },
+  { icon: Shield, label: "Security", path: "/security" },
+  // { icon: Trash2, label: "Delete Account", path: "/delete-account" },
 ];
 
 export function Sidebar() {
@@ -75,9 +82,21 @@ export function Sidebar() {
         {/* Hamburger menu is removed for desktop mode */}
       </div>
       <nav className="flex-1 p-2">
-        {menuItems.map((item) => (
-          <MenuItem key={item.path} item={item} isCollapsed={isCollapsed} />
-        ))}
+        <div className="mb-4">
+          {menuItems.map((item) => (
+            <MenuItem key={item.path} item={item} isCollapsed={isCollapsed} />
+          ))}
+        </div>
+        
+        {/* Profile section */}
+        <div className="mt-4 pt-4 border-t border-border">
+          <div className="px-4 py-2 text-xs uppercase text-muted-foreground font-semibold">
+            {!isCollapsed && "Account"}
+          </div>
+          {profileMenuItems.map((item) => (
+            <MenuItem key={item.path} item={item} isCollapsed={isCollapsed} />
+          ))}
+        </div>
       </nav>
     </>
   );

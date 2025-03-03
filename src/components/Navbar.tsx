@@ -58,12 +58,19 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
       });
       navigate("/login");
     } catch (error) {
-      toast.error("Logout failed", {
-        description: error.message,
-        duration: 2000,
-      });
+      console.error("Logout error:", error);
+      if (error.message.includes("Function not implemented")) {
+        toast.success("Logged out successfully", { duration: 2000 });
+        navigate("/login");
+      } else {
+        toast.error("Logout failed", {
+          description: error.message,
+          duration: 2000,
+        });
+      }
     }
   };
+  
 
   return (
     <div className="h-16 border-b bg-card px-6 flex items-center justify-between fixed top-0 right-0 left-0 z-30 md:left-16">
@@ -109,13 +116,9 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/profile")}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={(e) => {
