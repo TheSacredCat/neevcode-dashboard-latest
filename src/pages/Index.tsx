@@ -9,6 +9,7 @@ import { TopCourses } from "@/components/TopCourses";
 import { RecentSales } from "@/components/RecentSales";
 import TeacherList from "@/components/TeacherList";
 import { ApplicantCard } from "@/components/ApplicantCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   LineChart,
   Line,
@@ -37,6 +38,7 @@ const revenueData = [
 
 export default function Index() {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const handleClick = () => {
     navigate('/Teachers');
@@ -80,11 +82,13 @@ export default function Index() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="w-full flex justify-between">
-          <TabsTrigger value="overview" className="flex-1">Overview</TabsTrigger>
-          <TabsTrigger value="analytics" className="flex-1">Analytics</TabsTrigger>
-          <TabsTrigger value="reports" className="flex-1">Reports</TabsTrigger>
-          <TabsTrigger value="careers" className="flex-1">Career Inquiries</TabsTrigger>
+        <TabsList className="w-full grid grid-cols-4 h-auto">
+          <TabsTrigger value="overview" className="py-2 text-xs sm:text-sm md:text-base">Overview</TabsTrigger>
+          <TabsTrigger value="analytics" className="py-2 text-xs sm:text-sm md:text-base">Analytics</TabsTrigger>
+          <TabsTrigger value="reports" className="py-2 text-xs sm:text-sm md:text-base">Reports</TabsTrigger>
+          <TabsTrigger value="careers" className="py-2 text-xs sm:text-sm md:text-base whitespace-normal">
+            {isMobile ? "Careers" : "Career Inquiries"}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
