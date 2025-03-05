@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,7 +20,6 @@ import {
   Legend,
 } from "recharts";
 
-// Revenue data for the chart
 const revenueData = [
   { name: "Jan", revenue: 12800 },
   { name: "Feb", revenue: 18300 },
@@ -37,10 +36,10 @@ const revenueData = [
 ];
 
 export default function Index() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/Teachers'); // Redirect to /Teachers
+    navigate('/Teachers');
   };
 
   return (
@@ -81,11 +80,11 @@ export default function Index() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="careers">Career Inquiries</TabsTrigger>
+        <TabsList className="w-full flex justify-between">
+          <TabsTrigger value="overview" className="flex-1">Overview</TabsTrigger>
+          <TabsTrigger value="analytics" className="flex-1">Analytics</TabsTrigger>
+          <TabsTrigger value="reports" className="flex-1">Reports</TabsTrigger>
+          <TabsTrigger value="careers" className="flex-1">Career Inquiries</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -169,23 +168,6 @@ export default function Index() {
               </CardContent>
             </Card>
           </div>
-          {/* <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="space-y-1">
-                <CardTitle>Teaching Staff</CardTitle>
-                <CardDescription>
-                  Manage your teaching staff and their information.
-                </CardDescription>
-              </div>
-              <Button variant="outline" className="gap-1" onClick={handleClick}>
-                View All
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <TeacherList />
-            </CardContent>
-          </Card> */}
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">
           <Card>
@@ -236,7 +218,6 @@ export default function Index() {
                     date: "June 15, 2023",
                     resumeUrl: "/resumes/rahul-sharma-resume.pdf",
                     education: "Bachelor of Design, NID Ahmedabad",
-                    experience: "3 years at TechDesign Solutions",
                     skills: "Figma, Adobe XD, User Research, Prototyping",
                     email: "rahul.sharma@example.com",
                     linkedinProfile: "https://linkedin.com/in/rahul-sharma-example",
@@ -251,7 +232,6 @@ export default function Index() {
                     date: "June 12, 2023",
                     resumeUrl: "/resumes/priya-patel-resume.pdf",
                     education: "MS Computer Science, IIT Delhi",
-                    experience: "5 years at Infosys as Python Developer",
                     skills: "Python, Django, Flask, Data Science, Machine Learning",
                     email: "priya.patel@example.com",
                     linkedinProfile: "",
@@ -266,7 +246,6 @@ export default function Index() {
                     date: "June 10, 2023",
                     resumeUrl: "/resumes/amit-kumar-resume.pdf",
                     education: "B.Tech Computer Science, BITS Pilani",
-                    experience: "4 years at SecureNet Solutions",
                     skills: "Network Security, Penetration Testing, CISSP Certified",
                     email: "amit.kumar@example.com",
                     linkedinProfile: "https://linkedin.com/in/amit-kumar-example",

@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, Search, User, LogOut, Sun, Moon } from "lucide-react";
+import { Bell, Search, User, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +17,7 @@ import { useTheme } from "@/components/theme-provider";
 import { toast } from "sonner";
 import { auth } from "@/firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
+import { Sun, Moon } from "lucide-react";
 
 interface NavbarProps {
   setIsAuthenticated: (value: boolean) => void;
@@ -77,8 +78,8 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
       {/* Left section - empty space for mobile menu button in sidebar */}
       <div className="w-8 md:w-0"></div>
       
-      {/* Middle section - search bar */}
-      <div className="flex-1 flex justify-center md:justify-start max-w-md mx-auto md:mx-0">
+      {/* Middle section - search bar with adjusted positioning */}
+      <div className="flex-1 flex justify-center md:justify-start max-w-md mx-auto md:ml-4 md:mr-auto">
         <div className="relative w-full">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input placeholder="Search anything..." className="pl-8 w-full bg-muted" />

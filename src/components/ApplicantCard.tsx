@@ -106,7 +106,7 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
                 </Avatar>
                 <div>
                   <h2 className="text-xl font-bold">{applicant.name}</h2>
-                  <p className="text-[#947dc2]">{applicant.position}</p>
+                  {/* Removed position line as requested */}
                 </div>
               </div>
 
