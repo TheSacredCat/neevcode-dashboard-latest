@@ -72,26 +72,21 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
     }
   };
   
-
   return (
     <div className="h-16 border-b bg-card px-6 flex items-center justify-between fixed top-0 right-0 left-0 z-30 md:left-16">
-      <div className="flex-1 max-w-xl">
-        <div className="relative">
+      {/* Left section - empty space for mobile menu button in sidebar */}
+      <div className="w-8 md:w-0"></div>
+      
+      {/* Middle section - search bar */}
+      <div className="flex-1 flex justify-center md:justify-start max-w-md mx-auto md:mx-0">
+        <div className="relative w-full">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search anything..." className="pl-8 w-full max-w-md bg-muted" />
+          <Input placeholder="Search anything..." className="pl-8 w-full bg-muted" />
         </div>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          className="rounded-full"
-        >
-          {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-        </Button>
-
+      {/* Right section - notification and profile */}
+      <div className="flex items-center space-x-2 md:space-x-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
@@ -129,6 +124,10 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
             <DropdownMenuItem onClick={() => navigate("/profile")}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+              {theme === "light" ? <Moon className="mr-2 h-4 w-4" /> : <Sun className="mr-2 h-4 w-4" />}
+              <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
