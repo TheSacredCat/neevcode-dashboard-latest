@@ -12,6 +12,7 @@ import { Download, Linkedin, Mail } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Applicant {
   id: number;
@@ -21,7 +22,6 @@ interface Applicant {
   date: string;
   resumeUrl: string;
   education: string;
-  experience: string;
   skills: string;
   email: string;
   linkedinProfile: string;
@@ -96,82 +96,77 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-4">
-            <div className="flex items-center gap-4 mb-4">
-              <Avatar className="h-16 w-16 bg-[#947dc2]">
-                <AvatarFallback className="text-black dark:text-white text-xl">
-                  {getInitials(applicant.name)}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h2 className="text-xl font-bold">{applicant.name}</h2>
-                <p className="text-[#947dc2]">{applicant.position}</p>
-              </div>
-            </div>
-
-            <Separator className="my-4" />
-
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 gap-3">
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold">Contact:</span>
-                  <span className="text-sm">{applicant.email}</span>
-                  {applicant.linkedinProfile && (
-                    <a
-                      href={applicant.linkedinProfile}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm flex items-center gap-1 text-blue-600 hover:text-blue-800"
-                    >
-                      <Linkedin className="h-3 w-3" /> LinkedIn Profile
-                    </a>
-                  )}
+          <ScrollArea className="h-[70vh] pr-4">
+            <div className="mt-4">
+              <div className="flex items-center gap-4 mb-4">
+                <Avatar className="h-16 w-16 bg-[#947dc2]">
+                  <AvatarFallback className="text-black dark:text-white text-xl">
+                    {getInitials(applicant.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h2 className="text-xl font-bold">{applicant.name}</h2>
+                  <p className="text-[#947dc2]">{applicant.position}</p>
                 </div>
               </div>
 
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Education</h3>
-                  <p className="text-sm">{applicant.education}</p>
-                </CardContent>
-              </Card>
+              <Separator className="my-4" />
 
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Experience</h3>
-                  <p className="text-sm">{applicant.experience}</p>
-                </CardContent>
-              </Card>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold">Contact:</span>
+                    <span className="text-sm">{applicant.email}</span>
+                    {applicant.linkedinProfile && (
+                      <a
+                        href={applicant.linkedinProfile}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                      >
+                        <Linkedin className="h-3 w-3" /> LinkedIn Profile
+                      </a>
+                    )}
+                  </div>
+                </div>
 
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Skills</h3>
-                  <p className="text-sm">{applicant.skills}</p>
-                </CardContent>
-              </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold mb-2">Education</h3>
+                    <p className="text-sm">{applicant.education}</p>
+                  </CardContent>
+                </Card>
 
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Why join us?</h3>
-                  <p className="text-sm">{applicant.whyJoinUs || "Not specified"}</p>
-                </CardContent>
-              </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold mb-2">Skills</h3>
+                    <p className="text-sm">{applicant.skills}</p>
+                  </CardContent>
+                </Card>
 
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Availability</h3>
-                  <p className="text-sm">{applicant.availability || "Not specified"}</p>
-                </CardContent>
-              </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold mb-2">Why join us?</h3>
+                    <p className="text-sm">{applicant.whyJoinUs || "Not specified"}</p>
+                  </CardContent>
+                </Card>
 
-              <div className="flex justify-end">
-                <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download Resume
-                </Button>
+                <Card>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold mb-2">Availability</h3>
+                    <p className="text-sm">{applicant.availability || "Not specified"}</p>
+                  </CardContent>
+                </Card>
+
+                <div className="flex justify-end">
+                  <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Resume
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </>
