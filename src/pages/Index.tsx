@@ -237,7 +237,11 @@ export default function Index() {
                     resumeUrl: "/resumes/rahul-sharma-resume.pdf",
                     education: "Bachelor of Design, NID Ahmedabad",
                     experience: "3 years at TechDesign Solutions",
-                    skills: "Figma, Adobe XD, User Research, Prototyping"
+                    skills: "Figma, Adobe XD, User Research, Prototyping",
+                    email: "rahul.sharma@example.com",
+                    linkedinProfile: "https://linkedin.com/in/rahul-sharma-example",
+                    whyJoinUs: "I'm excited about the opportunity to design educational interfaces that can make learning more accessible and engaging for students of all backgrounds.",
+                    availability: "Immediate joining"
                   },
                   {
                     id: 2,
@@ -248,7 +252,11 @@ export default function Index() {
                     resumeUrl: "/resumes/priya-patel-resume.pdf",
                     education: "MS Computer Science, IIT Delhi",
                     experience: "5 years at Infosys as Python Developer",
-                    skills: "Python, Django, Flask, Data Science, Machine Learning"
+                    skills: "Python, Django, Flask, Data Science, Machine Learning",
+                    email: "priya.patel@example.com",
+                    linkedinProfile: "",
+                    whyJoinUs: "After years of working in the industry, I've discovered my passion for teaching and mentoring. I want to help students build real-world skills that will prepare them for tech careers.",
+                    availability: "Available from August 1st"
                   },
                   {
                     id: 3,
@@ -259,7 +267,11 @@ export default function Index() {
                     resumeUrl: "/resumes/amit-kumar-resume.pdf",
                     education: "B.Tech Computer Science, BITS Pilani",
                     experience: "4 years at SecureNet Solutions",
-                    skills: "Network Security, Penetration Testing, CISSP Certified"
+                    skills: "Network Security, Penetration Testing, CISSP Certified",
+                    email: "amit.kumar@example.com",
+                    linkedinProfile: "https://linkedin.com/in/amit-kumar-example",
+                    whyJoinUs: "Cybersecurity education is becoming increasingly important, and I want to contribute to creating a generation of security-conscious professionals.",
+                    availability: "2 weeks notice period"
                   }
                 ].map((applicant) => (
                   <ApplicantCard key={applicant.id} applicant={applicant} />

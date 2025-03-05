@@ -1,6 +1,7 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, Search, User, LogOut, Settings, Sun, Moon } from "lucide-react";
+import { Bell, Search, User, LogOut, Sun, Moon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,6 +83,15 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
       </div>
 
       <div className="flex items-center space-x-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          className="rounded-full"
+        >
+          {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
@@ -119,16 +129,6 @@ export function Navbar({ setIsAuthenticated }: NavbarProps) {
             <DropdownMenuItem onClick={() => navigate("/profile")}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.preventDefault();
-                setTheme(theme === "light" ? "dark" : "light");
-              }}
-              onSelect={(e) => e.preventDefault()}
-            >
-              {theme === "light" ? <Moon className="mr-2 h-4 w-4" /> : <Sun className="mr-2 h-4 w-4" />}
-              <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600" onClick={handleLogout}>

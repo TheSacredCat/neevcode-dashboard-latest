@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Download } from "lucide-react";
+import { Download, Linkedin, Mail } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -23,6 +23,10 @@ interface Applicant {
   education: string;
   experience: string;
   skills: string;
+  email: string;
+  linkedinProfile: string;
+  whyJoinUs: string;
+  availability: string;
 }
 
 const getInitials = (name: string) => {
@@ -31,6 +35,11 @@ const getInitials = (name: string) => {
     .map((word) => word[0])
     .join("")
     .toUpperCase();
+};
+
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + "...";
 };
 
 export function ApplicantCard({ applicant }: { applicant: Applicant }) {
@@ -48,11 +57,28 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
             </Avatar>
             <div>
               <h3 className="font-medium text-[#947dc2]">{applicant.name}</h3>
-              <p className="text-sm text-muted-foreground mt-1">Applied for: {applicant.position}</p>
+              <div className="flex items-center mt-1 text-xs text-muted-foreground">
+                {applicant.linkedinProfile ? (
+                  <a
+                    href={applicant.linkedinProfile}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 hover:text-[#947dc2] transition-colors"
+                  >
+                    <Linkedin className="h-3 w-3" />
+                    LinkedIn Profile
+                  </a>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <Mail className="h-3 w-3" />
+                    {applicant.email}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-        <p className="text-sm mt-3">{applicant.description}</p>
+        <p className="text-sm mt-3">{truncateText(applicant.description, 100)}</p>
         <div className="mt-3 flex justify-between items-center">
           <span className="text-xs text-muted-foreground">{applicant.date}</span>
           <Button variant="outline" size="sm" onClick={() => setIsDetailsOpen(true)}>
@@ -86,6 +112,23 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
             <Separator className="my-4" />
 
             <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-3">
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold">Contact:</span>
+                  <span className="text-sm">{applicant.email}</span>
+                  {applicant.linkedinProfile && (
+                    <a
+                      href={applicant.linkedinProfile}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                    >
+                      <Linkedin className="h-3 w-3" /> LinkedIn Profile
+                    </a>
+                  )}
+                </div>
+              </div>
+
               <Card>
                 <CardContent className="p-4">
                   <h3 className="font-semibold mb-2">Education</h3>
@@ -104,6 +147,20 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
                 <CardContent className="p-4">
                   <h3 className="font-semibold mb-2">Skills</h3>
                   <p className="text-sm">{applicant.skills}</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-2">Why join us?</h3>
+                  <p className="text-sm">{applicant.whyJoinUs || "Not specified"}</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-2">Availability</h3>
+                  <p className="text-sm">{applicant.availability || "Not specified"}</p>
                 </CardContent>
               </Card>
 
