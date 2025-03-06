@@ -43,7 +43,7 @@ const sampleMessages = [
     firstName: "Aisha",
     lastName: "Patel",
     email: "aisha.patel@example.com",
-    message: "I'm having trouble accessing the course materials. I purchased the Web Development course last week but can't access the videos.",
+    message: "I'm having trouble accessing the course materials. I purchased the Web Development course last week but can't access the videos. I've tried logging out and logging back in, clearing my cache, and using different browsers, but I still can't see the content. Could you please help me resolve this issue as soon as possible? Thank you for your assistance.",
     date: "2023-07-18T14:45:00",
     isRead: false,
   },
@@ -52,7 +52,7 @@ const sampleMessages = [
     firstName: "Sanjay",
     lastName: "Gupta",
     email: "sanjay.gupta@example.com",
-    message: "I wanted to inquire about your corporate training options. We have a team of 15 developers who need upskilling in React and Node.js.",
+    message: "I wanted to inquire about your corporate training options. We have a team of 15 developers who need upskilling in React and Node.js. We are looking for a comprehensive program that can be customized to our team's specific needs and can be delivered over a period of 3-6 months. Could you please provide details about your corporate training packages, pricing, and scheduling options? Additionally, do you offer any assessments before and after the training to measure improvement?",
     date: "2023-07-19T09:15:00",
     isRead: false,
   },
@@ -221,7 +221,7 @@ export default function Messages() {
             
             <div>
               <p className="text-sm font-medium mb-1">Message:</p>
-              <div className="p-4 bg-muted rounded-md">
+              <div className="p-4 bg-muted rounded-md max-h-[200px] overflow-y-auto">
                 <p>{selectedMessage?.message}</p>
               </div>
             </div>
@@ -230,7 +230,10 @@ export default function Messages() {
               <Button variant="outline">
                 Reply via Email
               </Button>
-              <Button size="sm">
+              <Button 
+                size="sm" 
+                className="bg-[#947dc2] hover:bg-[#7E69AB] text-white"
+              >
                 Mark as Resolved
               </Button>
             </div>
