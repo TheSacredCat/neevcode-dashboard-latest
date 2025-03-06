@@ -121,7 +121,7 @@ export default function Messages() {
           <p className="text-muted-foreground">
             View and respond to contact messages
             {unreadCount > 0 && (
-              <Badge variant="outline" className="ml-2 bg-[#947dc2]/20 text-[#947dc2]">
+              <Badge variant="outline" className="ml-2 bg-primary/20 text-primary">
                 {unreadCount} unread
               </Badge>
             )}
@@ -150,15 +150,15 @@ export default function Messages() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
+          <div className="rounded-md border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[200px]">Name</TableHead>
+                  <TableHead className="w-[180px]">Name</TableHead>
                   <TableHead className="hidden md:table-cell">Email</TableHead>
                   <TableHead className="hidden lg:table-cell">Date</TableHead>
                   <TableHead className="hidden sm:table-cell">Preview</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-right w-10">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -170,25 +170,26 @@ export default function Messages() {
                   </TableRow>
                 ) : (
                   filteredMessages.map((message) => (
-                    <TableRow key={message.id} className={!message.isRead ? "bg-[#947dc2]/5" : ""}>
+                    <TableRow key={message.id} className={!message.isRead ? "bg-primary/5" : ""}>
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           {!message.isRead && (
-                            <div className="w-2 h-2 rounded-full bg-[#947dc2]" />
+                            <div className="w-2 h-2 rounded-full bg-primary" />
                           )}
                           {message.firstName} {message.lastName}
                         </div>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">{message.email}</TableCell>
-                      <TableCell className="hidden lg:table-cell">{formatDate(message.date)}</TableCell>
+                      <TableCell className="hidden lg:table-cell whitespace-nowrap">{formatDate(message.date)}</TableCell>
                       <TableCell className="hidden sm:table-cell max-w-xs truncate">
-                        {message.message.substring(0, 60)}...
+                        {message.message.substring(0, 50)}...
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right p-2">
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => handleViewMessage(message)}
+                          aria-label="View message"
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -229,7 +230,7 @@ export default function Messages() {
               <Button variant="outline">
                 Reply via Email
               </Button>
-              <Button>
+              <Button size="sm">
                 Mark as Resolved
               </Button>
             </div>
