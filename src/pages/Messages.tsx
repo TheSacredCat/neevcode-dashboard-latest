@@ -118,10 +118,10 @@ export default function Messages() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Messages</h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground flex items-center">
             View and respond to contact messages
             {unreadCount > 0 && (
-              <Badge variant="outline" className="ml-2 bg-primary/20 text-primary">
+              <Badge variant="outline" className="ml-2 bg-[#E5DEFF] text-[#7E69AB] border-[#9b87f5]">
                 {unreadCount} unread
               </Badge>
             )}
@@ -170,11 +170,11 @@ export default function Messages() {
                   </TableRow>
                 ) : (
                   filteredMessages.map((message) => (
-                    <TableRow key={message.id} className={!message.isRead ? "bg-primary/5" : ""}>
+                    <TableRow key={message.id} className={!message.isRead ? "bg-[#E5DEFF]/30" : ""}>
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           {!message.isRead && (
-                            <div className="w-2 h-2 rounded-full bg-primary" />
+                            <div className="w-2 h-2 rounded-full bg-[#9b87f5]" />
                           )}
                           {message.firstName} {message.lastName}
                         </div>
@@ -232,7 +232,7 @@ export default function Messages() {
               </Button>
               <Button 
                 size="sm" 
-                className="bg-[#947dc2] hover:bg-[#7E69AB] text-white"
+                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white whitespace-nowrap text-xs px-3"
               >
                 Mark as Resolved
               </Button>
