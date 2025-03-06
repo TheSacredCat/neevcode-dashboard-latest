@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -11,6 +12,7 @@ import Courses from "./pages/Courses";
 import Teachers from "./pages/Teachers";
 import Expenses from "./pages/Expenses";
 import ContentManagement from "./pages/ContentManagement";
+import Messages from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -46,6 +48,7 @@ function AppLayout() {
             <Route path="/" element={<ProtectedRoute element={<Index />} />} />
             <Route path="/courses" element={<ProtectedRoute element={<Courses />} />} />
             <Route path="/teachers" element={<ProtectedRoute element={<Teachers />} />} />
+            <Route path="/messages" element={<ProtectedRoute element={<Messages />} />} />
             <Route path="/expenses" element={<ProtectedRoute element={<Expenses />} />} />
             <Route path="/content" element={<ProtectedRoute element={<ContentManagement />} />} />
             <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
