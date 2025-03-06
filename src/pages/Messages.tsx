@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Card,
@@ -27,7 +26,6 @@ import {
   DialogTitle 
 } from "@/components/ui/dialog";
 
-// Sample data - would be replaced with real data from your backend
 const sampleMessages = [
   {
     id: 1,
@@ -82,7 +80,6 @@ export default function Messages() {
   const [selectedMessage, setSelectedMessage] = useState<typeof sampleMessages[0] | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Filter messages based on search query
   const filteredMessages = messages.filter(
     (message) =>
       message.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -92,7 +89,6 @@ export default function Messages() {
   );
 
   const handleViewMessage = (message: typeof sampleMessages[0]) => {
-    // Mark message as read
     setMessages(
       messages.map((m) =>
         m.id === message.id ? { ...m, isRead: true } : m
@@ -203,7 +199,6 @@ export default function Messages() {
         </CardContent>
       </Card>
 
-      {/* Message Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -231,8 +226,8 @@ export default function Messages() {
                 Reply via Email
               </Button>
               <Button 
-                size="sm" 
-                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white whitespace-nowrap text-xs px-3"
+                variant="outline"
+                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white border-none h-9 text-xs px-3"
               >
                 Mark as Resolved
               </Button>
