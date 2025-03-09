@@ -114,7 +114,7 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
             <Button 
               variant="outline" 
               size="sm" 
-              className={`h-8 flex-shrink-0 ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
+              className={applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}
               onClick={handleMarkReviewed}
             >
               {applicant.reviewed ? (
@@ -127,7 +127,7 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
                 </>
               )}
             </Button>
-            <Button variant="outline" size="sm" className="h-8 flex-shrink-0" onClick={() => setIsDetailsOpen(true)}>
+            <Button variant="outline" size="sm" onClick={() => setIsDetailsOpen(true)}>
               View Details
             </Button>
           </div>
@@ -204,11 +204,11 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
                   </CardContent>
                 </Card>
 
-                <div className="flex justify-between items-center gap-5">
+                <div className="flex items-center space-x-3">
                   <Button 
                     variant="outline" 
                     size="sm"
-                    className={`w-auto flex-1 ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
+                    className={applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}
                     onClick={handleMarkReviewed}
                   >
                     {applicant.reviewed ? (
@@ -223,7 +223,7 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
                   </Button>
                   <Button 
                     size="sm" 
-                    className="w-auto flex-1 bg-[#947dc2] hover:bg-[#947dc2]/90"
+                    className="bg-[#947dc2] hover:bg-[#947dc2]/90"
                   >
                     <Download className="mr-2 h-4 w-4" />
                     Download Resume
@@ -244,10 +244,10 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2">
-            <AlertDialogCancel className="h-9">Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDelete}
-              className="h-9 bg-red-500 hover:bg-red-600 focus:ring-red-500"
+              className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
             >
               Delete
             </AlertDialogAction>
