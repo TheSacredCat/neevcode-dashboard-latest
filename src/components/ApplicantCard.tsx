@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Download, Linkedin, Mail, Trash2, CheckCircle } from "lucide-react";
+import { Download, Linkedin, Mail, Trash2, CheckCircle, ArrowLeft } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -114,18 +114,18 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
             <Button 
               variant="outline" 
               size="sm" 
-              className={`text-xs ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
+              className={`text-xs h-8 px-2 overflow-visible whitespace-nowrap ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
               onClick={handleMarkReviewed}
             >
               {applicant.reviewed ? (
                 <>
-                  <CheckCircle className="h-3 w-3 mr-1" /> Reviewed
+                  <CheckCircle className="h-3 w-3 mr-1" /> Mark as Pending
                 </>
               ) : (
                 "Mark Reviewed"
               )}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setIsDetailsOpen(true)}>
+            <Button variant="outline" size="sm" className="h-8 px-3" onClick={() => setIsDetailsOpen(true)}>
               View Details
             </Button>
           </div>
@@ -151,7 +151,6 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
                 </Avatar>
                 <div>
                   <h2 className="text-xl font-bold">{applicant.name}</h2>
-                  {/* Removed position line as requested */}
                 </div>
               </div>
 
@@ -203,21 +202,24 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
                   </CardContent>
                 </Card>
 
-                <div className="flex justify-between">
+                <div className="flex justify-between gap-2">
                   <Button 
                     variant="outline" 
-                    className={`text-xs ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
+                    size="sm"
+                    className={`text-xs h-9 ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
                     onClick={handleMarkReviewed}
                   >
                     {applicant.reviewed ? (
                       <>
-                        <CheckCircle className="h-4 w-4 mr-1" /> Reviewed
+                        <ArrowLeft className="h-4 w-4 mr-1" /> Mark as Pending
                       </>
                     ) : (
-                      "Mark Reviewed"
+                      <>
+                        <CheckCircle className="h-4 w-4 mr-1" /> Mark Reviewed
+                      </>
                     )}
                   </Button>
-                  <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
+                  <Button size="sm" className="h-9 bg-[#947dc2] hover:bg-[#947dc2]/90">
                     <Download className="mr-2 h-4 w-4" />
                     Download Resume
                   </Button>
@@ -236,11 +238,11 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
               This will permanently delete the application from {applicant.name}. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="gap-2">
+            <AlertDialogCancel className="h-9 px-3">Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDelete}
-              className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
+              className="h-9 px-3 bg-red-500 hover:bg-red-600 focus:ring-red-500"
             >
               Delete
             </AlertDialogAction>
