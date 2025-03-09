@@ -7,12 +7,14 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
-import { Download, Linkedin, Mail } from "lucide-react";
+import { Download, Linkedin, Mail, Trash2, CheckCircle } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface Applicant {
   id: number;
@@ -27,6 +29,13 @@ interface Applicant {
   linkedinProfile: string;
   whyJoinUs: string;
   availability: string;
+  reviewed?: boolean;
+}
+
+interface ApplicantCardProps {
+  applicant: Applicant;
+  onDelete: (id: number) => void;
+  onMarkReviewed: (id: number, reviewed: boolean) => void;
 }
 
 const getInitials = (name: string) => {
@@ -42,12 +51,32 @@ const truncateText = (text: string, maxLength: number) => {
   return text.substring(0, maxLength) + "...";
 };
 
-export function ApplicantCard({ applicant }: { applicant: Applicant }) {
+export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: ApplicantCardProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+
+  const handleDelete = () => {
+    setIsDeleteAlertOpen(false);
+    onDelete(applicant.id);
+  };
+
+  const handleMarkReviewed = () => {
+    onMarkReviewed(applicant.id, !applicant.reviewed);
+  };
 
   return (
     <>
-      <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20">
+      <div className="bg-[#947dc2]/10 p-4 rounded-md border border-[#947dc2]/20 relative">
+        <div className="absolute top-3 right-3">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-transparent"
+            onClick={() => setIsDeleteAlertOpen(true)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 bg-[#947dc2]">
@@ -81,9 +110,25 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
         <p className="text-sm mt-3">{truncateText(applicant.description, 100)}</p>
         <div className="mt-3 flex justify-between items-center">
           <span className="text-xs text-muted-foreground">{applicant.date}</span>
-          <Button variant="outline" size="sm" onClick={() => setIsDetailsOpen(true)}>
-            View Details
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className={`text-xs ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
+              onClick={handleMarkReviewed}
+            >
+              {applicant.reviewed ? (
+                <>
+                  <CheckCircle className="h-3 w-3 mr-1" /> Reviewed
+                </>
+              ) : (
+                "Mark Reviewed"
+              )}
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setIsDetailsOpen(true)}>
+              View Details
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -158,7 +203,20 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
                   </CardContent>
                 </Card>
 
-                <div className="flex justify-end">
+                <div className="flex justify-between">
+                  <Button 
+                    variant="outline" 
+                    className={`text-xs ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
+                    onClick={handleMarkReviewed}
+                  >
+                    {applicant.reviewed ? (
+                      <>
+                        <CheckCircle className="h-4 w-4 mr-1" /> Reviewed
+                      </>
+                    ) : (
+                      "Mark Reviewed"
+                    )}
+                  </Button>
                   <Button className="bg-[#947dc2] hover:bg-[#947dc2]/90">
                     <Download className="mr-2 h-4 w-4" />
                     Download Resume
@@ -169,6 +227,26 @@ export function ApplicantCard({ applicant }: { applicant: Applicant }) {
           </ScrollArea>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the application from {applicant.name}. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDelete}
+              className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
