@@ -127,7 +127,12 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
                 </>
               )}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setIsDetailsOpen(true)}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="whitespace-nowrap"
+              onClick={() => setIsDetailsOpen(true)}
+            >
               View Details
             </Button>
           </div>

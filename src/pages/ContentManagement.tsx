@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,7 +33,7 @@ interface Review {
   comment: string;
   avatar?: string;
   date: string;
-  inReview?: boolean;
+  starred?: boolean;
 }
 
 const getInitials = (name: string) => {
@@ -47,7 +46,7 @@ const getInitials = (name: string) => {
 
 export default function ContentManagement() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"all" | "in-review">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "starred">("all");
   const [reviews, setReviews] = useState<Review[]>([
     {
       id: 1,
@@ -56,7 +55,7 @@ export default function ContentManagement() {
       rating: 5,
       comment: "This course helped me land my dream job! The instructor explains complex concepts in a simple way.",
       date: "2023-06-15",
-      inReview: false
+      starred: false
     },
     {
       id: 2,
@@ -65,11 +64,10 @@ export default function ContentManagement() {
       rating: 4.5,
       comment: "Great course content, but I wish there were more exercises to practice with.",
       date: "2023-06-12",
-      inReview: false
+      starred: false
     }
   ]);
 
-  // Form states
   const [reviewName, setReviewName] = useState("");
   const [reviewCourse, setReviewCourse] = useState("");
   const [reviewRating, setReviewRating] = useState("");
@@ -102,7 +100,7 @@ export default function ContentManagement() {
       comment: reviewComment,
       avatar: reviewAvatar || undefined,
       date: new Date().toISOString().split('T')[0],
-      inReview: false
+      starred: false
     };
     
     setReviews([...reviews, newReview]);
@@ -124,14 +122,14 @@ export default function ContentManagement() {
 
   const toggleReviewStatus = (id: number) => {
     setReviews(reviews.map(review => 
-      review.id === id ? { ...review, inReview: !review.inReview } : review
+      review.id === id ? { ...review, starred: !review.starred } : review
     ));
     
     const review = reviews.find(r => r.id === id);
     if (review) {
-      const newStatus = !review.inReview;
-      toast.success(`Review ${newStatus ? 'marked for review' : 'removed from review'}`, {
-        description: `The review has been ${newStatus ? 'added to' : 'removed from'} the review queue`
+      const newStatus = !review.starred;
+      toast.success(`Review ${newStatus ? 'starred' : 'unstarred'}`, {
+        description: `The review has been ${newStatus ? 'added to' : 'removed from'} the starred reviews`
       });
     }
   };
@@ -152,7 +150,7 @@ export default function ContentManagement() {
 
   const filteredReviews = activeTab === "all" 
     ? reviews 
-    : reviews.filter(review => review.inReview);
+    : reviews.filter(review => review.starred);
 
   return (
     <div className="space-y-6">
@@ -263,10 +261,10 @@ export default function ContentManagement() {
           </Dialog>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="all" className="mb-4" onValueChange={(value) => setActiveTab(value as "all" | "in-review")}>
+          <Tabs defaultValue="all" className="mb-4" onValueChange={(value) => setActiveTab(value as "all" | "starred")}>
             <TabsList>
               <TabsTrigger value="all">All Reviews</TabsTrigger>
-              <TabsTrigger value="in-review">In Review</TabsTrigger>
+              <TabsTrigger value="starred">Starred</TabsTrigger>
             </TabsList>
           </Tabs>
           
@@ -293,13 +291,11 @@ export default function ContentManagement() {
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          className={review.inReview ? "text-purple-600" : "text-gray-500"}
+                          className={review.starred ? "text-yellow-500" : "text-gray-500"}
                           onClick={() => toggleReviewStatus(review.id)}
                         >
-                          {review.inReview ? (
-                            <UIBadge variant="outline" className="bg-purple-100 text-purple-700 hover:bg-purple-200 border-purple-300">
-                              <Badge className="h-3 w-3 mr-1" /> In Review
-                            </UIBadge>
+                          {review.starred ? (
+                            <Star className="h-4 w-4 fill-yellow-400" />
                           ) : (
                             <Star className="h-4 w-4" />
                           )}
@@ -327,7 +323,7 @@ export default function ContentManagement() {
           ) : (
             <div className="h-[450px] flex items-center justify-center border rounded-lg">
               <p className="text-muted-foreground">
-                {activeTab === "all" ? "No reviews yet. Add a review to get started." : "No reviews in review queue."}
+                {activeTab === "all" ? "No reviews yet. Add a review to get started." : "No starred reviews yet."}
               </p>
             </div>
           )}
