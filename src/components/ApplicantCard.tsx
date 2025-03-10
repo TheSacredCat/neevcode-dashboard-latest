@@ -130,6 +130,7 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
             <Button 
               variant="outline" 
               size="sm"
+              className="whitespace-nowrap"
               onClick={() => setIsDetailsOpen(true)}
             >
               View Details

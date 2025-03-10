@@ -38,7 +38,7 @@ interface Teacher {
   role: string;
   status: "Permanent" | "Intern" | "Part-Time";
   email: string;
-  type?: "Admin" | "Trainer";
+  type: "Admin" | "Trainer";
 }
 
 interface FormData {
@@ -137,7 +137,7 @@ export default function TeacherList() {
       email: teacher.email,
       employmentType: teacher.status === "Permanent" ? "permanent" : 
                      teacher.status === "Intern" ? "intern" : "part-time",
-      type: teacher.type || "Trainer",
+      type: teacher.type,
     });
     
     // Set editing ID
@@ -222,7 +222,7 @@ export default function TeacherList() {
                   <span>{teacher.name}</span>
                 </div>
               </TableCell>
-              <TableCell>{teacher.type || "Trainer"}</TableCell>
+              <TableCell>{teacher.type}</TableCell>
               <TableCell>{teacher.subject}</TableCell>
               <TableCell>{teacher.role}</TableCell>
               <TableCell>
@@ -308,12 +308,13 @@ export default function TeacherList() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-subject">Subject (Optional)</Label>
+              <Label htmlFor="edit-subject">Subject {formData.type === "Admin" && "(Optional)"}</Label>
               <Input
                 id="edit-subject"
                 value={formData.subject}
                 onChange={(e) => handleFormChange("subject", e.target.value)}
                 placeholder="Enter subject"
+                required={formData.type !== "Admin"}
               />
             </div>
             <div className="space-y-2">
