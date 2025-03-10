@@ -114,20 +114,20 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
             <Button 
               variant="outline" 
               size="sm" 
-              className={`h-8 flex-shrink-0 ${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
+              className={`${applicant.reviewed ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-[#947dc2]/20 text-[#947dc2] hover:bg-[#947dc2]/30"}`}
               onClick={handleMarkReviewed}
             >
               {applicant.reviewed ? (
                 <>
-                  <CheckCircle className="h-3 w-3 mr-1" /> Mark as Pending
+                  <CheckCircle className="h-3 w-3 mr-1" /> Pending
                 </>
               ) : (
                 <>
-                  <CheckCircle className="h-3 w-3 mr-1" /> Mark Reviewed
+                  <CheckCircle className="h-3 w-3 mr-1" /> Review
                 </>
               )}
             </Button>
-            <Button variant="outline" size="sm" className="h-8 flex-shrink-0" onClick={() => setIsDetailsOpen(true)}>
+            <Button variant="outline" size="sm" onClick={() => setIsDetailsOpen(true)}>
               View Details
             </Button>
           </div>

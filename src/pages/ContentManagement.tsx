@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Star, StarHalf, Trash2, Pencil } from "lucide-react";
+import { Plus, Star, StarHalf, Trash2, Badge } from "lucide-react";
 import { toast } from "sonner";
 import { 
   Dialog, 
@@ -23,6 +23,8 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge as UIBadge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Review {
   id: number;
@@ -32,6 +34,7 @@ interface Review {
   comment: string;
   avatar?: string;
   date: string;
+  inReview?: boolean;
 }
 
 const getInitials = (name: string) => {
@@ -44,6 +47,7 @@ const getInitials = (name: string) => {
 
 export default function ContentManagement() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"all" | "in-review">("all");
   const [reviews, setReviews] = useState<Review[]>([
     {
       id: 1,
@@ -51,7 +55,8 @@ export default function ContentManagement() {
       courseName: "React Masterclass",
       rating: 5,
       comment: "This course helped me land my dream job! The instructor explains complex concepts in a simple way.",
-      date: "2023-06-15"
+      date: "2023-06-15",
+      inReview: false
     },
     {
       id: 2,
@@ -59,7 +64,8 @@ export default function ContentManagement() {
       courseName: "Advanced JavaScript",
       rating: 4.5,
       comment: "Great course content, but I wish there were more exercises to practice with.",
-      date: "2023-06-12"
+      date: "2023-06-12",
+      inReview: false
     }
   ]);
 
@@ -95,7 +101,8 @@ export default function ContentManagement() {
       rating: parseFloat(reviewRating),
       comment: reviewComment,
       avatar: reviewAvatar || undefined,
-      date: new Date().toISOString().split('T')[0]
+      date: new Date().toISOString().split('T')[0],
+      inReview: false
     };
     
     setReviews([...reviews, newReview]);
@@ -115,6 +122,20 @@ export default function ContentManagement() {
     });
   };
 
+  const toggleReviewStatus = (id: number) => {
+    setReviews(reviews.map(review => 
+      review.id === id ? { ...review, inReview: !review.inReview } : review
+    ));
+    
+    const review = reviews.find(r => r.id === id);
+    if (review) {
+      const newStatus = !review.inReview;
+      toast.success(`Review ${newStatus ? 'marked for review' : 'removed from review'}`, {
+        description: `The review has been ${newStatus ? 'added to' : 'removed from'} the review queue`
+      });
+    }
+  };
+
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -128,6 +149,10 @@ export default function ContentManagement() {
       </div>
     );
   };
+
+  const filteredReviews = activeTab === "all" 
+    ? reviews 
+    : reviews.filter(review => review.inReview);
 
   return (
     <div className="space-y-6">
@@ -238,9 +263,16 @@ export default function ContentManagement() {
           </Dialog>
         </CardHeader>
         <CardContent>
-          {reviews.length > 0 ? (
+          <Tabs defaultValue="all" className="mb-4" onValueChange={(value) => setActiveTab(value as "all" | "in-review")}>
+            <TabsList>
+              <TabsTrigger value="all">All Reviews</TabsTrigger>
+              <TabsTrigger value="in-review">In Review</TabsTrigger>
+            </TabsList>
+          </Tabs>
+          
+          {filteredReviews.length > 0 ? (
             <div className="space-y-4">
-              {reviews.map((review) => (
+              {filteredReviews.map((review) => (
                 <div key={review.id} className="flex gap-4 p-4 rounded-lg border">
                   <Avatar className="h-12 w-12 bg-[#947dc2]">
                     {review.avatar ? (
@@ -258,8 +290,19 @@ export default function ContentManagement() {
                         <p className="text-sm text-muted-foreground">{review.courseName}</p>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon">
-                          <Pencil className="h-4 w-4" />
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className={review.inReview ? "text-purple-600" : "text-gray-500"}
+                          onClick={() => toggleReviewStatus(review.id)}
+                        >
+                          {review.inReview ? (
+                            <UIBadge variant="outline" className="bg-purple-100 text-purple-700 hover:bg-purple-200 border-purple-300">
+                              <Badge className="h-3 w-3 mr-1" /> In Review
+                            </UIBadge>
+                          ) : (
+                            <Star className="h-4 w-4" />
+                          )}
                         </Button>
                         <Button 
                           variant="ghost" 
@@ -283,7 +326,9 @@ export default function ContentManagement() {
             </div>
           ) : (
             <div className="h-[450px] flex items-center justify-center border rounded-lg">
-              <p className="text-muted-foreground">No reviews yet. Add a review to get started.</p>
+              <p className="text-muted-foreground">
+                {activeTab === "all" ? "No reviews yet. Add a review to get started." : "No reviews in review queue."}
+              </p>
             </div>
           )}
         </CardContent>

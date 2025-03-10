@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -146,14 +145,15 @@ export default function Index() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="w-full grid grid-cols-4 h-auto">
-          <TabsTrigger value="overview" className="py-2 text-xs sm:text-sm md:text-base">Overview</TabsTrigger>
-          <TabsTrigger value="analytics" className="py-2 text-xs sm:text-sm md:text-base">Analytics</TabsTrigger>
-          <TabsTrigger value="reports" className="py-2 text-xs sm:text-sm md:text-base">Reports</TabsTrigger>
-          <TabsTrigger value="careers" className="py-2 text-xs sm:text-sm md:text-base whitespace-normal">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="careers">
             {isMobile ? "Careers" : "Career Inquiries"}
           </TabsTrigger>
         </TabsList>
+        
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4">
