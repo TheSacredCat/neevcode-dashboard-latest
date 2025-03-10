@@ -36,17 +36,18 @@ interface Teacher {
   name: string;
   subject: string;
   role: string;
-  status: "Permanent" | "Intern";
+  status: "Permanent" | "Intern" | "Part-Time";
   email: string;
+  type?: "Admin" | "Trainer";
 }
 
 interface FormData {
   name: string;
   role: string;
-  customRole: string;
   subject: string;
   email: string;
   employmentType: string;
+  type: string;
 }
 
 const getInitials = (name: string) => {
@@ -65,7 +66,8 @@ export default function TeacherList() {
       subject: "Mathematics",
       role: "Senior Teacher",
       status: "Permanent",
-      email: "john@example.com"
+      email: "john@example.com",
+      type: "Trainer"
     },
     {
       id: 2,
@@ -73,7 +75,8 @@ export default function TeacherList() {
       subject: "Physics",
       role: "Teacher",
       status: "Permanent",
-      email: "jane@example.com"
+      email: "jane@example.com",
+      type: "Trainer"
     },
     {
       id: 3,
@@ -81,7 +84,8 @@ export default function TeacherList() {
       subject: "Chemistry",
       role: "Assistant Teacher",
       status: "Intern",
-      email: "mike@example.com"
+      email: "mike@example.com",
+      type: "Trainer"
     }
   ]);
 
@@ -90,10 +94,10 @@ export default function TeacherList() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     role: "",
-    customRole: "",
     subject: "",
     email: "",
     employmentType: "",
+    type: "",
   });
 
   // Form field update handler
@@ -106,10 +110,10 @@ export default function TeacherList() {
     setFormData({
       name: "",
       role: "",
-      customRole: "",
       subject: "",
       email: "",
       employmentType: "",
+      type: "",
     });
   };
 
@@ -125,16 +129,15 @@ export default function TeacherList() {
 
   // Start editing a teacher - Fixed order of operations
   const handleStartEdit = (teacher: Teacher) => {
-    const isCustomRole = !["Director", "Lead Instructor", "Instructor", "Teaching Assistant"].includes(teacher.role);
-    
     // Set form data first before opening dialog
     setFormData({
       name: teacher.name,
-      role: isCustomRole ? "other" : teacher.role,
-      customRole: isCustomRole ? teacher.role : "",
+      role: teacher.role,
       subject: teacher.subject,
       email: teacher.email,
-      employmentType: teacher.status === "Permanent" ? "permanent" : "intern",
+      employmentType: teacher.status === "Permanent" ? "permanent" : 
+                     teacher.status === "Intern" ? "intern" : "part-time",
+      type: teacher.type || "Trainer",
     });
     
     // Set editing ID
@@ -148,10 +151,9 @@ export default function TeacherList() {
 
   // Validation function
   const validateForm = (): boolean => {
-    const { name, role, customRole, subject, email, employmentType } = formData;
-    const finalRole = role === "other" ? customRole : role;
+    const { name, role, email, employmentType, type } = formData;
     
-    if (!name || !finalRole || !subject || !email || !employmentType) {
+    if (!name || !role || !email || !employmentType || !type) {
       toast.error("Please fill in all required fields");
       return false;
     }
@@ -162,18 +164,22 @@ export default function TeacherList() {
   const handleUpdateTeacher = () => {
     if (!validateForm() || editingId === null) return;
     
-    const { name, role, customRole, subject, email, employmentType } = formData;
-    const finalRole = role === "other" ? customRole : role;
+    const { name, role, subject, email, employmentType, type } = formData;
+    
+    const status = 
+      employmentType === "permanent" ? "Permanent" : 
+      employmentType === "intern" ? "Intern" : "Part-Time";
     
     setTeachers(prev => prev.map(teacher => {
       if (teacher.id === editingId) {
         return {
           ...teacher,
           name,
-          role: finalRole,
+          role,
           subject,
           email,
-          status: employmentType === "permanent" ? "Permanent" : "Intern",
+          status,
+          type: type as "Admin" | "Trainer"
         };
       }
       return teacher;
@@ -195,6 +201,7 @@ export default function TeacherList() {
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
+            <TableHead>Type</TableHead>
             <TableHead>Subject</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Status</TableHead>
@@ -215,6 +222,7 @@ export default function TeacherList() {
                   <span>{teacher.name}</span>
                 </div>
               </TableCell>
+              <TableCell>{teacher.type || "Trainer"}</TableCell>
               <TableCell>{teacher.subject}</TableCell>
               <TableCell>{teacher.role}</TableCell>
               <TableCell>
@@ -276,33 +284,31 @@ export default function TeacherList() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-role">Role</Label>
+              <Label htmlFor="edit-type">Type</Label>
               <Select 
-                value={formData.role} 
-                onValueChange={(value) => handleFormChange("role", value)}
+                value={formData.type} 
+                onValueChange={(value) => handleFormChange("type", value)}
               >
-                <SelectTrigger id="edit-role">
-                  <SelectValue placeholder="Select role" />
+                <SelectTrigger id="edit-type">
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Director">Director</SelectItem>
-                  <SelectItem value="Lead Instructor">Lead Instructor</SelectItem>
-                  <SelectItem value="Instructor">Instructor</SelectItem>
-                  <SelectItem value="Teaching Assistant">Teaching Assistant</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="Admin">Admin</SelectItem>
+                  <SelectItem value="Trainer">Trainer</SelectItem>
                 </SelectContent>
               </Select>
-              {formData.role === "other" && (
-                <Input
-                  className="mt-2"
-                  placeholder="Enter custom role"
-                  value={formData.customRole}
-                  onChange={(e) => handleFormChange("customRole", e.target.value)}
-                />
-              )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-subject">Subject</Label>
+              <Label htmlFor="edit-role">Role</Label>
+              <Input
+                id="edit-role"
+                value={formData.role}
+                onChange={(e) => handleFormChange("role", e.target.value)}
+                placeholder="Enter role"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-subject">Subject (Optional)</Label>
               <Input
                 id="edit-subject"
                 value={formData.subject}
@@ -332,6 +338,7 @@ export default function TeacherList() {
                 <SelectContent>
                   <SelectItem value="permanent">Permanent</SelectItem>
                   <SelectItem value="intern">Intern</SelectItem>
+                  <SelectItem value="part-time">Part-Time</SelectItem>
                 </SelectContent>
               </Select>
             </div>
