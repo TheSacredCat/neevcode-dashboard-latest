@@ -151,12 +151,18 @@ export default function TeacherList() {
 
   // Validation function
   const validateForm = (): boolean => {
-    const { name, role, email, employmentType, type } = formData;
+    const { name, role, email, employmentType, type, subject } = formData;
     
     if (!name || !role || !email || !employmentType || !type) {
       toast.error("Please fill in all required fields");
       return false;
     }
+
+    if (type === "Trainer" && !subject) {
+      toast.error("Subject is required for Trainers");
+      return false;
+    }
+    
     return true;
   };
 

@@ -110,7 +110,7 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
         <p className="text-sm mt-3">{truncateText(applicant.description, 100)}</p>
         <div className="mt-3 flex justify-between items-center">
           <span className="text-xs text-muted-foreground">{applicant.date}</span>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <Button 
               variant="outline" 
               size="sm" 
@@ -130,7 +130,7 @@ export function ApplicantCard({ applicant, onDelete, onMarkReviewed }: Applicant
             <Button 
               variant="outline" 
               size="sm"
-              className="whitespace-nowrap"
+              className="min-w-[100px] whitespace-nowrap overflow-visible"
               onClick={() => setIsDetailsOpen(true)}
             >
               View Details
